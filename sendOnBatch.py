@@ -8,7 +8,7 @@ import re
 ### usage  cmst3_submit_manyfilesperjob.py dataset njobs applicationName queue 
 #######################################
 if (len(sys.argv) != 3) and (len(sys.argv) != 4) and (len(sys.argv) != 5):
-    print "usage sendOnBatch.py dataset filesPerJob analyzerType=\"HZZlljj\" flags=\"\""
+    print "usage sendOnBatch.py dataset filesPerJob analyzerType=\"QG\" flags=\"\""
     sys.exit(1)
 dataset = sys.argv[1]
 inputlist = "files_"+dataset+".txt"
@@ -21,7 +21,7 @@ queue = "8nh"
 #ijobmax = 40
 ijobmax = int(sys.argv[2])
 
-analyzerType = "HZZlljj"
+analyzerType = "QG"
 if len(sys.argv) >= 4:
     analyzerType = sys.argv[3]
 flags = ""
