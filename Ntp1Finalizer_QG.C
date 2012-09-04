@@ -193,7 +193,7 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
 
 
 
-  for( unsigned iBin=0; iBin<nPtBins; iBin++ ) {
+  for( unsigned iBin=0; iBin<unsigned(nPtBins); iBin++ ) {
 
   //float ptMin = 100.+20.*iBin;
   //float ptMax = ptMin + 20.;
@@ -551,6 +551,27 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
   tree_->SetBranchAddress("rmsCandJet", rmsCandJet);
   Float_t ptDJet[20];
   tree_->SetBranchAddress("ptDJet", ptDJet);
+ Float_t betaStarJet[20]	;  tree_->SetBranchAddress("betaStarJet", 	 betaStarJet);
+ Float_t axis1Jet[20]		;  tree_->SetBranchAddress("axis1Jet", 		 axis1Jet);
+ Float_t axis2Jet[20]		;  tree_->SetBranchAddress("axis2Jet", 		 axis2Jet);
+ Float_t pullJet[20]		;  tree_->SetBranchAddress("pullJet", 		 pullJet);
+ Float_t tanaJet[20]		;  tree_->SetBranchAddress("tanaJet", 		 tanaJet);
+ Float_t ptD_QCJet[20]		;  tree_->SetBranchAddress("ptD_QCJet", 	 ptD_QCJet);
+ Float_t rmsCand_QCJet[20]	;  tree_->SetBranchAddress("rmsCand_QCJet", 	 rmsCand_QCJet);
+ Float_t axis1_QCJet[20]	;  tree_->SetBranchAddress("axis1_QCJet", 	 axis1_QCJet);
+ Float_t axis2_QCJet[20]	;  tree_->SetBranchAddress("axis2_QCJet", 	 axis2_QCJet);
+ Float_t pull_QCJet[20]		;  tree_->SetBranchAddress("pull_QCJet", 	 pull_QCJet);
+ Float_t tana_QCJet[20]		;  tree_->SetBranchAddress("tana_QCJet", 	 tana_QCJet);
+ Float_t nNeutral_QCJet[20]	;  tree_->SetBranchAddress("nNeutral_QCJet", 	 nNeutral_QCJet);
+ Float_t RJet[20]		;  tree_->SetBranchAddress("RJet", 		 RJet);
+ Float_t nChg_ptCutJet[20]	;  tree_->SetBranchAddress("nChg_ptCutJet", 	 nChg_ptCutJet);
+ Float_t nChg_QCJet[20]		;  tree_->SetBranchAddress("nChg_QCJet", 	 nChg_QCJet);
+ Float_t nChg_ptCut_QCJet[20]	;  tree_->SetBranchAddress("nChg_ptCut_QCJet", 	 nChg_ptCut_QCJet);
+ Float_t nNeutral_ptCutJet[20]	;  tree_->SetBranchAddress("nNeutral_ptCutJet",  nNeutral_ptCutJet);
+ Float_t RchgJet[20]		;  tree_->SetBranchAddress("RchgJet", 		 RchgJet);
+ Float_t RneutralJet[20]	;  tree_->SetBranchAddress("RneutralJet", 	 RneutralJet);
+ Float_t Rchg_QCJet[20]		;  tree_->SetBranchAddress("Rchg_QCJet", 	 Rchg_QCJet);
+
 
   Int_t nPart;
   tree_->SetBranchAddress("nPart", &nPart);
@@ -566,7 +587,28 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
   tree_->SetBranchAddress("pdgIdPart", pdgIdPart);
 
 
-  Float_t ptJet_t, etaJet_t, ptDJet_t;
+  Float_t ptJet_t, etaJet_t, ptDJet_t,
+					 betaStarJet_t       ,
+					 axis1Jet_t          ,
+					 axis2Jet_t          ,
+					 pullJet_t           ,
+					 tanaJet_t           ,
+					 ptD_QCJet_t         ,
+					 rmsCand_QCJet_t     ,
+					 axis1_QCJet_t       ,
+					 axis2_QCJet_t       ,
+					 pull_QCJet_t        ,
+					 tana_QCJet_t        ,
+					 nNeutral_QCJet_t    ,
+					 RJet_t              ,
+					 nChg_ptCutJet_t     ,
+					 nChg_QCJet_t        ,
+					 nChg_ptCut_QCJet_t  ,
+					 nNeutral_ptCutJet_t ,
+					 RchgJet_t           ,
+					 RneutralJet_t       ,
+					 Rchg_QCJet_t        ;
+
   Int_t nChargedJet_t, nNeutralJet_t, pdgIdPartJet_t;
 
   TTree* tree_passedEvents;
@@ -586,6 +628,27 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
     tree_passedEvents->Branch( "nNeutralJet0", &nNeutralJet_t, "nNeutralJet_t/I" );
     tree_passedEvents->Branch( "ptDJet0", &ptDJet_t, "ptDJet_t/F" );
     tree_passedEvents->Branch( "pdgIdPartJet0", &pdgIdPartJet_t, "pdgIdPartJet_t/I" );
+
+    tree_passedEvents->Branch( "betaStarJet0", &betaStarJet_t,"betaStarJet0/F");
+    tree_passedEvents->Branch( "axis1Jet0", &axis1Jet_t,"axis1Jet0/F");
+    tree_passedEvents->Branch( "axis2Jet0", &axis2Jet_t,"axis2Jet0/F");
+    tree_passedEvents->Branch( "pullJet0", &pullJet_t,"pullJet0/F");
+    tree_passedEvents->Branch( "tanaJet0", &tanaJet_t,"tanaJet0/F");
+    tree_passedEvents->Branch( "ptD_QCJet0", &ptD_QCJet_t,"ptD_QCJet0/F");
+    tree_passedEvents->Branch( "rmsCand_QCJet0", &rmsCand_QCJet_t,"rmsCand_QCJet0/F");
+    tree_passedEvents->Branch( "axis1_QCJet0", &axis1_QCJet_t,"axis1_QCJet0/F");
+    tree_passedEvents->Branch( "axis2_QCJet0", &axis2_QCJet_t,"axis2_QCJet0/F");
+    tree_passedEvents->Branch( "pull_QCJet0", &pull_QCJet_t,"pull_QCJet0/F");
+    tree_passedEvents->Branch( "tana_QCJet0", &tana_QCJet_t,"tana_QCJet0/F");
+    tree_passedEvents->Branch( "nNeutral_QCJet0", &nNeutral_QCJet_t,"nNeutral_QCJet0/F");
+    tree_passedEvents->Branch( "RJet0", &RJet_t,"RJet0/F");
+    tree_passedEvents->Branch( "nChg_ptCutJet0", &nChg_ptCutJet_t,"nChg_ptCutJet0/F");
+    tree_passedEvents->Branch( "nChg_QCJet0", &nChg_QCJet_t,"nChg_QCJet0/F");
+    tree_passedEvents->Branch( "nChg_ptCut_QCJet0", &nChg_ptCut_QCJet_t,"nChg_ptCut_QCJet0/F");
+    tree_passedEvents->Branch( "nNeutral_ptCutJet0", &nNeutral_ptCutJet_t,"nNeutral_ptCutJet0/F");
+    tree_passedEvents->Branch( "RchgJet0", &RchgJet_t,"RchgJet0/F");
+    tree_passedEvents->Branch( "RneutralJet0", &RneutralJet_t,"RneutralJet0/F");
+    tree_passedEvents->Branch( "Rchg_QCJet0", &Rchg_QCJet_t,"Rchg_QCJet0/F");
 
   }
 
@@ -708,6 +771,27 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
       nNeutralJet_t = nNeutralJet[iJet];
       ptDJet_t = ptDJet[iJet];
       pdgIdPartJet_t = partFlavor;
+
+ betaStarJet_t               =    betaStarJet[iJet];
+ axis1Jet_t                  =    axis1Jet[iJet];
+ axis2Jet_t                  =    axis2Jet[iJet];
+ pullJet_t                   =    pullJet[iJet];
+ tanaJet_t                   =    tanaJet[iJet];
+ ptD_QCJet_t                 =    ptD_QCJet[iJet];
+ rmsCand_QCJet_t             =    rmsCand_QCJet[iJet];
+ axis1_QCJet_t               =    axis1_QCJet[iJet];
+ axis2_QCJet_t               =    axis2_QCJet[iJet];
+ pull_QCJet_t                =    pull_QCJet[iJet];
+ tana_QCJet_t                =    tana_QCJet[iJet];
+ nNeutral_QCJet_t            =    nNeutral_QCJet[iJet];
+ RJet_t                      =    RJet[iJet];
+ nChg_ptCutJet_t             =    nChg_ptCutJet[iJet];
+ nChg_QCJet_t                =    nChg_QCJet[iJet];
+ nChg_ptCut_QCJet_t          =    nChg_ptCut_QCJet[iJet];
+ nNeutral_ptCutJet_t         =    nNeutral_ptCutJet[iJet];
+ RchgJet_t                   =    RchgJet[iJet];
+ RneutralJet_t               =    RneutralJet[iJet];
+ Rchg_QCJet_t                =    Rchg_QCJet[iJet];
 
       if( write_tree )
         tree_passedEvents->Fill();
