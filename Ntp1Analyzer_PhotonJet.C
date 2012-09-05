@@ -363,6 +363,8 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        TLorentzVector genPhot;
        genPhot.SetPtEtaPhiE( pMc[iMc]*sin(thetaMc[iMc]), etaMc[iMc], phiMc[iMc], energyMc[iMc] );
 
+       if( genPhot.Pt()<0.1 ) continue;
+
        Float_t deltaR = genPhot.DeltaR(foundRecoPhot);
    
        if( deltaR < deltaRmin_Phot ) {
@@ -445,7 +447,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
 
      //if( foundPhot.pt < 10. ) continue;
-     if( foundRecoPhot.pt < 1. ) continue;
+     if( foundRecoPhot.Pt() < 1. ) continue;
 
 
      
@@ -622,6 +624,7 @@ if( DEBUG_VERBOSE_ && passedPhotonID_medium_==true) {
 //     if( (thisJet.Eta() == firstJet.Eta())&&(thisJet.Phi()==firstJet.Phi())&&
 //         (thisJet.Pt()==firstJet.Pt()) ) continue;
 
+       if( thisJet.Pt()<0.1 ) continue;
 
        Float_t deltaR = foundPhot.DeltaR(thisJet);
 //     Float_t deltaEta = foundPhot.eta - thisJet.etaReco;
@@ -751,7 +754,7 @@ if( DEBUG_VERBOSE_ && passedPhotonID_medium_==true) {
 //    ptJetReco_  =  firstJet.ptReco;
   ptCorrJetReco_  =  firstJet.Pt();
      phiJetReco_  =  firstJet.Phi();
-     etaJetReco_  =  firstJet.Eta();
+     etaJetReco_  =  (firstJet.Pt()>0.) ? firstJet.Eta() : -10.;
      ptDJetReco_  =  firstJet.ptD;
  rmsCandJetReco_  =  firstJet.rmsCand;
     betaJetReco_  =  firstJet.beta;
@@ -798,7 +801,7 @@ betaStarJetReco_  =  firstJet.betaStar;
 
    //pt2ndJetReco_= secondJet.ptReco;
      ptCorr2ndJetReco_= secondJet.Pt();
-     eta2ndJetReco_= secondJet.Eta();
+     eta2ndJetReco_= (secondJet.Pt()>0.) ? secondJet.Eta() : -10.;
      phi2ndJetReco_= secondJet.Phi();
 
    // pt2ndJetGen_= secondJet.ptGen;
@@ -884,31 +887,35 @@ betaStarJetReco_  =  firstJet.betaStar;
      Float_t ptPart2nd_found = 0.;
 
 
-     for(Int_t iPartMc=0; iPartMc<nMc; ++iPartMc) {
+     if( secondJet.Pt()>0. ) {
 
-       if( statusMc[iPartMc]!=3 ) continue;
+       for(Int_t iPartMc=0; iPartMc<nMc; ++iPartMc) {
 
-       TLorentzVector parton;
-       parton.SetPtEtaPhiE( pMc[iPartMc]*sin(thetaMc[iPartMc]), etaMc[iPartMc], phiMc[iPartMc], energyMc[iPartMc] );
+         if( statusMc[iPartMc]!=3 ) continue;
 
-       if( parton.Pt() < 0.1 ) continue;
-     
-       Int_t   pdgId = idMc[iPartMc];
-     
-       Float_t deltaRMc = parton.DeltaR(secondJet);
+         TLorentzVector parton;
+         parton.SetPtEtaPhiE( pMc[iPartMc]*sin(thetaMc[iPartMc]), etaMc[iPartMc], phiMc[iPartMc], energyMc[iPartMc] );
 
-       bool goodPdgId = false;
-       if( (fabs(pdgId)<=9) || (fabs(pdgId)==21) ) goodPdgId = true;
-     
-       if( (deltaRMc < deltaRMcmin_2) && goodPdgId ) {
-         deltaRMcmin_2 = deltaRMc;
-         pdgIdPart2nd_found = pdgId;
-         etaPart2nd_found = parton.Eta();
-         phiPart2nd_found = parton.Phi();
-         ptPart2nd_found = parton.Pt();
-       }
+         if( parton.Pt() < 0.1 ) continue;
+       
+         Int_t   pdgId = idMc[iPartMc];
+       
+         Float_t deltaRMc = parton.DeltaR(secondJet);
 
-     } //for Mc particles
+         bool goodPdgId = false;
+         if( (fabs(pdgId)<=9) || (fabs(pdgId)==21) ) goodPdgId = true;
+       
+         if( (deltaRMc < deltaRMcmin_2) && goodPdgId ) {
+           deltaRMcmin_2 = deltaRMc;
+           pdgIdPart2nd_found = pdgId;
+           etaPart2nd_found = parton.Eta();
+           phiPart2nd_found = parton.Phi();
+           ptPart2nd_found = parton.Pt();
+         }
+
+       } //for Mc particles
+
+     } // if theres a second jet
 
 
 
