@@ -12,7 +12,7 @@
 #include <map>
 
 
-int mkDiscriminator(const char *fileName="../QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Fall11-PU_S6_START42_V14B-v1_TREE.root",const char*treeName="tree_passedEvents")
+int mkDiscriminator(const char *fileName="../QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Fall11-PU_S6_START42_V14B-v1_fix_new_TREE.root",const char*treeName="tree_passedEvents")
 {
 
 gROOT->SetStyle("Plain");
@@ -32,16 +32,18 @@ vector<int> styles;
 vector<bool> flip;
 
 //concatenate all vars names
+variables.push_back(string("qglJet0")        ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kBlack); 	styles.push_back(1);flip.push_back(true); 
 variables.push_back(string("ptDJet0")        ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kRed); 	styles.push_back(1);flip.push_back(true); 
 variables.push_back(string("nChargedJet0")   ); range.push_back(pair<float,float>(0,100));  colors.push_back(kGreen);	styles.push_back(2);flip.push_back(false);
 variables.push_back(string("nNeutralJet0")   ); range.push_back(pair<float,float>(0,100));  colors.push_back(kBlue);	styles.push_back(3);flip.push_back(false);
-//variables.push_back(string("rmsCandJet0")    ); range.push_back(pair<float,float>(0,1));    colors.push_back(kMagenta);	styles.push_back(4);
+//variables.push_back(string("rmsCandJet0")    ); range.push_back(pair<float,float>(0,1));    colors.push_back(kMagenta);	styles.push_back(4);flip.push_back(true);
+//variables.push_back(string("rmsCandTrueJet0")    ); range.push_back(pair<float,float>(0,1));    colors.push_back(kMagenta-2);	styles.push_back(4);flip.push_back(true);
 variables.push_back(string("axis1Jet0")      ); range.push_back(pair<float,float>(0,1));    colors.push_back(kYellow+2);styles.push_back(1);flip.push_back(false);
 variables.push_back(string("axis2Jet0")      ); range.push_back(pair<float,float>(0,1));    colors.push_back(kOrange);	styles.push_back(2);flip.push_back(false);
 variables.push_back(string("pullJet0")       ); range.push_back(pair<float,float>(0,0.03));    colors.push_back(kRed+2);	styles.push_back(3);flip.push_back(false);
 variables.push_back(string("RJet0")          ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kGreen-2);	styles.push_back(1);flip.push_back(true);
 //QC	
-//variables.push_back(string("pull_QCJet0")    ); range.push_back(pair<float,float>(0,1));    colors.push_back(kGreen+2);	styles.push_back(4);flip.push_back(true);
+variables.push_back(string("pull_QCJet0")    ); range.push_back(pair<float,float>(0,1));    colors.push_back(kGreen+2);	styles.push_back(4);flip.push_back(false);
 variables.push_back(string("axis1_QCJet0")   ); range.push_back(pair<float,float>(0,1));    colors.push_back(kCyan+2);	styles.push_back(1);flip.push_back(false);
 variables.push_back(string("axis2_QCJet0")   ); range.push_back(pair<float,float>(0,1));    colors.push_back(kOrange+2);styles.push_back(2);flip.push_back(false);
 variables.push_back(string("ptD_QCJet0")     ); range.push_back(pair<float,float>(0,1));    colors.push_back(kCyan);	styles.push_back(3);flip.push_back(true);
@@ -53,11 +55,11 @@ string G("pdgIdPartJet0==21");      //g
 string C("abs(pdgIdPartJet0)==4");  //c
 string B("abs(pdgIdPartJet0)==5");  //b
 
-string Pt("(80<ptJet0 && ptJet0<120)");
+string Pt("(200<ptJet0 && ptJet0<250)");
 string Rho("(8<rhoPF && rhoPF<10)");
 string Eta("(abs(etaJet0)<2.0)");
 
-string LegendTitle("80<P_{T} [GeV]<120  8< #rho <10  |#eta|<2");
+string LegendTitle("200<P_{T} [GeV]<250  8< #rho <10  |#eta|<2");
 //Plot Rock Curvers
 
 TCanvas *c=new TCanvas("c","c",800,800);
@@ -86,9 +88,9 @@ for(int iVar=0;iVar< int(variables.size());++iVar) //loop over the variables ind
 	for(int iBin=1;iBin<hq->GetNbinsX()+1;++iBin)
 		{
 		if(!flip[iVar])
-			h->SetPoint(iBin-1,hq->Integral(0,iBin),1-hg->Integral(0,iBin));
+			h->SetPoint(iBin-1,hq->Integral(1,iBin),1-hg->Integral(1,iBin));
 		else
-			h->SetPoint(iBin-1,1-hq->Integral(0,iBin),hg->Integral(0,iBin));
+			h->SetPoint(iBin-1,1-hq->Integral(1,iBin),hg->Integral(1,iBin));
 		}
 		h->GetXaxis()->SetTitle("Quark Eff.");
 		h->GetYaxis()->SetTitle("Gluon Rej.");
