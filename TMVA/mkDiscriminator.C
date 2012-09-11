@@ -55,13 +55,31 @@ string G("pdgIdPartJet0==21");      //g
 string C("abs(pdgIdPartJet0)==4");  //c
 string B("abs(pdgIdPartJet0)==5");  //b
 
-string Pt("(200<ptJet0 && ptJet0<250)");
-string Rho("(8<rhoPF && rhoPF<10)");
-string Eta("(abs(etaJet0)<2.0)");
 
-string LegendTitle("200<P_{T} [GeV]<250  8< #rho <10  |#eta|<2");
-//Plot Rock Curvers
+vector<pair<float,float> > PtBins;
+vector<pair<float,float> > EtaBins;
+vector<pair<float,float> > RhoBins;
 
+PtBins.push_back(pair<float,float>(30,40));
+PtBins.push_back(pair<float,float>(80,120));
+PtBins.push_back(pair<float,float>(200,250));
+
+EtaBins.push_back(pair<float,float>(0,2.0));
+EtaBins.push_back(pair<float,float>(2.0,3.0));
+EtaBins.push_back(pair<float,float>(3.0,4.7));
+
+RhoBins.push_back(pair<float,float>(8,10));
+
+
+for(int iPt=0 ;iPt <int(PtBins.size() );++iPt)
+for(int iEta=0;iEta<int(EtaBins.size());++iEta)
+for(int iRho=0;iRho<int(RhoBins.size());++iRho){
+
+string Pt( Form("(%.1f<ptJet0 && ptJet0<%.1f)", PtBins[iPt].first,PtBins[iPt].second) );
+string Rho( Form("(%.1f<rhoPF && rhoPF<%.1f)",RhoBins[iRho].first,RhoBins[iRho].second));
+string Eta( Form("%.1f<=(abs(etaJet0)<%.1f)",EtaBins[iEta].first,EtaBins[iEta].second));
+
+string LegendTitle(  Form("%.0f<P_{T} [GeV]<%.0f  %.0f< #rho <%.0f  %.0f #leq |#eta|<%.0f",PtBins[iPt].first,PtBins[iPt].second,RhoBins[iRho].first,RhoBins[iRho].second,EtaBins[iEta].first,EtaBins[iEta].second ));
 TCanvas *c=new TCanvas("c","c",800,800);
 
 for(int iVar=0;iVar< int(variables.size());++iVar) //loop over the variables index
@@ -82,9 +100,6 @@ for(int iVar=0;iVar< int(variables.size());++iVar) //loop over the variables ind
 		h->SetFillColor(0);
 		h->GetXaxis()->SetTitle("Quark Eff.");
 		h->GetYaxis()->SetTitle("Gluon Rej.");
-//	bool flip=false;
-//	if( hq->GetNbinsX()>40 && ((hq->Integral(0,40)-hg->Integral(0,40) )<0)) flip=true;
-//	if(flip) printf("flip\n");
 	for(int iBin=1;iBin<hq->GetNbinsX()+1;++iBin)
 		{
 		if(!flip[iVar])
@@ -107,5 +122,10 @@ L->SetFillStyle(0);
 L->SetBorderSize(0);
 L->SetHeader(LegendTitle.c_str());
 
+c->SaveAs(Form("Plot/RoC_vars_pt%.0f_%.0f_rho%.0f_%.0f_eta%.0f_%.0f.pdf",PtBins[iPt].first,PtBins[iPt].second,RhoBins[iRho].first,RhoBins[iRho].second,EtaBins[iEta].first,EtaBins[iEta].second ));
+c->SaveAs(Form("Plot/RoC_vars_pt%.0f_%.0f_rho%.0f_%.0f_eta%.0f_%.0f.root",PtBins[iPt].first,PtBins[iPt].second,RhoBins[iRho].first,RhoBins[iRho].second,EtaBins[iEta].first,EtaBins[iEta].second ));
+
+delete c;
+}
 return 0; 
 }
