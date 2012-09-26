@@ -26,11 +26,14 @@ finalize_QG: Ntp1Finalizer.o Ntp1Finalizer_QG.o finalize_QG.cpp fitTools.o Analy
 	$(CC) -Wall $(INCLUDES) -o finalize_QG finalize_QG.cpp Ntp1Finalizer.o Ntp1Finalizer_QG.o fitTools.o AnalysisJet.o BTagSFUtil.o SFlightFuncs.o MistagFuncs.o $(ROOTFLAG) $(EXTRALIBS)
 
 
-do2ndLevel_QG: Ntp1Analyzer.o Ntp1Analyzer_QG.o do2ndLevel_QG.cpp
-	$(CC) -Wall $(INCLUDES) -o do2ndLevel_QG do2ndLevel_QG.cpp Ntp1Analyzer.o Ntp1Analyzer_QG.o $(ROOTFLAG)
+do2ndLevel_QG: Ntp1Analyzer.o Ntp1Analyzer_QG.o do2ndLevel_QG.cpp QGLikelihoodCalculator.o
+	$(CC) -Wall $(INCLUDES) -o do2ndLevel_QG do2ndLevel_QG.cpp Ntp1Analyzer.o Ntp1Analyzer_QG.o QGLikelihoodCalculator.o $(ROOTFLAG)
 
 do2ndLevel_PhotonJet: Ntp1Analyzer.o Ntp1Analyzer_PhotonJet.o do2ndLevel_PhotonJet.cpp AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o
 	$(CC) -Wall $(INCLUDES) -o do2ndLevel_PhotonJet do2ndLevel_PhotonJet.cpp Ntp1Analyzer.o Ntp1Analyzer_PhotonJet.o AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o $(ROOTFLAG) $(EXTRALIBS)
+
+do2ndLevel_MultiJet: Ntp1Analyzer.o Ntp1Analyzer_MultiJet.o do2ndLevel_MultiJet.cpp AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o
+	$(CC) -Wall $(INCLUDES) -o do2ndLevel_MultiJet do2ndLevel_MultiJet.cpp Ntp1Analyzer.o Ntp1Analyzer_MultiJet.o AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o $(ROOTFLAG) $(EXTRALIBS)
 
 
 drawQG: DrawBase.o fitTools.o drawQG.cpp
@@ -47,6 +50,9 @@ Ntp1Analyzer_QG.o: Ntp1Analyzer_QG.C
 
 Ntp1Analyzer_PhotonJet.o: Ntp1Analyzer_PhotonJet.C
 	$(CC) $(CFLAGS) $(INCLUDES) Ntp1Analyzer_PhotonJet.C $(ROOTFLAG)
+
+Ntp1Analyzer_MultiJet.o: Ntp1Analyzer_MultiJet.C
+	$(CC) $(CFLAGS) $(INCLUDES) Ntp1Analyzer_MultiJet.C $(ROOTFLAG)
 
 
 Ntp1Finalizer.o: $(CMSSW_BASE)/src/UserCode/pandolf/CommonTools/Ntp1Finalizer.C
