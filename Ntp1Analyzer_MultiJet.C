@@ -182,7 +182,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
      nJet_ = 0;
      for(unsigned int iRecoJet=0; iRecoJet<nAK5PFPUcorrJet; ++iRecoJet) {
 
-       if( nJet_>=20 ) break;
+       if( nJet_>=8 ) break;
 
        AnalysisJet thisJet(pxAK5PFPUcorrJet[iRecoJet], pyAK5PFPUcorrJet[iRecoJet], pzAK5PFPUcorrJet[iRecoJet], energyAK5PFPUcorrJet[iRecoJet]);;
 
@@ -251,7 +251,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
      } //for reco jets
 
      
-     if( jets.size()<4 ) continue; //at least 4 jets
+     if( jets.size()<2 ) continue; //at least 2 jets
 
 
 //   // will be relying mostly on HLT_HT600 trigger, so the following requirement is ~100% efficient:
@@ -259,6 +259,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
 
      for( unsigned iJet=0; iJet<jets.size(); iJet++ ) {
+
 
        eJet_[iJet]  =  jets[iJet]->Energy();
        ptJet_[iJet]  =  jets[iJet]->Pt();
