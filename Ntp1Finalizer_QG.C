@@ -8,15 +8,84 @@
 #include "TH2D.h"
 #include "TProfile.h"
 #include "TRegexp.h"
+#include "TMVA/Reader.h"
 
 
 #include "CommonTools/fitTools.h"
 
 
-
+//#define MVAPAOLO
 
 
 // constructor:
+//MVA PAOLO
+#ifdef MVAPAOLO
+#include <map>
+#include <vector>
+using namespace std;
+
+map<TString, float> corrections;
+map<TString, float> mvaVariables;
+map<TString, float> mvaVariables_corr;
+TMVA::Reader *reader;
+ TString mva("BDTD");
+
+void inline setCorrections(TString regionAndPt, float corrAxis1, float corrAxis2, float corrMult, float corrJetR, float corrJetPull){
+  corrections[regionAndPt + "axis1"] = corrAxis1;
+  corrections[regionAndPt + "axis2"] = corrAxis2;
+  corrections[regionAndPt + "Mult"] = corrMult;
+  corrections[regionAndPt + "JetR"] = corrJetR;
+  corrections[regionAndPt + "JetPull"] = corrJetPull;
+}
+
+double inline interpolate(double pt, int ptlow, int pthigh, double& mvalow, double &mvahigh){
+  return (mvahigh-mvalow)/(pthigh-ptlow)*(pt-ptlow)+mvalow;
+}
+
+void inline getMVA(TString region, double pt,double rho, double &mvaval, double &mvaprob){
+  //Get pT bin
+  int pTlow, pThigh;
+  if(pt>=20 && pt<30){ pTlow = 30; pThigh = 30;}
+  else if(pt>=30 && pt<50){ pTlow = 30; pThigh = 50;}
+  else if(pt>=50 && pt<80){ pTlow = 50; pThigh = 80;}
+  else if(pt>=80 && pt<120){ pTlow = 80; pThigh = 120;}
+  else if(pt>=120 && pt<170){ pTlow = 120; pThigh = 170;}
+  else if(pt>=170 && pt<300){ pTlow = 170; pThigh = 300;}
+  else{ pTlow = 300; pThigh = 300;}
+
+  if(region == "forward" && pThigh == 300){ pTlow = 170; pThigh = 170;}
+	printf("BBB ");
+    	for(map<TString, float>::iterator it = mvaVariables_corr.begin(); it != mvaVariables_corr.end(); ++it){ printf("%s",it->first.Data());}
+
+  //Calculate (interpolated) mva value
+  for(map<TString, float>::iterator it = mvaVariables.begin(); it != mvaVariables.end(); ++it){
+    mvaVariables_corr[it->first] = mvaVariables[it->first] - corrections[TString::Format("%d",pTlow) + region + it->first]*rho;
+  }
+  mvaval = reader->EvaluateMVA(TString(mva) + TString::Format("%d",pTlow) + region);
+  mvaprob = reader->GetProba(TString(mva) + TString::Format("%d",pTlow) + region);
+	printf("AAA region=%s pt=%.1f rho=%.1f mvaval=%.3f M=%.1f MC=%.2f a1=%.5f a1C=%.5f a2=%.5f a2C=%.5f R=%.5f RC=%.5f P=%.5f PC=%.5f",region.Data(),pt,rho,mvaval,
+				mvaVariables["Mult"],mvaVariables_corr["Mult"],
+				mvaVariables["axis1"],mvaVariables_corr["axis1"],
+				mvaVariables["axis2"],mvaVariables_corr["axis2"],
+				mvaVariables["JetR"],mvaVariables_corr["JetR"],
+				mvaVariables["JetPull"],mvaVariables_corr["JetPull"]
+				);
+
+  if(pTlow != pThigh){
+    for(map<TString, float>::iterator it = mvaVariables.begin(); it != mvaVariables.end(); ++it){
+      mvaVariables_corr[it->first] = mvaVariables[it->first] - corrections[TString::Format("%d",pThigh) + region + it->first]*rho;
+    }
+    double mvaval_high = reader->EvaluateMVA(TString(mva) + TString::Format("%d",pThigh) + region);
+    double mvaprob_high = reader->GetProba(TString(mva) + TString::Format("%d",pTlow) + region);
+    mvaval = interpolate(pt, pTlow, pThigh, mvaval, mvaval_high);
+    mvaprob = interpolate(pt, pTlow, pThigh, mvaprob, mvaprob_high);
+	printf("mh=%.2f mi=%.2f",mvaval_high,mvaval);
+  } 
+	printf("\n");
+}
+#endif
+//END MVA PAOLO
+
 
 Ntp1Finalizer_QG::Ntp1Finalizer_QG( const std::string& dataset ) : Ntp1Finalizer( "QG", dataset ) {
 
@@ -529,6 +598,8 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
   tree_->SetBranchAddress("nvertex", &nvertex);
   Float_t rhoPF;
   tree_->SetBranchAddress("rhoPF", &rhoPF);
+  Float_t rhoJetPF;
+  tree_->SetBranchAddress("rhoJetPF", &rhoJetPF);
 
   Float_t ptHat;
   tree_->SetBranchAddress("ptHat", &ptHat);
@@ -564,10 +635,10 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
  Float_t tana_QCJet[20]		;  tree_->SetBranchAddress("tana_QCJet", 	 tana_QCJet);
  Float_t nNeutral_QCJet[20]	;  tree_->SetBranchAddress("nNeutral_QCJet", 	 nNeutral_QCJet);
  Float_t RJet[20]		;  tree_->SetBranchAddress("RJet", 		 RJet);
- Float_t nChg_ptCutJet[20]	;  tree_->SetBranchAddress("nChg_ptCutJet", 	 nChg_ptCutJet);
- Float_t nChg_QCJet[20]		;  tree_->SetBranchAddress("nChg_QCJet", 	 nChg_QCJet);
- Float_t nChg_ptCut_QCJet[20]	;  tree_->SetBranchAddress("nChg_ptCut_QCJet", 	 nChg_ptCut_QCJet);
- Float_t nNeutral_ptCutJet[20]	;  tree_->SetBranchAddress("nNeutral_ptCutJet",  nNeutral_ptCutJet);
+ Int_t nChg_ptCutJet[20]	;  tree_->SetBranchAddress("nChg_ptCutJet", 	 nChg_ptCutJet);
+ Int_t nChg_QCJet[20]		;  tree_->SetBranchAddress("nChg_QCJet", 	 nChg_QCJet);
+ Int_t nChg_ptCut_QCJet[20]	;  tree_->SetBranchAddress("nChg_ptCut_QCJet", 	 nChg_ptCut_QCJet);
+ Int_t nNeutral_ptCutJet[20]	;  tree_->SetBranchAddress("nNeutral_ptCutJet",  nNeutral_ptCutJet);
  Float_t RchgJet[20]		;  tree_->SetBranchAddress("RchgJet", 		 RchgJet);
  Float_t RneutralJet[20]	;  tree_->SetBranchAddress("RneutralJet", 	 RneutralJet);
  Float_t Rchg_QCJet[20]		;  tree_->SetBranchAddress("Rchg_QCJet", 	 Rchg_QCJet);
@@ -602,16 +673,17 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
 					 tana_QCJet_t        ,
 					 nNeutral_QCJet_t    ,
 					 RJet_t              ,
-					 nChg_ptCutJet_t     ,
-					 nChg_QCJet_t        ,
-					 nChg_ptCut_QCJet_t  ,
-					 nNeutral_ptCutJet_t ,
 					 RchgJet_t           ,
 					 RneutralJet_t       ,
 					 Rchg_QCJet_t        ,
-					 qglJet_t		;
+					 qglJet_t	=-99	,
+					 qglPaoloJet_t		;
 
-  Int_t nChargedJet_t, nNeutralJet_t, pdgIdPartJet_t;
+  Int_t nChargedJet_t, nNeutralJet_t, pdgIdPartJet_t,
+					 nChg_ptCutJet_t     ,
+					 nChg_QCJet_t        ,
+					 nChg_ptCut_QCJet_t  ,
+					 nNeutral_ptCutJet_t ;
 
   TTree* tree_passedEvents;
 
@@ -623,6 +695,7 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
     tree_passedEvents->Branch( "LS", &LS, "LS/I" );
     tree_passedEvents->Branch( "event", &event, "event/I" );
     tree_passedEvents->Branch( "rhoPF", &rhoPF, "rhoPF/F" );
+    tree_passedEvents->Branch( "rhoJetPF", &rhoJetPF, "rhoJetPF/F" );
     tree_passedEvents->Branch( "eventWeight", &eventWeight, "eventWeight/F" );
     tree_passedEvents->Branch( "ptJet0", &ptJet_t, "ptJet_t/F" );
     tree_passedEvents->Branch( "etaJet0", &etaJet_t, "etaJet_t/F" );
@@ -644,18 +717,60 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
     tree_passedEvents->Branch( "tana_QCJet0", &tana_QCJet_t,"tana_QCJet0/F");
     tree_passedEvents->Branch( "nNeutral_QCJet0", &nNeutral_QCJet_t,"nNeutral_QCJet0/F");
     tree_passedEvents->Branch( "RJet0", &RJet_t,"RJet0/F");
-    tree_passedEvents->Branch( "nChg_ptCutJet0", &nChg_ptCutJet_t,"nChg_ptCutJet0/F");
-    tree_passedEvents->Branch( "nChg_QCJet0", &nChg_QCJet_t,"nChg_QCJet0/F");
-    tree_passedEvents->Branch( "nChg_ptCut_QCJet0", &nChg_ptCut_QCJet_t,"nChg_ptCut_QCJet0/F");
-    tree_passedEvents->Branch( "nNeutral_ptCutJet0", &nNeutral_ptCutJet_t,"nNeutral_ptCutJet0/F");
+    tree_passedEvents->Branch( "nChg_ptCutJet0", &nChg_ptCutJet_t,"nChg_ptCutJet0/I");
+    tree_passedEvents->Branch( "nChg_QCJet0", &nChg_QCJet_t,"nChg_QCJet0/I");
+    tree_passedEvents->Branch( "nChg_ptCut_QCJet0", &nChg_ptCut_QCJet_t,"nChg_ptCut_QCJet0/I");
+    tree_passedEvents->Branch( "nNeutral_ptCutJet0", &nNeutral_ptCutJet_t,"nNeutral_ptCutJet0/I");
     tree_passedEvents->Branch( "RchgJet0", &RchgJet_t,"RchgJet0/F");
     tree_passedEvents->Branch( "RneutralJet0", &RneutralJet_t,"RneutralJet0/F");
     tree_passedEvents->Branch( "Rchg_QCJet0", &Rchg_QCJet_t,"Rchg_QCJet0/F");
     tree_passedEvents->Branch( "qglJet0", &qglJet_t,"qglJet0/F");
+    tree_passedEvents->Branch( "qglPaoloJet0", &qglPaoloJet_t,"qglPaoloJet0/F");
 
   }
+//MVA _PAOLO
+#ifdef MVAPAOLO
+  reader=new TMVA::Reader("");
+  TString variableNames[] = {"axis1","axis2","Mult","JetR","JetPull"};
+	for(int i=0; i < 5; ++i) reader->AddVariable(variableNames[i], &mvaVariables_corr[variableNames[i]]);
+TString weightdir("data/");
+TString rangePt[6] = {"30to50","50to80","80to120","120to170","170to300","300to470"};
+  TString pt[6] = {"30","50","80","120","170","300"};
+  TString region[3] = {"central","transition","forward"};
+  for(int i = 0; i < 6; ++i){
+    for(int j = 0; j < 3; ++j){
+      if(i == 5 && j == 2) continue;
+      reader->BookMVA(TString("BDTD")+pt[i]+region[j], TString(weightdir) + rangePt[i] + "_" + region[j] + "_" + TString(mva) + ".xml");
+    }
+  }
+  cout << "XML files are booked" << endl;
+	 // Set correction arrays, ordered as 	ax1, 		ax2, 		mult, 		JR, 		JP
+  setCorrections("30central",		0.000816, 	0.000764, 	0., 		-0.002864, 	0.000072);
+  setCorrections("30transition",	0.002178, 	0.001773, 	0.285514, 	-0.005477, 	0.000156); 
+  setCorrections("30forward",		0.001291, 	0.001259, 	0.203733, 	-0.004888, 	0.000094); 
 
+  setCorrections("50central", 		0.000524, 	0.000488, 	0., 		-0.001459, 	0.000037);
+  setCorrections("50transition",	0.001664, 	0.001322, 	0.256516, 	-0.004148, 	0.000122); 
+  setCorrections("50forward",		0.001064, 	0.000978, 	0.202807, 	-0.004651, 	0.000081); 
 
+  setCorrections("80central",		0.000362, 	0.000332, 	0., 		-0.000901, 	0.000021);
+  setCorrections("80transition",	0.001140, 	0.000923, 	0.246119, 	-0.003209, 	0.000075); 
+  setCorrections("80forward",		0.000741, 	0.000702, 	0.202268, 	-0.003967, 	0.000049); 
+
+  setCorrections("120central",		0.000254, 	0.000233, 	0., 		-0.000605, 	0.000014);
+  setCorrections("120transition",	0.000777, 	0.000646, 	0.234861, 	-0.002532, 	0.000044);
+  setCorrections("120forward",		0.000676, 	0.000606, 	0.212068, 	-0.003914, 	0.000044);
+
+  setCorrections("170central",		0.000177, 	0.000157, 	0., 		-0.000424, 	0.000008);
+  setCorrections("170transition",	0.000555, 	0.000457, 	0.233618, 	-0.002029, 	0.000026);
+  setCorrections("170forward", 		0.000333, 	0.000365, 	0.208433, 	-0.002963, 	0.000015);
+
+  setCorrections("300central",		0.000100, 	0.000088, 	0., 		-0.000345, 	0.000004);
+  setCorrections("300tranistion",	0.000387, 	0.000298, 	0.244468, 	-0.001433, 	0.000015);
+  setCorrections("300forward",		-0.002678, 	-0.001875,	0.157607, 	0.010459, 	-0.000106);
+#endif
+// --end MVA PAOLO
+		
   int nEntries = tree_->GetEntries();
 
   for(int iEntry=0; iEntry<nEntries; ++iEntry) {
@@ -676,7 +791,7 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
       TLorentzVector thisJet;
       thisJet.SetPtEtaPhiE( ptJet[iJet], etaJet[iJet], phiJet[iJet], eJet[iJet]);
 
-      if( fabs(thisJet.Eta())>2. ) continue;
+      //if( fabs(thisJet.Eta())>2. ) continue;
       if( thisJet.Pt()<ptBins[0] ) continue;
       if( thisJet.Pt()>4000. ) continue;
 
@@ -795,7 +910,34 @@ void Ntp1Finalizer_QG::finalize( bool write_tree ) {
  RchgJet_t                   =    RchgJet[iJet];
  RneutralJet_t               =    RneutralJet[iJet];
  Rchg_QCJet_t                =    Rchg_QCJet[iJet];
- qglJet_t                =    qglJet[iJet];
+ qglJet_t                    =    qglJet[iJet];
+
+//MVA PAOLO
+#ifdef MVAPAOLO
+ TString region;
+      if(fabs(etaJet_t)<2) region = "central";
+      else if(fabs(etaJet_t)>=2 && fabs(etaJet_t)<3) region = "transition";
+      else region = "forward";
+	double mvaval,mvaprob;
+
+
+      if(region == "central"){
+	mvaVariables["JetPull"]  = pull_QCJet_t;
+	mvaVariables["axis1"] = TMath::Max(float(axis1_QCJet_t),float(0.));
+	mvaVariables["axis2"] = TMath::Max(float(axis2_QCJet_t),float(0.));
+	mvaVariables["Mult"] = nChg_QCJet_t;
+	mvaVariables["JetR"] = Rchg_QCJet_t;
+      } else {
+	mvaVariables["JetPull"]  = pullJet_t;
+	mvaVariables["axis1"] = TMath::Max(float(axis1Jet_t),float(0.));
+	mvaVariables["axis2"] = TMath::Max(float(axis2Jet_t),float(0.));
+	mvaVariables["Mult"] = nChg_ptCutJet_t +nNeutral_ptCutJet_t;
+	mvaVariables["JetR"] = RJet_t;
+      }
+getMVA(region, ptJet_t,rhoJetPF, mvaval, mvaprob);
+	qglPaoloJet_t = mvaval;
+#endif
+//END MVA PAOLO
 
       if( write_tree )
         tree_passedEvents->Fill();
