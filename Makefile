@@ -39,6 +39,9 @@ do2ndLevel_MultiJet: Ntp1Analyzer.o Ntp1Analyzer_MultiJet.o do2ndLevel_MultiJet.
 make_omogeneizzato: make_omogeneizzato.cpp
 	$(CC)  $(INCLUDES) -Wall -o make_omogeneizzato make_omogeneizzato.cpp `${ROOTSYS}/bin/root-config --cflags --libs`
 
+create_pileupNvertex_files: create_pileupNvertex_files.cpp
+	$(CC)  $(INCLUDES) -Wall -o create_pileupNvertex_files create_pileupNvertex_files.cpp `${ROOTSYS}/bin/root-config --cflags --libs`
+
 
 drawQG: DrawBase.o fitTools.o drawQG.cpp
 	$(CC) -Wall -I$(CMSSW_BASE)/src/UserCode/pandolf/ -o drawQG drawQG.cpp DrawBase.o fitTools.o $(ROOTFLAG) $(EXTRALIBS)
