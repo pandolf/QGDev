@@ -36,6 +36,10 @@ do2ndLevel_MultiJet: Ntp1Analyzer.o Ntp1Analyzer_MultiJet.o do2ndLevel_MultiJet.
 	$(CC) -Wall $(INCLUDES) -o do2ndLevel_MultiJet do2ndLevel_MultiJet.cpp Ntp1Analyzer.o Ntp1Analyzer_MultiJet.o AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o $(ROOTFLAG) $(EXTRALIBS)
 
 
+make_omogeneizzato: make_omogeneizzato.cpp
+	$(CC)  $(INCLUDES) -Wall -o make_omogeneizzato make_omogeneizzato.cpp `${ROOTSYS}/bin/root-config --cflags --libs`
+
+
 drawQG: DrawBase.o fitTools.o drawQG.cpp
 	$(CC) -Wall -I$(CMSSW_BASE)/src/UserCode/pandolf/ -o drawQG drawQG.cpp DrawBase.o fitTools.o $(ROOTFLAG) $(EXTRALIBS)
 
