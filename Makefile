@@ -43,7 +43,8 @@ make_omogeneizzato: make_omogeneizzato.cpp
 drawQG: DrawBase.o fitTools.o drawQG.cpp
 	$(CC) -Wall -I$(CMSSW_BASE)/src/UserCode/pandolf/ -o drawQG drawQG.cpp DrawBase.o fitTools.o $(ROOTFLAG) $(EXTRALIBS)
 
-
+drawDiMultiJetQG: fitTools.o DrawBase.o drawDiMultiJetQG.cpp
+	$(CC) -Wall -I$(CMSSW_BASE)/src/UserCode/pandolf/ -o drawDiMultiJetQG drawDiMultiJetQG.cpp fitTools.o DrawBase.o $(ROOTFLAG) $(EXTRALIBS)
 
 
 Ntp1Analyzer.o: $(CMSSW_BASE)/src/UserCode/pandolf/CommonTools/Ntp1Analyzer.C
