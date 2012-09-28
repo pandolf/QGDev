@@ -20,8 +20,8 @@
 //#include "/shome/pandolf/CMSSW_4_2_8/src/UserCode/pandolf/CommonTools/PUWeight.C"
 //#include "/shome/pandolf/CMSSW_4_2_8/src/UserCode/pandolf/QGLikelihood/QGLikelihoodCalculator.C"
 
-#include "/afs/cern.ch/work/p/pandolf/CMSSW_4_2_8_patch7/src/QGLikelihood/src/QGLikelihoodCalculator.cc"
-#include "/afs/cern.ch/work/p/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/CommonTools/PUWeight.C"
+#include "/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGLikelihood/src/QGLikelihoodCalculator.cc"
+#include "/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/CommonTools/PUWeight.C"
 
 float delta_phi(float phi1, float phi2);
 
@@ -83,6 +83,7 @@ void finalize(const std::string& dataset, const std::string& puReweighing="Run20
 //  std::string secondJetText_str(secondJetText);
 //  outfileName = outfileName + "_" + secondJetText_str;
 //}
+if( !(dataset_tstr.BeginsWith("Photon") && dataset_tstr.Contains("Run2011")) )
   outfileName += "_PU" + puReweighing;
   outfileName += ".root";
 
@@ -639,11 +640,11 @@ void finalize(const std::string& dataset, const std::string& puReweighing="Run20
   std::string puFileName;
   //puFileName = "all2011A.pileup_v2.root";
   if( puReweighing=="Run2011A" )
-    puFileName = "all2011A.pileup_v2_73mb.root";
+    puFileName = "/afs/cern.ch/user/p/pandolf/public/all2011A.pileup_v2_73mb.root";
   if( puReweighing=="Run2011B" )
-    puFileName = "all2011B.pileup_v2_73mb.root";
+    puFileName = "/afs/cern.ch/user/p/pandolf/public/all2011B.pileup_v2_73mb.root";
   if( puReweighing=="Run2011FULL" )
-    puFileName = "all2011AB.pileup_v2_73mb.root";
+    puFileName = "/afs/cern.ch/user/p/pandolf/public/all2011AB.pileup_v2_73mb.root";
   std::cout << std::endl << "-> Using data pileup file: " << puFileName << std::endl;
   TFile* filePU = TFile::Open(puFileName.c_str());
   TH1F* h1_nPU_data = (TH1F*)filePU->Get("pileup");
