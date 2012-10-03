@@ -16,13 +16,14 @@
 #include <vector>
 #include <cmath>
 
-#include "AnalysisJet.C"
-#include "AnalysisPhoton.C"
+#include "CommonTools/AnalysisJet.cc"
+#include "CommonTools/AnalysisPhoton.cc"
 
 //#include "/cmsrm/pc25/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/CommonTools/PUWeight.C"
 //#include "/cmsrm/pc25/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/QGLikelihood/QGLikelihoodCalculator.C"
-#include "/shome/pandolf/CMSSW_4_2_8/src/UserCode/pandolf/CommonTools/PUWeight.C"
-#include "/shome/pandolf/CMSSW_4_2_8/src/UserCode/pandolf/QGLikelihood/QGLikelihoodCalculator.C"
+#include "CommonTools/PUWeight.C"
+#include "QGLikelihood/interface/QGLikelihoodCalculator.h"
+#include "QGLikelihood/src/QGLikelihoodCalculator.cc"
 
 
 
@@ -219,8 +220,8 @@ void TreeFinalizerC_MultiJet::finalize() {
   Int_t pdgIdPartJet[20];
   tree_->SetBranchAddress("pdgIdPartStatus3Jet", pdgIdPartJet);
   //tree_->SetBranchAddress("pdgIdPartJet", pdgIdPartJet);
-  Int_t pdgIdMomJet[20];
-  tree_->SetBranchAddress("pdgIdMomStatus3Jet", pdgIdMomJet);
+  //Int_t pdgIdMomJet[20];
+  //tree_->SetBranchAddress("pdgIdMomStatus3Jet", pdgIdMomJet);
   //tree_->SetBranchAddress("pdgIdMomJet", pdgIdMomJet);
 
 
@@ -633,16 +634,16 @@ void TreeFinalizerC_MultiJet::finalize() {
       thisJet->SetPtEtaPhiE( ptJet[iJet], etaJet[iJet], phiJet[iJet], ptJet[iJet]/ptRawJet[iJet]*eJet[iJet] );
       thisJet->ptD = ptDJet[iJet];
       thisJet->rmsCand = rmsCandJet[iJet];
-      thisJet->nTracksReco = nChargedHadronsJet[iJet];
-      thisJet->nNeutralHadronsReco = nNeutralHadronsJet[iJet];
-      thisJet->nPhotonsReco = nPhotonsJet[iJet];
-      thisJet->nHFHadronsReco = nHFHadronsJet[iJet];
-      thisJet->nHFEMReco = nHFEMJet[iJet];
-      thisJet->eTracksReco = eChargedHadronsJet[iJet];
-      thisJet->eNeutralHadronsReco = eNeutralHadronsJet[iJet];
-      thisJet->ePhotonsReco = ePhotonsJet[iJet];
-      thisJet->eHFHadronsReco = eHFHadronsJet[iJet];
-      thisJet->eHFEMReco = eHFEMJet[iJet];
+      thisJet->nChargedHadrons = nChargedHadronsJet[iJet];
+      thisJet->nNeutralHadrons = nNeutralHadronsJet[iJet];
+      thisJet->nPhotons = nPhotonsJet[iJet];
+      thisJet->nHFHadrons = nHFHadronsJet[iJet];
+      thisJet->nHFEM = nHFEMJet[iJet];
+      thisJet->eChargedHadrons = eChargedHadronsJet[iJet];
+      thisJet->eNeutralHadrons = eNeutralHadronsJet[iJet];
+      thisJet->ePhotons = ePhotonsJet[iJet];
+      thisJet->eHFHadrons = eHFHadronsJet[iJet];
+      thisJet->eHFEM = eHFEMJet[iJet];
 
       if( jets.size()<2 ) { //jetID only on two leading jets
       //  if( !(thisJet->passedJetID()) ) continue;
@@ -650,11 +651,11 @@ void TreeFinalizerC_MultiJet::finalize() {
 
       if( fabs(thisJet->Eta())<2.4 ) {
         if( QGLikelihoodJet[iJet]==0. || QGLikelihoodJet[iJet]==1. )
-          thisJet->QGLikelihood =  qglikeli->computeQGLikelihoodPU( thisJet->Pt(), rhoPF, thisJet->nCharged(), thisJet->nNeutral(), thisJet->ptD );
+          thisJet->QGLikelihood =  qglikeli->computeQGLikelihoodPU( thisJet->Pt(), rhoPF, thisJet->nChargedHadrons, thisJet->nNeutralHadrons + thisJet->nPhotons, thisJet->ptD );
         else
           thisJet->QGLikelihood = QGLikelihoodJet[iJet];
       } else if( fabs(thisJet->Eta())>3. && fabs(thisJet->Eta())<4.7 ) {
-        thisJet->QGLikelihood =  qglikeli->computeQGLikelihoodFwd( thisJet->Pt(), rhoPF, thisJet->ptD, -log( thisJet->rmsCand ) );
+        thisJet->QGLikelihood = -1;// qglikeli->computeQGLikelihoodFwd( thisJet->Pt(), rhoPF, thisJet->ptD, -log( thisJet->rmsCand ) );
       }
 
 
@@ -665,7 +666,7 @@ void TreeFinalizerC_MultiJet::finalize() {
         thisJet->etaPart = etaPartJet[iJet];
         thisJet->phiPart = phiPartJet[iJet];
         thisJet->ePart = ePartJet[iJet];
-        thisJet->pdgIdMom = pdgIdMomJet[iJet];
+        //thisJet->pdgIdMom = pdgIdMomJet[iJet];
 
         TLorentzVector* parton = new TLorentzVector();
         parton->SetPtEtaPhiE( thisJet->ptPart, thisJet->etaPart, thisJet->phiPart, thisJet->ePart );
@@ -689,7 +690,7 @@ void TreeFinalizerC_MultiJet::finalize() {
         thisJet->etaPart = 0.;
         thisJet->phiPart = 0.;
         thisJet->ePart = 0.;
-        thisJet->pdgIdMom = 0;
+        //thisJet->pdgIdMom = 0;
 
       }
 
@@ -730,16 +731,16 @@ void TreeFinalizerC_MultiJet::finalize() {
       QGLikelihoodJet0 = jets[0]->QGLikelihood;
       ptDJet0 = jets[0]->ptD;
       rmsCandJet0 = jets[0]->rmsCand;
-      nChargedJet0 = jets[0]->nCharged();
-      nNeutralJet0 = jets[0]->nNeutral();
+      nChargedJet0 = jets[0]->nChargedHadrons;
+      nNeutralJet0 = jets[0]->nNeutralHadrons+ jets[0]->nPhotons;
 
       h1_ptJet0->Fill( jets[0]->Pt(), eventWeight );
       h1_etaJet0->Fill( jets[0]->Eta(), eventWeight );
       h1_pdgIdJet0->Fill( jets[0]->pdgIdPart, eventWeight );
       h1_QGLikelihoodJet0->Fill( QGLikelihoodJet0, eventWeight );
       h1_ptDJet0->Fill( jets[0]->ptD, eventWeight );
-      h1_nChargedJet0->Fill( jets[0]->nCharged(), eventWeight );
-      h1_nNeutralJet0->Fill( jets[0]->nNeutral(), eventWeight );
+      h1_nChargedJet0->Fill( jets[0]->nChargedHadrons, eventWeight );
+      h1_nNeutralJet0->Fill( jets[0]->nNeutralHadrons + jets[0]->nPhotons, eventWeight );
 
     }
 
@@ -751,16 +752,16 @@ void TreeFinalizerC_MultiJet::finalize() {
       QGLikelihoodJet1 = jets[1]->QGLikelihood;
       ptDJet1 = jets[1]->ptD;
       rmsCandJet1 = jets[1]->rmsCand;
-      nChargedJet1 = jets[1]->nCharged();
-      nNeutralJet1 = jets[1]->nNeutral();
+      nChargedJet1 = jets[1]->nChargedHadrons;
+      nNeutralJet1 = jets[1]->nNeutralHadrons+ jets[1]->nPhotons;
 
       h1_ptJet1->Fill( jets[1]->Pt(), eventWeight );
       h1_etaJet1->Fill( jets[1]->Eta(), eventWeight );
       h1_pdgIdJet1->Fill( jets[1]->pdgIdPart, eventWeight );
       h1_QGLikelihoodJet1->Fill( QGLikelihoodJet1, eventWeight );
       h1_ptDJet1->Fill( jets[1]->ptD, eventWeight );
-      h1_nChargedJet1->Fill( jets[1]->nCharged(), eventWeight );
-      h1_nNeutralJet1->Fill( jets[1]->nNeutral(), eventWeight );
+      h1_nChargedJet1->Fill( jets[1]->nChargedHadrons, eventWeight );
+      h1_nNeutralJet1->Fill( jets[1]->nNeutralHadrons+jets[1]->nPhotons, eventWeight );
 
     }
 
@@ -774,16 +775,16 @@ void TreeFinalizerC_MultiJet::finalize() {
       QGLikelihoodJet2 = jets[2]->QGLikelihood;
       ptDJet2 = jets[2]->ptD;
       rmsCandJet2 = jets[2]->rmsCand;
-      nChargedJet2 = jets[2]->nCharged();
-      nNeutralJet2 = jets[2]->nNeutral();
+      nChargedJet2 = jets[2]->nChargedHadrons;
+      nNeutralJet2 = jets[2]->nNeutralHadrons+ jets[2]->nPhotons;
 
       h1_ptJet2->Fill( jets[2]->Pt(), eventWeight );
       h1_etaJet2->Fill( jets[2]->Eta(), eventWeight );
       h1_pdgIdJet2->Fill( jets[2]->pdgIdPart, eventWeight );
       h1_QGLikelihoodJet2->Fill( QGLikelihoodJet2, eventWeight );
       h1_ptDJet2->Fill( jets[2]->ptD, eventWeight );
-      h1_nChargedJet2->Fill( jets[2]->nCharged(), eventWeight );
-      h1_nNeutralJet2->Fill( jets[2]->nNeutral(), eventWeight );
+      h1_nChargedJet2->Fill( jets[2]->nChargedHadrons, eventWeight );
+      h1_nNeutralJet2->Fill( jets[2]->nNeutralHadrons+ jets[2]->nPhotons, eventWeight );
 
     }
 
@@ -795,16 +796,16 @@ void TreeFinalizerC_MultiJet::finalize() {
       QGLikelihoodJet3 = jets[3]->QGLikelihood;
       ptDJet3 = jets[3]->ptD;
       rmsCandJet3 = jets[3]->rmsCand;
-      nChargedJet3 = jets[3]->nCharged();
-      nNeutralJet3 = jets[3]->nNeutral();
+      nChargedJet3 = jets[3]->nChargedHadrons;
+      nNeutralJet3 = jets[3]->nNeutralHadrons+jets[3]->nPhotons;
 
       h1_ptJet3->Fill( jets[3]->Pt(), eventWeight );
       h1_etaJet3->Fill( jets[3]->Eta(), eventWeight );
       h1_pdgIdJet3->Fill( jets[3]->pdgIdPart, eventWeight );
       h1_QGLikelihoodJet3->Fill( QGLikelihoodJet3, eventWeight );
       h1_ptDJet3->Fill( jets[3]->ptD, eventWeight );
-      h1_nChargedJet3->Fill( jets[3]->nCharged(), eventWeight );
-      h1_nNeutralJet3->Fill( jets[3]->nNeutral(), eventWeight );
+      h1_nChargedJet3->Fill( jets[3]->nChargedHadrons, eventWeight );
+      h1_nNeutralJet3->Fill( jets[3]->nNeutralHadrons+jets[3]->nPhotons, eventWeight );
 
     }
 
