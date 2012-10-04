@@ -29,7 +29,8 @@ int main( int argc, char* argv[]) {
 
   TString flags_tstr(flags);
 
-  bool requireLeptons = !isQCD;
+  //bool requireLeptons = !isQCD;
+  bool requireLeptons = false;
   bool chargedHadronSubtraction = (flags_tstr.Contains("CHS"));
 
   if( requireLeptons ) std::cout << "-> Requiring leptons." << std::endl;

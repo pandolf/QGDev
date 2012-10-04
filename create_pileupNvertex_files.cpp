@@ -4,7 +4,7 @@
 #include "TH1D.h"
 
 
-bool use2012=true;
+bool use2012=false;
 
 
 void createPileUpNVertexFile( TTree* treedata, TTree* treeMC, float ptMin, float ptMax );
@@ -12,14 +12,14 @@ void createPileUpNVertexFile( TTree* treedata, TTree* treeMC, float ptMin, float
 int main() {
 
 
-  TFile* filedata;
+  TChain* treedata=new TChain("tree_passedEvents");
   if( use2012 )
-    filedata = TFile::Open("QGStudies_Photon_Run2012_ichep.root");
+    treedata->Add("QGStudies_Photon_Run2012_ichep.root");
   else
-    filedata = TFile::Open("QGStudies_Photon_Run2011_FULL.root");
+    treedata->Add("/afs/cern.ch/work/a/amarini/2ndLevel/QG/QG/QGStudies_Photon_Run2011*.root");
 
 
-  TTree* treedata = (TTree*)filedata->Get("tree_passedEvents");
+  //TTree* treedata = (TTree*)filedata->Get("tree_passedEvents");
   //TTree* treedata = (TTree*)filedata->Get("omog");
 
 
@@ -27,8 +27,8 @@ int main() {
   if( use2012 )
     treeMC->Add("QGStudies_G_Summer12.root/tree_passedEvents");
   else
-    treeMC->Add("QGStudies_G_Summer11.root/tree_passedEvents");
-  treeMC->Add("QGStudies_QCD_EMEnriched_Summer11.root/tree_passedEvents");
+    treeMC->Add("/afs/cern.ch/work/a/amarini/2ndLevel/QG/QG/QGStudies_G_Pt*.root/tree_passedEvents");
+  treeMC->Add("/afs/cern.ch/work/a/amarini/2ndLevel/QG/QG/QGStudies_QCD_*_EMEnriched_*.root/tree_passedEvents");
 
   //TChain* treeMC = new TChain("omog");
   //treeMC->Add("Omog_QGStudies_G_Summer11.root/omog");

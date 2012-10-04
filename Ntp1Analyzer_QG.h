@@ -95,6 +95,8 @@ class Ntp1Analyzer_QG : public Ntp1Analyzer {
    Float_t pTMaxChg_QC_[20];
   
    Float_t betastar_[20];
+
+   Float_t qgl_[20];
   
   
     bool DEBUG_VERBOSE_;

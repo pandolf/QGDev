@@ -10,9 +10,9 @@
 #include <stdio.h>
 #include <vector>
 #include <map>
+using namespace std;
 
-
-int mkDiscriminator(const char *fileName="../QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Fall11-PU_S6_START42_V14B-v1_fix_new_TREE.root",const char*treeName="tree_passedEvents")
+int mkDiscriminator(const char *fileName="../QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Fall11-PU_S6_START42_V14B-v1_TREE.root",const char*treeName="tree_passedEvents")
 {
 
 gROOT->SetStyle("Plain");
@@ -32,7 +32,8 @@ vector<int> styles;
 vector<bool> flip;
 
 //concatenate all vars names
-variables.push_back(string("qglJet0")        ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kBlack); 	styles.push_back(1);flip.push_back(true); 
+//variables.push_back(string("qglJet0")        ); range.push_back(pair<float,float>(-5,5));colors.push_back(kBlack); 	styles.push_back(1);flip.push_back(true); 
+variables.push_back(string("qglPaoloJet0")        ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kBlue+2); 	styles.push_back(1);flip.push_back(false); 
 variables.push_back(string("ptDJet0")        ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kRed); 	styles.push_back(1);flip.push_back(true); 
 variables.push_back(string("nChargedJet0")   ); range.push_back(pair<float,float>(0,100));  colors.push_back(kGreen);	styles.push_back(2);flip.push_back(false);
 variables.push_back(string("nNeutralJet0")   ); range.push_back(pair<float,float>(0,100));  colors.push_back(kBlue);	styles.push_back(3);flip.push_back(false);
@@ -48,6 +49,8 @@ variables.push_back(string("axis1_QCJet0")   ); range.push_back(pair<float,float
 variables.push_back(string("axis2_QCJet0")   ); range.push_back(pair<float,float>(0,1));    colors.push_back(kOrange+2);styles.push_back(2);flip.push_back(false);
 variables.push_back(string("ptD_QCJet0")     ); range.push_back(pair<float,float>(0,1));    colors.push_back(kCyan);	styles.push_back(3);flip.push_back(true);
 variables.push_back(string("rmsCand_QCJet0") ); range.push_back(pair<float,float>(0,1));    colors.push_back(kGray);	styles.push_back(4);flip.push_back(false);
+
+variables.push_back(string("(nChargedJet0+nNeutralJet0)")   ); range.push_back(pair<float,float>(0,100));  colors.push_back(kMagenta);	styles.push_back(3);flip.push_back(false);
 
 
 string Q("abs(pdgIdPartJet0)<4");   //uds
@@ -69,7 +72,8 @@ EtaBins.push_back(pair<float,float>(2.0,3.0));
 EtaBins.push_back(pair<float,float>(3.0,4.7));
 
 RhoBins.push_back(pair<float,float>(8,10));
-
+RhoBins.push_back(pair<float,float>(10,12));
+RhoBins.push_back(pair<float,float>(12,14));
 
 for(int iPt=0 ;iPt <int(PtBins.size() );++iPt)
 for(int iEta=0;iEta<int(EtaBins.size());++iEta)
@@ -77,7 +81,7 @@ for(int iRho=0;iRho<int(RhoBins.size());++iRho){
 
 string Pt( Form("(%.1f<ptJet0 && ptJet0<%.1f)", PtBins[iPt].first,PtBins[iPt].second) );
 string Rho( Form("(%.1f<rhoPF && rhoPF<%.1f)",RhoBins[iRho].first,RhoBins[iRho].second));
-string Eta( Form("%.1f<=(abs(etaJet0)<%.1f)",EtaBins[iEta].first,EtaBins[iEta].second));
+string Eta( Form("(%.1f<=abs(etaJet0) && abs(etaJet0)<%.1f)",EtaBins[iEta].first,EtaBins[iEta].second));
 
 string LegendTitle(  Form("%.0f<P_{T} [GeV]<%.0f  %.0f< #rho <%.0f  %.0f #leq |#eta|<%.0f",PtBins[iPt].first,PtBins[iPt].second,RhoBins[iRho].first,RhoBins[iRho].second,EtaBins[iEta].first,EtaBins[iEta].second ));
 TCanvas *c=new TCanvas("c","c",800,800);
@@ -96,6 +100,7 @@ for(int iVar=0;iVar< int(variables.size());++iVar) //loop over the variables ind
 	hg->Scale(1./hg->Integral());
 	
 	TGraph *h=new TGraph(); h->SetName(variables[iVar].c_str()); h->SetTitle(variables[iVar].c_str());
+		if(variables[iVar].find(string("Paolo"))!=string::npos) h->SetTitle("qglUAJet0");
 		h->SetLineStyle(styles[iVar]);h->SetLineColor(colors[iVar]);
 		h->SetFillColor(0);
 		h->GetXaxis()->SetTitle("Quark Eff.");
@@ -116,6 +121,7 @@ for(int iVar=0;iVar< int(variables.size());++iVar) //loop over the variables ind
 	
 	delete hq;
 	delete hg;
+	
 	}
 TLegend*L=c->BuildLegend(0.1,0.1,0.7*.8+.1,.6*.8+.1);
 L->SetFillStyle(0);
@@ -129,3 +135,10 @@ delete c;
 }
 return 0; 
 }
+
+#ifdef STANDALONE
+int main(int argc, char**argv)
+{
+return mkDiscriminator();
+}
+#endif

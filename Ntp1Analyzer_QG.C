@@ -56,6 +56,8 @@ class AnalysisJet : public TLorentzVector {
   float pTMaxChg_QC;
 
   float betastar;
+  
+  float qgl;
 
 };
 
@@ -84,6 +86,7 @@ void Ntp1Analyzer_QG::CreateOutputFile() {
   reducedTree_->Branch("event",&event_,"event_/I");
   reducedTree_->Branch("nvertex",&nvertex_,"nvertex_/I");
   reducedTree_->Branch("rhoPF",&rhoPF_,"rhoPF_/F");
+  reducedTree_->Branch("rhoJetPF",&rhoJetPF_,"rhoJetPF_/F");
   reducedTree_->Branch("eventWeight",&eventWeight_,"eventWeight_/F");
 
 
@@ -136,6 +139,8 @@ void Ntp1Analyzer_QG::CreateOutputFile() {
   reducedTree_->Branch("pTMaxChg_QCJet", pTMaxChg_QC_, "pTMaxChg_QC_[nJet_]/F");
 
   reducedTree_->Branch("betastarJet", betastar_, "betastar_[nJet_]/F");
+
+  reducedTree_->Branch("qglJet", qgl_, "qgl_[nJet_]/F");
 
 
   reducedTree_->Branch("nPart", &nPart_, "nPart_/I");
@@ -197,6 +202,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
      eventWeight_ = -1.; //default
      nvertex_ = nPV;
      rhoPF_ = rhoFastjet;
+     rhoJetPF_ = rhoJetsFastjet;
 
      if( !isGoodEvent(jentry) ) continue; //this takes care also of integrated luminosity and trigger
 
@@ -604,6 +610,8 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
          thisJet.betastar = betastarAK5PFNoPUJet[iJet];
 
+         thisJet.qgl = qglAK5PFNoPUJet[iJet];
+
 
          leadJets.push_back(thisJet);
          leadJetsIndex.push_back(iJet);
@@ -665,6 +673,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
          thisJet.betastar = betastarAK5PFPUcorrJet[iJet];
 
+         thisJet.qgl = qglAK5PFPUcorrJet[iJet];
 
          leadJets.push_back(thisJet);
          leadJetsIndex.push_back(iJet);
@@ -728,6 +737,8 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
          pTMaxChg_QC_[nJet_] = thisJet.pTMaxChg_QC;
 
          betastar_[nJet_] = thisJet.betastar;
+
+         qgl_[nJet_] = thisJet.qgl;
 
          // match to gen jet:
          float deltaR_genJet_best = 999.;

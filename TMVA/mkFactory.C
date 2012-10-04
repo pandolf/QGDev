@@ -21,8 +21,8 @@ TTree *t=(TTree*)f->Get(treeName);
 if(t==NULL){fprintf(stderr,"No such tree: %s\n",treeName);return 2;}
 
 using namespace TMVA;
-TCut mycuts = "abs(pdgIdPartJet0)<4 && 30<ptJet0 && ptJet0<40 && 8<rhoPF && rhoPF<10"; // for example: TCut mycuts = "abs(var1)<0.5 && abs(var2-0.5)<1";
-TCut mycutb = "pdgIdPartJet0==21 && 30<ptJet0 && ptJet0<40 && 8<rhoPF && rhoPF<10"; // 
+TCut mycuts = "abs(pdgIdPartJet0)<4 && 30<ptJet0 && ptJet0<40 && 8<rhoPF && rhoPF<10 && abs(etaJet0)<2"; // for example: TCut mycuts = "abs(var1)<0.5 && abs(var2-0.5)<1";
+TCut mycutb = "pdgIdPartJet0==21 && 30<ptJet0 && ptJet0<40 && 8<rhoPF && rhoPF<10 && abs(etaJet0)<2"; // 
 
 TFile *out =TFile::Open("TMVA1_30_40.root","RECREATE");
 if(out==NULL){fprintf(stderr,"Unable to create TMVA.root\n");return 3;}
@@ -30,7 +30,7 @@ if(out==NULL){fprintf(stderr,"Unable to create TMVA.root\n");return 3;}
 Factory *fac =new Factory( "TMVAClassification", out, "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D" );
 
 fac->AddVariable("ptD_QCJet0",'F');
-fac->AddVariable("nChargedJet0",'F');
+fac->AddVariable("(nChargedJet0+nNeutralJet0)",'F');
 //fac->AddVariable("nNeutralJet0",'F');
 //fac->AddVariable("rmsCandJet0",'F');
 //fac->AddVariable("axis1Jet0",'F');
@@ -58,8 +58,9 @@ fac->BookMethod(TMVA::Types::kLikelihood, "Likelihood","!H:!V");
 	fac->EvaluateAllMethods();
 //
 TFile *out2=TFile::Open("TMVA2_30_40.root","RECREATE");
-Factory *fac2=new Factory( "TMVAClassification2", out2, "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D" );
+Factory *fac2=new Factory( "TMVAClassification2", out2, "!V:!Silent:Color:DrawProgressBar" );
 // PAOLO
+//fac2->AddVariable("qglPaoloJet0",'F');
 fac2->AddVariable("nChargedJet0",'F');
 fac2->AddVariable("axis1_QCJet0",'F');
 fac2->AddVariable("TMath::Max(axis2_QCJet0,0)",'F');
@@ -82,7 +83,6 @@ fac2->BookMethod(TMVA::Types::kLikelihood, "Likelihood","!H:!V");
 TFile *out3=TFile::Open("TMVA3_30_40.root","RECREATE");
 Factory *fac3=new Factory( "TMVAClassification3", out3, "!V:!Silent:Color:DrawProgressBar" );
 //QGL
-
 fac3->AddVariable("qglJet0",'F');
 
 fac3->AddSignalTree(t);
@@ -97,6 +97,25 @@ fac3->BookMethod(TMVA::Types::kLikelihood, "Likelihood","!H:!V");
 	fac3->TestAllMethods();
 	fac3->EvaluateAllMethods();
 
+TFile *out4=TFile::Open("TMVA4_30_40.root","RECREATE");
+Factory *fac4=new Factory( "TMVAClassification4", out4, "!V:!Silent:Color:DrawProgressBar" );
+//QGL
+fac4->AddVariable("ptD_QCJet0",'F');
+fac4->AddVariable("nChargedJet0",'F');
+fac4->AddVariable("axis1_QCJet0",'F');
+fac4->AddVariable("TMath::Max(axis2_QCJet0,0)",'F');
+
+fac4->AddSignalTree(t);
+fac4->AddBackgroundTree(t);
+
+fac4->PrepareTrainingAndTestTree(mycuts,mycutb,"!V:SplitMode=Random");
+//fac4->BookMethod(TMVA::Types::kBDT, "BDT",
+//	            "!H:!V:NTrees=10:nEventsMin=150:MaxDepth=1:BoostType=AdaBoost:AdaBoostBeta=0.5:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning");
+fac4->BookMethod(TMVA::Types::kLikelihood, "Likelihood","!H:!V");
+	 
+	fac4->TrainAllMethods();
+	fac4->TestAllMethods();
+	fac4->EvaluateAllMethods();
 //if (!gROOT->IsBatch()) TMVAGui( out );
 
 }

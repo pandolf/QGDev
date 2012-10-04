@@ -68,6 +68,7 @@ void Ntp1Analyzer_PhotonJet::CreateOutputFile() {
   reducedTree_->Branch("nPU",&nPU_,"nPU_/I");
 
   reducedTree_->Branch("rhoPF",&rhoPF_,"rhoPF_/F");
+  reducedTree_->Branch("rhoJetPF",&rhoJetPF_,"rhoJetPF_/F");
 
   reducedTree_->Branch("eventWeight",&eventWeight_,"eventWeight_/F");
   reducedTree_->Branch("eventWeight_medium",&eventWeight_medium_,"eventWeight_medium_/F");
@@ -266,7 +267,7 @@ void Ntp1Analyzer_PhotonJet::Loop()
    TRandom3 rand;
 
 
-   QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/work/p/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
+   QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_5_3_3_patch3/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
 
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -285,6 +286,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
      eventWeight_ = -1.; //default
      nvertex_ = nPV;
      rhoPF_ = rhoFastjet;
+     rhoJetPF_ = rhoJetsFastjet;
 
 
      if( !isGoodEvent(jentry) ) continue; //this takes care also of HLT

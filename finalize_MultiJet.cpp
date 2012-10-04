@@ -45,7 +45,7 @@ int main( int argc, char* argv[] ) {
 
 
   TreeFinalizerC_MultiJet* tf = new TreeFinalizerC_MultiJet( dataset, dijet_analysis, iBlock, nBlocks );
-  tf->set_inputFileDir("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat/store/user/pandolf/2ndLevelTrees/");
+  tf->set_inputFileDir("./");
 
   if( dataset=="QCD_HT_Summer11" ) {
     tf->addInput( "QCD_TuneZ2_HT-100To250_7TeV-madgraph_Summer11-PU_S4_START42_V11-v2" );

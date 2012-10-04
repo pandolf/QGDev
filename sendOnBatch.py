@@ -42,19 +42,17 @@ afsdir = "/afs/cern.ch/user/p/pandolf/scratch0/NTUPLES/"+dataset
 # to write on local disks
 ################################################
 #diskoutputdir = "/cmsrm/pc21_2/pandolf/MC/"+dataset
-diskoutputdir = "/cmsrm/pc24_2/pandolf/MC/Summer11/"+dataset
-match_Spring11 = re.search( r'Spring11', dataset, re.M|re.I)
+diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Data/"+dataset
+
+match_Summer11 = re.search( r'Summer11', dataset, re.M|re.I)
+if match_Summer11:
+    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer11/"+dataset
 match_Fall11 = re.search( r'Fall11', dataset, re.M|re.I)
-if match_Spring11:
-    diskoutputdir = "/cmsrm/pc24_2/pandolf/MC/Spring11_v2/"+dataset
 if match_Fall11:
-    diskoutputdir = "/cmsrm/pc24_2/pandolf/MC/Fall11/"+dataset
-#diskoutputdir = "/cmsrm/pc22_2/pandolf/MC/Summer11/"+dataset
-#diskoutputmain2 = castordir
-#diskoutputmain2 = pnfsdir
+    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Fall11/"+dataset
+
 diskoutputmain2 = afsdir
 diskoutputmain = diskoutputdir
-os.system("mkdir -p "+diskoutputmain2)
 # prepare job to write on the cmst3 cluster disks
 ################################################
 dir = analyzerType + "_" + dataset
@@ -62,6 +60,7 @@ os.system("mkdir -p "+dir)
 os.system("mkdir -p "+dir+"/log/")
 os.system("mkdir -p "+dir+"/input/")
 os.system("mkdir -p "+dir+"/src/")
+os.system("mkdir -p "+diskoutputdir)
 #outputroot = outputmain+"/root/"
 #if castordir != "none": 
 #    os.system("rfmkdir -p "+outputmain)
@@ -69,9 +68,6 @@ os.system("mkdir -p "+dir+"/src/")
 #    os.system("rfchmod 777 "+outputmain)
 #    os.system("rfchmod 777 "+outputroot)
 #else: os.system("mkdir -p "+outputroot)
-
-if diskoutputdir != "none": 
-    os.system("ssh -o BatchMode=yes -o StrictHostKeyChecking=no pccmsrm25 mkdir -p "+diskoutputmain)
 
 #look for the current directory
 #######################################
@@ -99,30 +95,17 @@ while (len(inputfiles) > 0):
     outputname = dir+"/src/submit_"+str(ijob)+".src"
     outputfile = open(outputname,'w')
     outputfile.write('#!/bin/bash\n')
-    outputfile.write('export STAGE_HOST=castorcms\n')
     outputfile.write('export SCRAM_ARCH=slc5_amd64_gcc434\n')
-    outputfile.write('cd /afs/cern.ch/user/p/pandolf/scratch1/CMSSW_4_2_3_patch5/ ; eval `scramv1 runtime -sh` ; cd -\n')
-    #outputfile.write('export ROOTSYS=/afs/cern.ch/sw/lcg/app/releases/ROOT/5.26.00/x86_64-slc5-gcc34-opt/root\n')
-    #outputfile.write('export LD_LIBRARY_PATH=$ROOTSYS/lib\n')
-    #    outputfile.write('cd '+pwd)
-    #outputfile.write('cp '+pwd+'/Cert_132440-140399_7TeV_StreamExpress_Collisions10_CMSSWConfig.txt $WORKDIR\n')
-    #outputfile.write('cp '+pwd+'/lumi_by_LS_132440_140401.csv $WORKDIR\n')
-    #outputfile.write('cp -r  /afs/cern.ch/user/p/pandolf/scratch1/CMSSW_3_8_7/src/HZZlljj/HZZlljjAnalyzer/test/analysis/Bins $WORKDIR\n')
-    outputfile.write('cp '+pwd+'/QG_QCD_Pt_15to3000_TuneZ2_Flat*.root $WORKDIR\n')
-    outputfile.write('cp '+pwd+'/Pileup*.root $WORKDIR\n')
-    outputfile.write('cp '+pwd+'/SF_*.txt $WORKDIR\n')
+    outputfile.write('cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src ; eval `scramv1 runtime -sh` ; cd -\n')
     outputfile.write('cd $WORKDIR\n')
-    #outputfile.write(pwd+'/'+application+" "+dataset+" "+inputfilename+" _"+str(ijob)+"\n")
+
     if flags=="":
       outputfile.write(pwd+'/'+application+" "+dataset+" "+inputfilename+" "+str(ijob)+"\n")
     else :
       outputfile.write(pwd+'/'+application+" "+dataset+" "+inputfilename+" "+flags+"_"+str(ijob)+"\n")
-    outputfile.write('rm QG_QCD_Pt_15to3000_TuneZ2_Flat*.root\n')
-    outputfile.write('ls '+analyzerType+'*.root | xargs -i scp -o BatchMode=yes -o StrictHostKeyChecking=no {} pccmsrm25:'+diskoutputmain+'/{}\n') 
-    #outputfile.write('cp *.root '+diskoutputmain2+'\n') 
+    outputfile.write('ls '+analyzerType+'*.root | xargs -i cp {} '+diskoutputmain+'/{}\n') 
     outputfile.close
     os.system("echo bsub -q "+queue+" -o "+dir+"/log/"+dataset+"_"+str(ijob)+".log source "+pwd+"/"+outputname)
     os.system("bsub -q "+queue+" -o "+dir+"/log/"+dataset+"_"+str(ijob)+".log source "+pwd+"/"+outputname+" -copyInput="+dataset+"_"+str(ijob))
     ijob = ijob+1
-    time.sleep(3.)
     continue

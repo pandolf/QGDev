@@ -95,7 +95,8 @@ if( !(dataset_tstr.BeginsWith("Photon") && dataset_tstr.Contains("Run2011")) )
 
   bool noJetSelection = ( secondJetThreshold < 0. );
 
-  tree = new TChain("jetTree");
+  //tree = new TChain("jetTree");
+  tree = new TChain("reducedTree");
 
 
   std::string infileName, treeName;
@@ -630,7 +631,7 @@ if( !(dataset_tstr.BeginsWith("Photon") && dataset_tstr.Contains("Run2011")) )
 
 
 
-  QGLikelihoodCalculator* qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/work/p/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
+  QGLikelihoodCalculator* qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
   //QGLikelihoodCalculator* qglikeli = new QGLikelihoodCalculator("/shome/pandolf/CMSSW_4_2_8/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
 
 
@@ -1277,7 +1278,8 @@ void addInput( const std::string& dataset, bool genjets ) {
       std::cout << "Exiting." << std::endl;
       exit(77);
     }
-    std::string treeName = infileName +"/jetTree";
+    //std::string treeName = infileName +"/jetTree";
+    std::string treeName = infileName +"/reducedTree";
     tree->Add(treeName.c_str());
     std::cout << "-> Added " << treeName << ". Tree has " << tree->GetEntries() << " entries." << std::endl;
     h1_lumi = (TH1F*)infile->Get("lumi");
