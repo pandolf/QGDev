@@ -11,8 +11,10 @@ for i in files_*.txt ;
 	   CDIR=${PWD}
 	   DATADIR="/afs/cern.ch/work/a/amarini/2ndLevel"
 
+	[ "$1" == "" ] || { echo $DATASET | grep "$1" || continue ; }	
+
 		#choose the Analyzer
-		if [ "$1" == "" ]; then
+		if [ "$2" == "" ]; then
 			 #PHOTONJET
 			{ echo ${DATASET} | grep 'G_Pt'   >/dev/null	&& echo "G_Pt match" 	&& export ANALYZER="PhotonJet" ; } ||
 			{ echo ${DATASET} | grep 'Photon' >/dev/null 	&& echo "Photon match" 	&& export ANALYZER="PhotonJet" ; } ||
@@ -22,7 +24,7 @@ for i in files_*.txt ;
 			{ echo ${DATASET} | grep 'QCD_' >/dev/null 	&& echo "QCD Match" && export ANALYZER="MultiJet" ; } ||
 			export ANALYZER="QG" 
 		else
-			export ANALYZER="$1"
+			export ANALYZER="$2"
 		fi;
 
 		#Choose Directory

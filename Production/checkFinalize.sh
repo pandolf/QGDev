@@ -10,6 +10,8 @@ for i in files_${ANAL}_2ndLevel_*.txt ;
 	DATADIR="/afs/cern.ch/work/a/amarini/2ndLevel"
 	[ "$ANAL" == "PhotonJet"  ] && export PREFIX="QGStudies"
 	[ "$ANAL" == "MultiJet"   ] && export PREFIX="MultiJet"
+
+	[ "$1" == "" ] || { echo $DATASET | grep "$1" || continue ; }	
 	
 	{ echo ${DATASET} | grep "Summer11" > /dev/null && export DIRECTORY="Summer11"; } ||
 	{ echo ${DATASET} | grep "Fall11" > /dev/null && export DIRECTORY="Fall11"; } ||

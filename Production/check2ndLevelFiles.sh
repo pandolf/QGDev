@@ -7,6 +7,8 @@ for i in files_*.txt ;
            AAA=${i##*files_};
            DATASET=${AAA%.txt} ;
 
+	[ "$1" == "" ] || { echo $DATASET | grep "$1" || continue ; }	
+
 	{ echo ${DATASET} | grep "Summer11" > /dev/null && export DIRECTORY="Summer11"; } ||
 	{ echo ${DATASET} | grep "Fall11" > /dev/null && export DIRECTORY="Fall11"; } ||
 	export DIRECTORY="Data"

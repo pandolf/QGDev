@@ -37,6 +37,6 @@ echo "The Analyzer is ${ANALYZER}"
 read
 
 
-python sendOnBatch.py $DATASET 10 ${ANALIZER}
+python sendOnBatch.py $DATASET 10 ${ANALYZER}
 
 
