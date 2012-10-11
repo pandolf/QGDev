@@ -262,43 +262,43 @@ void TreeFinalizerC_MultiJet::finalize() {
   //puFileName = "PUTarget.Run2011B.175832-180252.root";
 
   PUWeight* fPUWeightRunA = new PUWeight(-1, "2011A", puType);
-  std::string puFileNameRunA = "all2011A.pileup_v2_73mb.root";
+  std::string puFileNameRunA = "/afs/cern.ch/user/p/pandolf/public/all2011A.pileup_v2_73mb.root";
   TFile* filePURunA = TFile::Open(puFileNameRunA.c_str());
   TH1F* h1_nPU_dataRunA = (TH1F*)filePURunA->Get("pileup");
   fPUWeightRunA->SetDataHistogram(h1_nPU_dataRunA);
 
   PUWeight* fPUWeight_HT150 = new PUWeight(-1, "HT150", puType);
-  std::string puFileName_HT150 = "pileup_HT150.root";
+  std::string puFileName_HT150 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT150.root";
   TFile* filePU_HT150 = TFile::Open(puFileName_HT150.c_str());
   TH1F* h1_nPU_data_HT150 = (TH1F*)filePU_HT150->Get("pileup");
   fPUWeight_HT150->SetDataHistogram(h1_nPU_data_HT150);
 
   PUWeight* fPUWeight_HT250 = new PUWeight(-1, "HT250", puType);
-  std::string puFileName_HT250 = "pileup_HT250.root";
+  std::string puFileName_HT250 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT250.root";
   TFile* filePU_HT250 = TFile::Open(puFileName_HT250.c_str());
   TH1F* h1_nPU_data_HT250 = (TH1F*)filePU_HT250->Get("pileup");
   fPUWeight_HT250->SetDataHistogram(h1_nPU_data_HT250);
 
   PUWeight* fPUWeight_HT350 = new PUWeight(-1, "HT350", puType);
-  std::string puFileName_HT350 = "pileup_HT350.root";
+  std::string puFileName_HT350 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT350.root";
   TFile* filePU_HT350 = TFile::Open(puFileName_HT350.c_str());
   TH1F* h1_nPU_data_HT350 = (TH1F*)filePU_HT350->Get("pileup");
   fPUWeight_HT350->SetDataHistogram(h1_nPU_data_HT350);
 
   PUWeight* fPUWeight_HT400 = new PUWeight(-1, "HT400", puType);
-  std::string puFileName_HT400 = "pileup_HT400.root";
+  std::string puFileName_HT400 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT400.root";
   TFile* filePU_HT400 = TFile::Open(puFileName_HT400.c_str());
   TH1F* h1_nPU_data_HT400 = (TH1F*)filePU_HT400->Get("pileup");
   fPUWeight_HT400->SetDataHistogram(h1_nPU_data_HT400);
 
   PUWeight* fPUWeight_HT500 = new PUWeight(-1, "HT500", puType);
-  std::string puFileName_HT500 = "pileup_HT500.root";
+  std::string puFileName_HT500 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT500.root";
   TFile* filePU_HT500 = TFile::Open(puFileName_HT500.c_str());
   TH1F* h1_nPU_data_HT500 = (TH1F*)filePU_HT500->Get("pileup");
   fPUWeight_HT500->SetDataHistogram(h1_nPU_data_HT500);
 
   PUWeight* fPUWeight_HT600 = new PUWeight(-1, "HT600", puType);
-  std::string puFileName_HT600 = "pileup_HT600.root";
+  std::string puFileName_HT600 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT600.root";
   TFile* filePU_HT600 = TFile::Open(puFileName_HT600.c_str());
   TH1F* h1_nPU_data_HT600 = (TH1F*)filePU_HT600->Get("pileup");
   fPUWeight_HT600->SetDataHistogram(h1_nPU_data_HT600);
@@ -436,7 +436,7 @@ void TreeFinalizerC_MultiJet::finalize() {
 
 
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/cmsrm/pc25/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
-  QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/shome/pandolf/CMSSW_4_2_8/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
+  QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
 
 
@@ -646,7 +646,13 @@ void TreeFinalizerC_MultiJet::finalize() {
       thisJet->eHFEM = eHFEMJet[iJet];
 
       if( jets.size()<2 ) { //jetID only on two leading jets
-      //  if( !(thisJet->passedJetID()) ) continue;
+        if( !(thisJet->passedJetID("minimal")) ) continue;
+   			 //if( fabs(thisJet->Eta())<2.4 && thisJet->nChargedHadrons==0 ) continue;
+   			 //if( (thisJet->nChargedHadrons + thisJet->nPhotons + thisJet->nNeutralHadrons + thisJet->nHFHadrons+thisJet->nHFEM)==1 ) continue;
+   			 //if( (thisJet->ePhotons+eHFEM)/thisJet->E()>0.99 ) continue;
+   			 //if( (thisJet->eNeutralHadrons)/thisJet->E()>0.99 ) continue;
+
+   			 //if( thisJet->Pt() > 50. && thisJet->Pt()<100. && (passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL) && ptPhotReco>53. ) continue;
       }
 
       if( fabs(thisJet->Eta())<2.4 ) {

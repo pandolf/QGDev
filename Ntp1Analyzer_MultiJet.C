@@ -97,6 +97,27 @@ void Ntp1Analyzer_MultiJet::CreateOutputFile() {
   reducedTree_->Branch("passed_HT700", &passed_HT700_, "passed_HT700_/O");
   reducedTree_->Branch("passed_HT750", &passed_HT750_, "passed_HT750_/O");
 
+  reducedTree_->Branch("axis1Jet", axis1_, "axis1_[nJet_]/F");
+  reducedTree_->Branch("axis2Jet", axis2_, "axis2_[nJet_]/F");
+  reducedTree_->Branch("pullJet", pull_, "pull_[nJet_]/F");
+  reducedTree_->Branch("tanaJet", tana_, "tana_[nJet_]/F");
+
+  reducedTree_->Branch("ptD_QCJet", ptD_QC_, "ptD_QC_[nJet_]/F");
+  reducedTree_->Branch("rmsCand_QCJet", rmsCand_QC_, "rmsCand_QC_[nJet_]/F");
+  reducedTree_->Branch("axis1_QCJet", axis1_QC_, "axis1_QC_[nJet_]/F");
+  reducedTree_->Branch("axis2_QCJet", axis2_QC_, "axis2_QC_[nJet_]/F");
+  reducedTree_->Branch("pull_QCJet", pull_QC_, "pull_QC_[nJet_]/F");
+  reducedTree_->Branch("tana_QCJet", tana_QC_, "tana_QC_[nJet_]/F");
+
+  reducedTree_->Branch("nChg_ptCutJet", nChg_ptCut_, "nChg_ptCut_[nJet_]/I");
+  reducedTree_->Branch("nChg_QCJet", nChg_QC_, "nChg_QC_[nJet_]/I");
+  reducedTree_->Branch("nChg_ptCut_QCJet", nChg_ptCut_QC_, "nChg_ptCut_QC_[nJet_]/I");
+  reducedTree_->Branch("nNeutral_ptCutJet", nNeutral_ptCut_, "nNeutral_ptCut_[nJet_]/I");
+
+  reducedTree_->Branch("RchgJet", Rchg_, "Rchg_[nJet_]/F");
+  reducedTree_->Branch("RneutralJet", Rneutral_, "Rneutral_[nJet_]/F");
+  reducedTree_->Branch("RJet", R_, "R_[nJet_]/F");
+  reducedTree_->Branch("Rchg_QCJet", Rchg_QC_, "Rchg_QC_[nJet_]/F");
 
 } 
 
@@ -201,6 +222,28 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
        thisJet.ptD = ptDAK5PFPUcorrJet[iRecoJet];
        thisJet.rmsCand = rmsCandAK5PFPUcorrJet[iRecoJet];
+
+         thisJet.axis1 = axis1AK5PFPUcorrJet[iRecoJet];
+         thisJet.axis2 = axis2AK5PFPUcorrJet[iRecoJet];
+         thisJet.pull = pullAK5PFPUcorrJet[iRecoJet];
+         thisJet.tana = tanaAK5PFPUcorrJet[iRecoJet];
+
+         thisJet.ptD_QC = ptD_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.rmsCand_QC = rmsCand_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.axis1_QC = axis1_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.axis2_QC = axis2_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.pull_QC = pull_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.tana_QC = tana_QCAK5PFPUcorrJet[iRecoJet];
+
+         thisJet.nChg_ptCut = nChg_ptCutAK5PFPUcorrJet[iRecoJet];
+         thisJet.nChg_QC = nChg_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.nChg_ptCut_QC = nChg_ptCut_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.nNeutral_ptCut = nNeutral_ptCutAK5PFPUcorrJet[iRecoJet];
+
+         thisJet.Rchg = RchgAK5PFPUcorrJet[iRecoJet];
+         thisJet.Rneutral = RneutralAK5PFPUcorrJet[iRecoJet];
+         thisJet.R = RAK5PFPUcorrJet[iRecoJet];
+         thisJet.Rchg_QC = Rchg_QCAK5PFPUcorrJet[iRecoJet];
 
        thisJet.trackCountingHighEffBJetTag = trackCountingHighEffBJetTagsAK5PFPUcorrJet[iRecoJet];
        thisJet.simpleSecondaryVertexHighEffBJetTag = simpleSecondaryVertexHighEffBJetTagsAK5PFPUcorrJet[iRecoJet];

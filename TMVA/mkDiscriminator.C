@@ -12,7 +12,7 @@
 #include <map>
 using namespace std;
 
-int mkDiscriminator(const char *fileName="../QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Fall11-PU_S6_START42_V14B-v1_TREE.root",const char*treeName="tree_passedEvents")
+int mkDiscriminator(const char *fileName="./QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Fall11-PU_S6_START42_V14B-v1_TREE.root",const char*treeName="tree_passedEvents")
 {
 
 gROOT->SetStyle("Plain");
@@ -32,7 +32,7 @@ vector<int> styles;
 vector<bool> flip;
 
 //concatenate all vars names
-//variables.push_back(string("qglJet0")        ); range.push_back(pair<float,float>(-5,5));colors.push_back(kBlack); 	styles.push_back(1);flip.push_back(true); 
+variables.push_back(string("qglJet0")        ); range.push_back(pair<float,float>(-5,5));colors.push_back(kBlack); 	styles.push_back(1);flip.push_back(true); 
 variables.push_back(string("qglPaoloJet0")        ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kBlue+2); 	styles.push_back(1);flip.push_back(false); 
 variables.push_back(string("ptDJet0")        ); range.push_back(pair<float,float>(0,1.001));colors.push_back(kRed); 	styles.push_back(1);flip.push_back(true); 
 variables.push_back(string("nChargedJet0")   ); range.push_back(pair<float,float>(0,100));  colors.push_back(kGreen);	styles.push_back(2);flip.push_back(false);

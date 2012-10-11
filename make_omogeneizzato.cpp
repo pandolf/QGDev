@@ -256,20 +256,20 @@ int main( int argc, char* argv[] ) {
   chain->SetBranchAddress( "matchedToGenJet", &matchedToGenJet);
 
 
-  std::string puFileName_Photon30 = "pileup_nvertex_QGStudies_Run2012_pt30_50.root";
-  //std::string puFileName_Photon30 = "pileup_nvertex_QGStudies_pt30_50.root";
+  //std::string puFileName_Photon30 = "pileup_nvertex_QGStudies_Run2012_pt30_50.root";
+  std::string puFileName_Photon30 = "pileup_nvertex_QGStudies_pt30_50.root";
   TFile* filePU_Photon30 = TFile::Open(puFileName_Photon30.c_str());
   TH1F* h1_nPU_data_Photon30 = (TH1F*)filePU_Photon30->Get("pileupdata");
   TH1F* h1_nPU_mc_Photon30 = (TH1F*)filePU_Photon30->Get("pileupmc");
 
-  std::string puFileName_Photon50 = "pileup_nvertex_QGStudies_Run2012_pt50_100.root";
-  //std::string puFileName_Photon50 = "pileup_nvertex_QGStudies_pt50_100.root";
+ // std::string puFileName_Photon50 = "pileup_nvertex_QGStudies_Run2012_pt50_100.root";
+  std::string puFileName_Photon50 = "pileup_nvertex_QGStudies_pt50_100.root";
   TFile* filePU_Photon50 = TFile::Open(puFileName_Photon50.c_str());
   TH1F* h1_nPU_data_Photon50 = (TH1F*)filePU_Photon50->Get("pileupdata");
   TH1F* h1_nPU_mc_Photon50 = (TH1F*)filePU_Photon50->Get("pileupmc");
 
-  std::string puFileName_Photon90 = "pileup_nvertex_QGStudies_Run2012_pt100_150.root";
-  //std::string puFileName_Photon90 = "pileup_nvertex_QGStudies_pt100_150.root";
+  //std::string puFileName_Photon90 = "pileup_nvertex_QGStudies_Run2012_pt100_150.root";
+  std::string puFileName_Photon90 = "pileup_nvertex_QGStudies_pt100_150.root";
   TFile* filePU_Photon90 = TFile::Open(puFileName_Photon90.c_str());
   TH1F* h1_nPU_data_Photon90 = (TH1F*)filePU_Photon90->Get("pileupdata");
   TH1F* h1_nPU_mc_Photon90 = (TH1F*)filePU_Photon90->Get("pileupmc");
@@ -322,33 +322,33 @@ int main( int argc, char* argv[] ) {
     }
 
 
-    if( run<5 ) { //mc 
+//  if( run<5 ) { //mc 
 
-      if( ptJet0>=50. && ptJet0<100. ) {
+//    if( ptJet0>=50. && ptJet0<100. ) {
 
-        //int bin = h1_nPU_mc_Photon50->FindBin( nvertex );
-        float mc_binvalue = h1_nPU_mc_Photon50->GetBinContent(nvertex+1);
-        float data_binvalue = h1_nPU_data_Photon50->GetBinContent(nvertex+1);
-        float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
-        eventWeight *= puweight;
+//      //int bin = h1_nPU_mc_Photon50->FindBin( nvertex );
+//      float mc_binvalue = h1_nPU_mc_Photon50->GetBinContent(nvertex+1);
+//      float data_binvalue = h1_nPU_data_Photon50->GetBinContent(nvertex+1);
+//      float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
+//      eventWeight *= puweight;
 
-      } else if( ptJet0>=100. && ptJet0<150. ) {
+//    } else if( ptJet0>=100. && ptJet0<150. ) {
 
-        float mc_binvalue = h1_nPU_mc_Photon90->GetBinContent(nvertex+1);
-        float data_binvalue = h1_nPU_data_Photon90->GetBinContent(nvertex+1);
-        float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
-        eventWeight *= puweight;
+//      float mc_binvalue = h1_nPU_mc_Photon90->GetBinContent(nvertex+1);
+//      float data_binvalue = h1_nPU_data_Photon90->GetBinContent(nvertex+1);
+//      float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
+//      eventWeight *= puweight;
 
-      } else if( ptJet0>=30. && ptJet0<50. ) {
+//    } else if( ptJet0>=30. && ptJet0<50. ) {
 
-        float mc_binvalue = h1_nPU_mc_Photon30->GetBinContent(nvertex+1);
-        float data_binvalue = h1_nPU_data_Photon30->GetBinContent(nvertex+1);
-        float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
-        eventWeight *= puweight;
+//      float mc_binvalue = h1_nPU_mc_Photon30->GetBinContent(nvertex+1);
+//      float data_binvalue = h1_nPU_data_Photon30->GetBinContent(nvertex+1);
+//      float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
+//      eventWeight *= puweight;
 
-      }
+//    }
 
-    }
+//  }
 
 
     DummyJet jet0;

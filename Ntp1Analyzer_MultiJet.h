@@ -68,6 +68,28 @@ class Ntp1Analyzer_MultiJet : public Ntp1Analyzer {
    Int_t pdgIdPartJet_[10];
    Int_t pdgIdMomJet_[10];
 
+   Float_t axis1_[20];
+   Float_t axis2_[20];
+   Float_t pull_[20];
+   Float_t tana_[20];
+  
+   Float_t ptD_QC_[20];
+   Float_t rmsCand_QC_[20];
+   Float_t axis1_QC_[20];
+   Float_t axis2_QC_[20];
+   Float_t pull_QC_[20];
+   Float_t tana_QC_[20];
+  
+   Int_t nChg_ptCut_[20];
+   Int_t nChg_QC_[20];
+   Int_t nChg_ptCut_QC_[20];
+   Int_t nNeutral_ptCut_[20];
+  
+   Float_t Rchg_[20];
+   Float_t Rneutral_[20];
+   Float_t R_[20];
+   Float_t Rchg_QC_[20];
+
    Float_t epfMet_;
    Float_t epfMetCorr_;
    Float_t phipfMet_;

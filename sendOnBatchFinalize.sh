@@ -3,7 +3,7 @@
 
 DATASET="$1"
 ANALYZER="$2"
-QUEUE="1nh"
+QUEUE="8nh"
 
 
 TMPDIR=QG_$DATASET

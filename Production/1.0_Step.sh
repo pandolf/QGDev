@@ -13,7 +13,6 @@ eval `scramv1 runtime -sh`
 alias eos='/afs/cern.ch/project/eos/installation/0.2.5/bin/eos.select'
 
 echo "The location of the files is $LOCATION and the dataset is $DATASET"
-read
 
 for i in `/afs/cern.ch/project/eos/installation/0.2.5/bin/eos.select ls $LOCATION `; 
 do

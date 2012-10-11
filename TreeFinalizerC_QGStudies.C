@@ -315,7 +315,7 @@ void TreeFinalizerC_QGStudies::finalize() {
   Float_t phiJetReco;
   tree_->SetBranchAddress("phiJetReco", &phiJetReco);
   Float_t eTracksReco;
-  tree_->SetBranchAddress("eTracksReco", &eTracksReco);
+  tree_->SetBranchAddress("eChargedHadrons", &eTracksReco);
   Int_t nTracksReco;
   tree_->SetBranchAddress("nTracksReco", &nTracksReco);
   Int_t nNeutralHadronsReco;
@@ -327,9 +327,9 @@ void TreeFinalizerC_QGStudies::finalize() {
   Int_t nHFEMReco;
   tree_->SetBranchAddress("nHFEMReco", &nHFEMReco);
   Float_t eNeutralHadronsReco;
-  tree_->SetBranchAddress("eNeutralHadronsReco", &eNeutralHadronsReco);
+  tree_->SetBranchAddress("eNeutralHadrons", &eNeutralHadronsReco);
   Float_t ePhotonsReco;
-  tree_->SetBranchAddress("ePhotonsReco", &ePhotonsReco);
+  tree_->SetBranchAddress("ePhotons", &ePhotonsReco);
   Float_t eHFHadronsReco;
   tree_->SetBranchAddress("eHFHadronsReco", &eHFHadronsReco);
   Float_t eHFEMReco;
@@ -648,14 +648,19 @@ void TreeFinalizerC_QGStudies::finalize() {
       h1_cutflow_50100->Fill( icut++, eventWeight );
 
     // jet id:
+   
+	
+  //jet will be redefined later?
+   TLorentzVector jetAAA;
+   jetAAA.SetPtEtaPhiE( ptCorrJetReco, etaJetReco, phiJetReco, eJetReco*ptCorrJetReco/ptJetReco );
+
     if( fabs(etaJetReco)<2.4 && nTracksReco==0 ) continue;
     if( (nTracksReco+nPhotonsReco+nNeutralHadronsReco+nHFHadronsReco+nHFEMReco)==1 ) continue;
-    if( ePhotonsReco+eHFEMReco>0.99 ) continue;
-    if( eNeutralHadronsReco>0.99 ) continue;
+    if( (ePhotonsReco+eHFEMReco)/jetAAA.E()>0.99 ) continue;
+    if( (eNeutralHadronsReco)/jetAAA.E()>0.99 ) continue;
 
     if( ptCorrJetReco > 50. && ptCorrJetReco<100. && (passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL) && ptPhotReco>53. )
       h1_cutflow_50100->Fill( icut++, eventWeight );
-
 
 
 

@@ -233,6 +233,29 @@ void Ntp1Analyzer_PhotonJet::CreateOutputFile() {
   reducedTree_->Branch("etcMet",&etcMet_,"etcMet_/F");
   reducedTree_->Branch("phitcMet",&phitcMet_,"phitcMet_/F");
 
+  reducedTree_->Branch("axis1Jet", axis1_, "axis1_[nJet_]/F");
+  reducedTree_->Branch("axis2Jet", axis2_, "axis2_[nJet_]/F");
+  reducedTree_->Branch("pullJet", pull_, "pull_[nJet_]/F");
+  reducedTree_->Branch("tanaJet", tana_, "tana_[nJet_]/F");
+
+  reducedTree_->Branch("ptD_QCJet", ptD_QC_, "ptD_QC_[nJet_]/F");
+  reducedTree_->Branch("rmsCand_QCJet", rmsCand_QC_, "rmsCand_QC_[nJet_]/F");
+  reducedTree_->Branch("axis1_QCJet", axis1_QC_, "axis1_QC_[nJet_]/F");
+  reducedTree_->Branch("axis2_QCJet", axis2_QC_, "axis2_QC_[nJet_]/F");
+  reducedTree_->Branch("pull_QCJet", pull_QC_, "pull_QC_[nJet_]/F");
+  reducedTree_->Branch("tana_QCJet", tana_QC_, "tana_QC_[nJet_]/F");
+
+  reducedTree_->Branch("nChg_ptCutJet", nChg_ptCut_, "nChg_ptCut_[nJet_]/I");
+  reducedTree_->Branch("nChg_QCJet", nChg_QC_, "nChg_QC_[nJet_]/I");
+  reducedTree_->Branch("nChg_ptCut_QCJet", nChg_ptCut_QC_, "nChg_ptCut_QC_[nJet_]/I");
+  reducedTree_->Branch("nNeutral_ptCutJet", nNeutral_ptCut_, "nNeutral_ptCut_[nJet_]/I");
+
+  reducedTree_->Branch("RchgJet", Rchg_, "Rchg_[nJet_]/F");
+  reducedTree_->Branch("RneutralJet", Rneutral_, "Rneutral_[nJet_]/F");
+  reducedTree_->Branch("RJet", R_, "R_[nJet_]/F");
+  reducedTree_->Branch("Rchg_QCJet", Rchg_QC_, "Rchg_QC_[nJet_]/F");
+
+
 } 
 
 
@@ -568,6 +591,29 @@ if( DEBUG_VERBOSE_ && passedPhotonID_medium_==true) {
 
        thisJet.ptD = ptDAK5PFPUcorrJet[iRecoJet];
        thisJet.rmsCand = rmsCandAK5PFPUcorrJet[iRecoJet];
+	
+       
+         thisJet.axis1 = axis1AK5PFPUcorrJet[iRecoJet];
+         thisJet.axis2 = axis2AK5PFPUcorrJet[iRecoJet];
+         thisJet.pull = pullAK5PFPUcorrJet[iRecoJet];
+         thisJet.tana = tanaAK5PFPUcorrJet[iRecoJet];
+
+         thisJet.ptD_QC = ptD_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.rmsCand_QC = rmsCand_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.axis1_QC = axis1_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.axis2_QC = axis2_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.pull_QC = pull_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.tana_QC = tana_QCAK5PFPUcorrJet[iRecoJet];
+
+         thisJet.nChg_ptCut = nChg_ptCutAK5PFPUcorrJet[iRecoJet];
+         thisJet.nChg_QC = nChg_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.nChg_ptCut_QC = nChg_ptCut_QCAK5PFPUcorrJet[iRecoJet];
+         thisJet.nNeutral_ptCut = nNeutral_ptCutAK5PFPUcorrJet[iRecoJet];
+
+         thisJet.Rchg = RchgAK5PFPUcorrJet[iRecoJet];
+         thisJet.Rneutral = RneutralAK5PFPUcorrJet[iRecoJet];
+         thisJet.R = RAK5PFPUcorrJet[iRecoJet];
+         thisJet.Rchg_QC = Rchg_QCAK5PFPUcorrJet[iRecoJet];
 
        thisJet.beta = betaAK5PFPUcorrJet[iRecoJet];
        thisJet.betaStar = betaAK5PFPUcorrJet[iRecoJet];
@@ -656,15 +702,24 @@ if( DEBUG_VERBOSE_ && passedPhotonID_medium_==true) {
      
 
 
-//   Float_t deltaRmin = 999.;
+   Float_t deltaRmin = 999.;
 
-//   for(unsigned int iGenJet=0; iGenJet<nJetGen; ++iGenJet) {
+   for(unsigned int iGenJet=0; iGenJet<nAK5GenJet; ++iGenJet) {
 
-//     Float_t  eJetGen_i = eJetGen[iGenJet];
-//     Float_t  ptJetGen_i  =  ptJetGen[iGenJet];
-//     Float_t  phiJetGen_i = phiJetGen[iGenJet];
-//     Float_t  etaJetGen_i = etaJetGen[iGenJet];
+     TLorentzVector pJetGen_i;
 
+     Float_t  eJetGen_i   = energyAK5GenJet[iGenJet];
+     Float_t  pxJetGen_i = pxAK5GenJet[iGenJet];
+     Float_t  pyJetGen_i = pyAK5GenJet[iGenJet];
+     Float_t  pzJetGen_i = pzAK5GenJet[iGenJet];
+
+	pJetGen_i.SetPxPyPzE(pxJetGen_i,pyJetGen_i,pzJetGen_i,eJetGen_i);
+     Float_t  phiJetGen_i = //phiAK5GenJet[iGenJet];
+				pJetGen_i.Phi();
+     Float_t  etaJetGen_i = //etaAK5GenJet[iGenJet];
+				pJetGen_i.Eta();
+     Float_t  ptJetGen_i  = //ptAK5GenJet[iGenJet];
+				pJetGen_i.Pt();
 //     Float_t  eTracksGen_i = (jetAlgo_=="akt5") ? eTracksGen[iGenJet] : 0.;
 //     Float_t  ePhotonsGen_i = (jetAlgo_=="akt5") ? ePhotonsGen[iGenJet] : 0.;
 //     Float_t  eNeutralHadronsGen_i = (jetAlgo_=="akt5") ? eNeutralHadronsGen[iGenJet] : 0.;
@@ -677,17 +732,18 @@ if( DEBUG_VERBOSE_ && passedPhotonID_medium_==true) {
 //     Int_t  nMuonsGen_i = (jetAlgo_=="akt5") ? nMuonsGen[iGenJet] : 0;
 //     Int_t  nElectronsGen_i = (jetAlgo_=="akt5") ? nElectronsGen[iGenJet] : 0;
 
-//     Float_t deltaEta = firstJet.etaReco - etaJetGen_i;
-//     Float_t deltaPhi = fitTools::delta_phi(firstJet.phiReco, phiJetGen_i);
+     //Float_t deltaEta = firstJet.etaReco - etaJetGen_i;
+     //Float_t deltaPhi = fitTools::delta_phi(firstJet.phiReco, phiJetGen_i);
 
-//     Float_t deltaR = sqrt( deltaEta*deltaEta + deltaPhi*deltaPhi );
+    // Float_t deltaR = sqrt( deltaEta*deltaEta + deltaPhi*deltaPhi );
+     Float_t deltaR = firstJet.DeltaR( pJetGen_i); 
 
-//     if( deltaR < deltaRmin ) {
-//       deltaRmin = deltaR;
-//       firstJet.ptGen = ptJetGen_i;
-//       firstJet.eGen = eJetGen_i;
-//       firstJet.etaGen = etaJetGen_i;
-//       firstJet.phiGen = phiJetGen_i;
+     if( deltaR < deltaRmin ) {
+       deltaRmin = deltaR;
+       firstJet.ptGen = ptJetGen_i;
+       firstJet.eGen = eJetGen_i;
+       firstJet.etaGen = etaJetGen_i;
+       firstJet.phiGen = phiJetGen_i;
 
 //       firstJet.eTracksGen = eTracksGen_i;
 //       firstJet.ePhotonsGen = ePhotonsGen_i;
@@ -700,9 +756,9 @@ if( DEBUG_VERBOSE_ && passedPhotonID_medium_==true) {
 //       firstJet.nNeutralHadronsGen = nNeutralHadronsGen_i;
 //       firstJet.nMuonsGen = nMuonsGen_i;
 //       firstJet.nElectronsGen = nElectronsGen_i;
-//     }
+     }
 
-//   } // for gen jets
+   } // for gen jets
 
 
 //   Float_t pxSumGen = 0.;
