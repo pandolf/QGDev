@@ -34,7 +34,6 @@ fi;
 
 echo "The Dataset is $DATASET"
 echo "The Analyzer is ${ANALYZER}"
-read
 
 
 python sendOnBatch.py $DATASET 10 ${ANALYZER}
