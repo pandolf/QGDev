@@ -233,27 +233,27 @@ void Ntp1Analyzer_PhotonJet::CreateOutputFile() {
   reducedTree_->Branch("etcMet",&etcMet_,"etcMet_/F");
   reducedTree_->Branch("phitcMet",&phitcMet_,"phitcMet_/F");
 
-  reducedTree_->Branch("axis1Jet", axis1_, "axis1_[nJet_]/F");
-  reducedTree_->Branch("axis2Jet", axis2_, "axis2_[nJet_]/F");
-  reducedTree_->Branch("pullJet", pull_, "pull_[nJet_]/F");
-  reducedTree_->Branch("tanaJet", tana_, "tana_[nJet_]/F");
+  reducedTree_->Branch("axis1Jet", &axis1_, "axis1_/F");
+  reducedTree_->Branch("axis2Jet", &axis2_, "axis2_/F");
+  reducedTree_->Branch("pullJet", &pull_, "pull_/F");
+  reducedTree_->Branch("tanaJet", &tana_, "tana_/F");
 
-  reducedTree_->Branch("ptD_QCJet", ptD_QC_, "ptD_QC_[nJet_]/F");
-  reducedTree_->Branch("rmsCand_QCJet", rmsCand_QC_, "rmsCand_QC_[nJet_]/F");
-  reducedTree_->Branch("axis1_QCJet", axis1_QC_, "axis1_QC_[nJet_]/F");
-  reducedTree_->Branch("axis2_QCJet", axis2_QC_, "axis2_QC_[nJet_]/F");
-  reducedTree_->Branch("pull_QCJet", pull_QC_, "pull_QC_[nJet_]/F");
-  reducedTree_->Branch("tana_QCJet", tana_QC_, "tana_QC_[nJet_]/F");
+  reducedTree_->Branch("ptD_QCJet"	, &ptD_QC_	, "ptD_QC_/F");
+  reducedTree_->Branch("rmsCand_QCJet"	, &rmsCand_QC_	, "rmsCand_QC_/F");
+  reducedTree_->Branch("axis1_QCJet"	, &axis1_QC_	, "axis1_QC_/F");
+  reducedTree_->Branch("axis2_QCJet"	, &axis2_QC_	, "axis2_QC_/F");
+  reducedTree_->Branch("pull_QCJet"	, &pull_QC_	, "pull_QC_/F");
+  reducedTree_->Branch("tana_QCJet"	, &tana_QC_	, "tana_QC_/F");
 
-  reducedTree_->Branch("nChg_ptCutJet", nChg_ptCut_, "nChg_ptCut_[nJet_]/I");
-  reducedTree_->Branch("nChg_QCJet", nChg_QC_, "nChg_QC_[nJet_]/I");
-  reducedTree_->Branch("nChg_ptCut_QCJet", nChg_ptCut_QC_, "nChg_ptCut_QC_[nJet_]/I");
-  reducedTree_->Branch("nNeutral_ptCutJet", nNeutral_ptCut_, "nNeutral_ptCut_[nJet_]/I");
+  reducedTree_->Branch("nChg_ptCutJet"	, &nChg_ptCut_	, "nChg_ptCut_/I");
+  reducedTree_->Branch("nChg_QCJet"	, &nChg_QC_	, "nChg_QC_/I");
+  reducedTree_->Branch("nChg_ptCut_QCJet"	, &nChg_ptCut_QC_	, "nChg_ptCut_QC_/I");
+  reducedTree_->Branch("nNeutral_ptCutJet"	, &nNeutral_ptCut_	, "nNeutral_ptCut_/I");
 
-  reducedTree_->Branch("RchgJet", Rchg_, "Rchg_[nJet_]/F");
-  reducedTree_->Branch("RneutralJet", Rneutral_, "Rneutral_[nJet_]/F");
-  reducedTree_->Branch("RJet", R_, "R_[nJet_]/F");
-  reducedTree_->Branch("Rchg_QCJet", Rchg_QC_, "Rchg_QC_[nJet_]/F");
+  reducedTree_->Branch("RchgJet"	, &Rchg_	, "Rchg_/F");
+  reducedTree_->Branch("RneutralJet"	, &Rneutral_	, "Rneutral_/F");
+  reducedTree_->Branch("RJet"	, &R_	, "R_/F");
+  reducedTree_->Branch("Rchg_QCJet"	, &Rchg_QC_	, "Rchg_QC_/F");
 
 
 } 
@@ -868,6 +868,32 @@ betaStarJetReco_  =  firstJet.betaStar;
 
      ptSecondaryJetsReco_ = ptSumReco;
      //ptSecondaryJetsGen_ = ptSumGen;
+
+
+	
+		axis1_	=firstJet.axis1;
+                axis2_	=firstJet.axis2;
+                pull_	=firstJet.pull;
+                tana_	=firstJet.tana;
+                                      
+                ptD_QC_	=firstJet.ptD_QC;
+                rmsCand_QC_=firstJet.rmsCand_QC;
+                axis1_QC_	=firstJet.axis1_QC;
+                axis2_QC_	=firstJet.axis2_QC;
+                pull_QC_	=firstJet.pull_QC;
+                tana_QC_	=firstJet.tana_QC;
+                                      
+                nChg_ptCut_	=firstJet.nChg_ptCut;
+                nChg_QC_	=firstJet.nChg_QC;
+                nChg_ptCut_QC_	=firstJet.nChg_ptCut_QC;
+                nNeutral_ptCut_	=firstJet.nNeutral_ptCut;
+                                      
+                Rchg_	=firstJet.Rchg;
+                Rneutral_	=firstJet.Rneutral;
+                R_	=firstJet.R;
+                Rchg_QC_	=firstJet.Rchg_QC;
+
+
 
      //look for first jet parton:
      Float_t deltaRMcmin = 999.;

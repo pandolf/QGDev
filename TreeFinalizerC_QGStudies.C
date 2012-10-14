@@ -344,6 +344,25 @@ void TreeFinalizerC_QGStudies::finalize() {
   tree_->SetBranchAddress("QGLikelihoodJetReco", &QGLikelihoodJetReco);
   Float_t trackCountingHighEffBJetTagsJetReco;
   tree_->SetBranchAddress("trackCountingHighEffBJetTagsJetReco", &trackCountingHighEffBJetTagsJetReco);
+	
+       Float_t axis1JetReco;		tree_->SetBranchAddress("axis1Jet",&axis1JetReco);
+       Float_t axis2JetReco;		tree_->SetBranchAddress("axis2Jet",&axis2JetReco);
+       Float_t pullJetReco;		tree_->SetBranchAddress("pullJet",&pullJetReco);
+       Float_t tanaJetReco;		tree_->SetBranchAddress("tanaJet",&tanaJetReco);
+       Float_t ptD_QCJetReco;		tree_->SetBranchAddress("ptD_QCJet",&ptD_QCJetReco);
+       Float_t rmsCand_QCJetReco;	tree_->SetBranchAddress("rmsCand_QCJet",&rmsCand_QCJetReco);
+       Float_t axis1_QCJetReco;		tree_->SetBranchAddress("axis1_QCJet",&axis1_QCJetReco);
+       Float_t axis2_QCJetReco;		tree_->SetBranchAddress("axis2_QCJet",&axis2_QCJetReco);
+       Float_t pull_QCJetReco;		tree_->SetBranchAddress("pull_QCJet",&pull_QCJetReco);
+       Float_t tana_QCJetReco;		tree_->SetBranchAddress("tana_QCJet",&tana_QCJetReco);
+       Float_t nChg_ptCutJetReco;	tree_->SetBranchAddress("nChg_ptCutJet",&nChg_ptCutJetReco);
+       Float_t nChg_QCJetReco;		tree_->SetBranchAddress("nChg_QCJet",&nChg_QCJetReco);
+       Float_t nChg_ptCut_QCJetReco;	tree_->SetBranchAddress("nChg_ptCut_QCJet",&nChg_ptCut_QCJetReco);
+       Float_t nNeutral_ptCutJetReco;	tree_->SetBranchAddress("nNeutral_ptCutJet",&nNeutral_ptCutJetReco);
+       Float_t RchgJetReco;		tree_->SetBranchAddress("RchgJet",&RchgJetReco);
+       Float_t RneutralJetReco;		tree_->SetBranchAddress("RneutralJet",&RneutralJetReco);
+       Float_t RJetReco;		tree_->SetBranchAddress("RJet",&RJetReco);
+       Float_t Rchg_QCJetReco;		tree_->SetBranchAddress("Rchg_QCJet",&Rchg_QCJetReco);
 
   Float_t eJetGen;
   tree_->SetBranchAddress("eJetGen", &eJetGen);
@@ -472,6 +491,29 @@ void TreeFinalizerC_QGStudies::finalize() {
   tree_passedEvents->Branch( "QGLikelihoodJet0", &QGlikelihood, "QGlikelihood/F");
   tree_passedEvents->Branch( "pdgIdPartJet0", &pdgIdPart, "pdgIdPart/I");
   tree_passedEvents->Branch( "deltaPhi_jet", &deltaPhi_jet, "deltaPhi_jet/F");
+
+  //tree_passedEvents->Branch( "ptD_QCJet0", &ptD_QCJetReco, "ptD_QCJetReco/F");
+  tree_passedEvents->Branch( "axis1Jet0"		, &axis1JetReco			, "axis1JetReco/F");
+  tree_passedEvents->Branch( "axis2Jet0"		, &axis2JetReco			, "axis2JetReco/F");
+  tree_passedEvents->Branch( "pullJet0"			, &pullJetReco			, "pullJetReco/F");
+  tree_passedEvents->Branch( "tanaJet0"			, &tanaJetReco			, "tanaJetReco/F");
+
+  tree_passedEvents->Branch( "ptD_QCJet0"		, &ptD_QCJetReco		, "ptD_QCJetReco/F");
+  tree_passedEvents->Branch( "rmsCand_QCJet0"		, &rmsCand_QCJetReco		, "rmsCand_QCJetReco/F");
+  tree_passedEvents->Branch( "axis1_QCJet0"		, &axis1_QCJetReco		, "axis1_QCJetReco/F");
+  tree_passedEvents->Branch( "axis2_QCJet0"		, &axis2_QCJetReco		, "axis2_QCJetReco/F");
+  tree_passedEvents->Branch( "pull_QCJet0"		, &pull_QCJetReco		, "pull_QCJetReco/F");
+  tree_passedEvents->Branch( "tana_QCJet0"		, &tana_QCJetReco		, "tana_QCJetReco/F");
+
+  tree_passedEvents->Branch( "nChg_ptCutJet0"		, &nChg_ptCutJetReco		, "nChg_ptCutJetReco/I");
+  tree_passedEvents->Branch( "nChg_QCJet0"		, &nChg_QCJetReco		, "nChg_QCJetReco/I");
+  tree_passedEvents->Branch( "nChg_ptCut_QCJet0"	, &nChg_ptCut_QCJetReco	 	, "nChg_ptCut_QCJetReco/I");
+  tree_passedEvents->Branch( "nNeutral_ptCutJet0"	, &nNeutral_ptCutJetReco	, "nNeutral_ptCutJetReco/I");
+
+  tree_passedEvents->Branch( "RchgJet0"			, &RchgJetReco			, "RchgJetReco/F");
+  tree_passedEvents->Branch( "RneutralJet0"		, &RneutralJetReco		, "RneutralJetReco/F");
+  tree_passedEvents->Branch( "RJet0"			, &RJetReco			, "RJetReco/F");
+  tree_passedEvents->Branch( "Rchg_QCJet0"		, &Rchg_QCJetReco		, "Rchg_QCJetReco/F");
 
 
 

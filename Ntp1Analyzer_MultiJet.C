@@ -97,27 +97,27 @@ void Ntp1Analyzer_MultiJet::CreateOutputFile() {
   reducedTree_->Branch("passed_HT700", &passed_HT700_, "passed_HT700_/O");
   reducedTree_->Branch("passed_HT750", &passed_HT750_, "passed_HT750_/O");
 
-  reducedTree_->Branch("axis1Jet", axis1_, "axis1_[nJet_]/F");
-  reducedTree_->Branch("axis2Jet", axis2_, "axis2_[nJet_]/F");
-  reducedTree_->Branch("pullJet", pull_, "pull_[nJet_]/F");
-  reducedTree_->Branch("tanaJet", tana_, "tana_[nJet_]/F");
+  reducedTree_->Branch("axis1Jet"		, axis1_		, "axis1_[nJet_]/F");
+  reducedTree_->Branch("axis2Jet"		, axis2_		, "axis2_[nJet_]/F");
+  reducedTree_->Branch("pullJet"		, pull_			, "pull_[nJet_]/F");
+  reducedTree_->Branch("tanaJet"		, tana_			, "tana_[nJet_]/F");
 
-  reducedTree_->Branch("ptD_QCJet", ptD_QC_, "ptD_QC_[nJet_]/F");
-  reducedTree_->Branch("rmsCand_QCJet", rmsCand_QC_, "rmsCand_QC_[nJet_]/F");
-  reducedTree_->Branch("axis1_QCJet", axis1_QC_, "axis1_QC_[nJet_]/F");
-  reducedTree_->Branch("axis2_QCJet", axis2_QC_, "axis2_QC_[nJet_]/F");
-  reducedTree_->Branch("pull_QCJet", pull_QC_, "pull_QC_[nJet_]/F");
-  reducedTree_->Branch("tana_QCJet", tana_QC_, "tana_QC_[nJet_]/F");
+  reducedTree_->Branch("ptD_QCJet"		, ptD_QC_		, "ptD_QC_[nJet_]/F");
+  reducedTree_->Branch("rmsCand_QCJet"		, rmsCand_QC_		, "rmsCand_QC_[nJet_]/F");
+  reducedTree_->Branch("axis1_QCJet"		, axis1_QC_		, "axis1_QC_[nJet_]/F");
+  reducedTree_->Branch("axis2_QCJet"		, axis2_QC_		, "axis2_QC_[nJet_]/F");
+  reducedTree_->Branch("pull_QCJet"		, pull_QC_		, "pull_QC_[nJet_]/F");
+  reducedTree_->Branch("tana_QCJet"		, tana_QC_		, "tana_QC_[nJet_]/F");
 
-  reducedTree_->Branch("nChg_ptCutJet", nChg_ptCut_, "nChg_ptCut_[nJet_]/I");
-  reducedTree_->Branch("nChg_QCJet", nChg_QC_, "nChg_QC_[nJet_]/I");
-  reducedTree_->Branch("nChg_ptCut_QCJet", nChg_ptCut_QC_, "nChg_ptCut_QC_[nJet_]/I");
-  reducedTree_->Branch("nNeutral_ptCutJet", nNeutral_ptCut_, "nNeutral_ptCut_[nJet_]/I");
+  reducedTree_->Branch("nChg_ptCutJet"		, nChg_ptCut_		, "nChg_ptCut_[nJet_]/I");
+  reducedTree_->Branch("nChg_QCJet"		, nChg_QC_		, "nChg_QC_[nJet_]/I");
+  reducedTree_->Branch("nChg_ptCut_QCJet"	, nChg_ptCut_QC_	, "nChg_ptCut_QC_[nJet_]/I");
+  reducedTree_->Branch("nNeutral_ptCutJet"	, nNeutral_ptCut_	, "nNeutral_ptCut_[nJet_]/I");
 
-  reducedTree_->Branch("RchgJet", Rchg_, "Rchg_[nJet_]/F");
-  reducedTree_->Branch("RneutralJet", Rneutral_, "Rneutral_[nJet_]/F");
-  reducedTree_->Branch("RJet", R_, "R_[nJet_]/F");
-  reducedTree_->Branch("Rchg_QCJet", Rchg_QC_, "Rchg_QC_[nJet_]/F");
+  reducedTree_->Branch("RchgJet"		, Rchg_			, "Rchg_[nJet_]/F");
+  reducedTree_->Branch("RneutralJet"		, Rneutral_		, "Rneutral_[nJet_]/F");
+  reducedTree_->Branch("RJet"			, R_			, "R_[nJet_]/F");
+  reducedTree_->Branch("Rchg_QCJet"		, Rchg_QC_		, "Rchg_QC_[nJet_]/F");
 
 } 
 
@@ -321,6 +321,31 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
        ptDJet_[iJet]= jets[iJet]->ptD;
        rmsCandJet_[iJet]= jets[iJet]->rmsCand;
+
+		axis1_[iJet]	=jets[iJet]->axis1;
+                axis2_[iJet]	=jets[iJet]->axis2;
+                pull_[iJet]	=jets[iJet]->pull;
+                tana_[iJet]	=jets[iJet]->tana;
+                                      
+                ptD_QC_[iJet]	=jets[iJet]->ptD_QC;
+                rmsCand_QC_[iJet]=jets[iJet]->rmsCand_QC;
+                axis1_QC_[iJet]	=jets[iJet]->axis1_QC;
+                axis2_QC_[iJet]	=jets[iJet]->axis2_QC;
+                pull_QC_[iJet]	=jets[iJet]->pull_QC;
+                tana_QC_[iJet]	=jets[iJet]->tana_QC;
+                                      
+                nChg_ptCut_[iJet]	=jets[iJet]->nChg_ptCut;
+                nChg_QC_[iJet]	=jets[iJet]->nChg_QC;
+                nChg_ptCut_QC_[iJet]	=jets[iJet]->nChg_ptCut_QC;
+                nNeutral_ptCut_[iJet]	=jets[iJet]->nNeutral_ptCut;
+                                      
+                Rchg_[iJet]	=jets[iJet]->Rchg;
+                Rneutral_[iJet]	=jets[iJet]->Rneutral;
+                R_[iJet]	=jets[iJet]->R;
+                Rchg_QC_[iJet]	=jets[iJet]->Rchg_QC;
+
+
+
 
        trackCountingHighEffBJetTagsJet_[iJet]= jets[iJet]->trackCountingHighEffBJetTag;
        simpleSecondaryVertexHighEffBJetTagsJet_[iJet]= jets[iJet]->simpleSecondaryVertexHighEffBJetTag;
