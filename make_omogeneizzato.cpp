@@ -6,6 +6,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TChain.h"
+#include "TH1F.h"
 
 #include "PUWeight.h"
 
@@ -24,6 +25,24 @@ Float_t QGLikelihoodJet0_out;
 Bool_t matchedToGenJet_out;
 Float_t deltaPhi_jet_out;
 
+Float_t axis1Jet0_out;		
+Float_t axis2Jet0_out;		
+Float_t pullJet0_out;		
+Float_t tanaJet0_out;		
+Float_t ptD_QCJet0_out;		
+Float_t rmsCand_QCJet0_out;	
+Float_t axis1_QCJet0_out;		
+Float_t axis2_QCJet0_out;		
+Float_t pull_QCJet0_out;		
+Float_t tana_QCJet0_out;		
+Int_t nChg_ptCutJet0_out;	
+Int_t nChg_QCJet0_out;		
+Int_t nChg_ptCut_QCJet0_out;	
+Int_t nNeutral_ptCutJet0_out;	
+Float_t RchgJet0_out;		
+Float_t RneutralJet0_out;		
+Float_t RJet0_out;		
+Float_t Rchg_QCJet0_out;		
 
 struct DummyJet {
 
@@ -38,9 +57,25 @@ struct DummyJet {
   float QGLikelihood;
   bool matchedToGenJet;
   float deltaPhi_jet;
-
+	float axis1		;		
+	float axis2		;		
+	float pull		;		
+	float tana		;		
+	float ptD_QC		;		
+	float rmsCand_QC	;	
+	float axis1_QC		;		
+	float axis2_QC		;		
+	float pull_QC		;		
+	float tana_QC		;		
+	int nChg_ptCut	;	
+	int nChg_QC		;		
+	int nChg_ptCut_QC	;	
+	int nNeutral_ptCut	;	
+	float Rchg		;		
+	float Rneutral		;		
+	float R			;		
+	float Rchg_QC		;		
 };
-
 
 bool fillFromTrigger( TTree* tree, bool passedHLT, float HLTvar, float HLTvar_thresh, float weight, const std::vector<DummyJet>& jets, float ptMin, float ptMax );
 
@@ -163,6 +198,73 @@ int main( int argc, char* argv[] ) {
   Float_t QGLikelihoodJet1;
   if( controlSample=="DiJet" || controlSample=="MultiJet" )
     chain->SetBranchAddress( "QGLikelihoodJet1", &QGLikelihoodJet1 );
+
+
+       Float_t axis1Jet0;		chain->SetBranchAddress("axis1Jet0",&axis1Jet0);
+       Float_t axis2Jet0;		chain->SetBranchAddress("axis2Jet0",&axis2Jet0);
+       Float_t pullJet0;		chain->SetBranchAddress("pullJet0",&pullJet0);
+       Float_t tanaJet0;		chain->SetBranchAddress("tanaJet0",&tanaJet0);
+       Float_t ptD_QCJet0;		chain->SetBranchAddress("ptD_QCJet0",&ptD_QCJet0);
+       Float_t rmsCand_QCJet0;		chain->SetBranchAddress("rmsCand_QCJet0",&rmsCand_QCJet0);
+       Float_t axis1_QCJet0;		chain->SetBranchAddress("axis1_QCJet0",&axis1_QCJet0);
+       Float_t axis2_QCJet0;		chain->SetBranchAddress("axis2_QCJet0",&axis2_QCJet0);
+       Float_t pull_QCJet0;		chain->SetBranchAddress("pull_QCJet0",&pull_QCJet0);
+       Float_t tana_QCJet0;		chain->SetBranchAddress("tana_QCJet0",&tana_QCJet0);
+	std::cout<<"NChg0"<<std::endl;//DEBUG
+       Int_t nChg_ptCutJet0;		chain->SetBranchAddress("nChg_ptCutJet0",&nChg_ptCutJet0);
+	std::cout<<"NChg1"<<std::endl;//DEBUG
+       Int_t nChg_QCJet0;		chain->SetBranchAddress("nChg_QCJet0",&nChg_QCJet0);
+       Int_t nChg_ptCut_QCJet0;		chain->SetBranchAddress("nChg_ptCut_QCJet0",&nChg_ptCut_QCJet0);
+       Int_t nNeutral_ptCutJet0;	chain->SetBranchAddress("nNeutral_ptCutJet0",&nNeutral_ptCutJet0);
+	std::cout<<"Done"<<std::endl;//DEBUG
+       Float_t RchgJet0;		chain->SetBranchAddress("RchgJet0",&RchgJet0);
+       Float_t RneutralJet0;		chain->SetBranchAddress("RneutralJet0",&RneutralJet0);
+       Float_t RJet0;			chain->SetBranchAddress("RJet0",&RJet0);
+       Float_t Rchg_QCJet0;		chain->SetBranchAddress("Rchg_QCJet0",&Rchg_QCJet0);
+
+	Float_t axis1Jet1;		
+	Float_t axis2Jet1;		
+	Float_t pullJet1;		
+	Float_t tanaJet1;		
+	Float_t ptD_QCJet1;		
+	Float_t rmsCand_QCJet1;		
+	Float_t axis1_QCJet1;		
+	Float_t axis2_QCJet1;		
+	Float_t pull_QCJet1;		
+	Float_t tana_QCJet1;		
+	Int_t nChg_ptCutJet1;		
+	Int_t nChg_QCJet1;		
+	Int_t nChg_ptCut_QCJet1;	
+	Int_t nNeutral_ptCutJet1;	
+	Float_t RchgJet1;		
+	Float_t RneutralJet1;		
+	Float_t RJet1;			
+	Float_t Rchg_QCJet1;		
+
+if( controlSample=="DiJet" || controlSample=="MultiJet")
+{
+       chain->SetBranchAddress("axis1Jet1",&axis1Jet1);
+       chain->SetBranchAddress("axis2Jet1",&axis2Jet1);
+       chain->SetBranchAddress("pullJet1",&pullJet1);
+       chain->SetBranchAddress("tanaJet1",&tanaJet1);
+       chain->SetBranchAddress("ptD_QCJet1",&ptD_QCJet1);
+       chain->SetBranchAddress("rmsCand_QCJet1",&rmsCand_QCJet1);
+       chain->SetBranchAddress("axis1_QCJet1",&axis1_QCJet1);
+       chain->SetBranchAddress("axis2_QCJet1",&axis2_QCJet1);
+       chain->SetBranchAddress("pull_QCJet1",&pull_QCJet1);
+       chain->SetBranchAddress("tana_QCJet1",&tana_QCJet1);
+       chain->SetBranchAddress("nChg_ptCutJet1",&nChg_ptCutJet1);
+       chain->SetBranchAddress("nChg_QCJet1",&nChg_QCJet1);
+       chain->SetBranchAddress("nChg_ptCut_QCJet1",&nChg_ptCut_QCJet1);
+       chain->SetBranchAddress("nNeutral_ptCutJet1",&nNeutral_ptCutJet1);
+       chain->SetBranchAddress("RchgJet1",&RchgJet1);
+       chain->SetBranchAddress("RneutralJet1",&RneutralJet1);
+       chain->SetBranchAddress("RJet1",&RJet1);
+       chain->SetBranchAddress("Rchg_QCJet1",&Rchg_QCJet1);
+
+}
+
+
 
   Float_t ht_akt5;
   if( controlSample=="DiJet" || controlSample=="MultiJet" )
@@ -304,6 +406,27 @@ int main( int argc, char* argv[] ) {
   tree_omogeneizzato->Branch( "matchedToGenJet", &matchedToGenJet_out, "matchedToGenJet_out/O" );
   tree_omogeneizzato->Branch( "deltaPhi_jet", &deltaPhi_jet_out, "deltaPhi_jet_out/F" );
 
+
+       tree_omogeneizzato->Branch("axis1Jet0"	,&axis1Jet0_out		,"axis1Jet0_out/F"	);
+       tree_omogeneizzato->Branch("axis2Jet0"	,&axis2Jet0_out		,"axis2Jet0_out/F"	);
+       tree_omogeneizzato->Branch("pullJet0"		,&pullJet0_out		,"pullJet0_out/F"		);
+       tree_omogeneizzato->Branch("tanaJet0"		,&tanaJet0_out		,"tanaJet0_out/F"		);
+       tree_omogeneizzato->Branch("ptD_QCJet0"	,&ptD_QCJet0_out	,"ptD_QCJet0_out/F"	);
+       tree_omogeneizzato->Branch("rmsCand_QCJet0"	,&rmsCand_QCJet0_out	,"rmsCand_QCJet0_out/F"	);
+       tree_omogeneizzato->Branch("axis1_QCJet0"	,&axis1_QCJet0_out	,"axis1_QCJet0_out/F"	);
+       tree_omogeneizzato->Branch("axis2_QCJet0"	,&axis2_QCJet0_out	,"axis2_QCJet0_out/F"	);
+       tree_omogeneizzato->Branch("pull_QCJet0"	,&pull_QCJet0_out	,"pull_QCJet0_out/F"	);
+       tree_omogeneizzato->Branch("tana_QCJet0"	,&tana_QCJet0_out	,"tana_QCJet0_out/F"	);
+       tree_omogeneizzato->Branch("nChg_ptCutJet0"	,&nChg_ptCutJet0_out	,"nChg_ptCutJet0_out/I"	);
+       tree_omogeneizzato->Branch("nChg_QCJet0"	,&nChg_QCJet0_out	,"nChg_QCJet0_out/I"	);
+       tree_omogeneizzato->Branch("nChg_ptCut_QCJet0",&nChg_ptCut_QCJet0_out	,"nChg_ptCut_QCJet0_out/I"	);
+      tree_omogeneizzato->Branch("nNeutral_ptCutJet0",&nNeutral_ptCutJet0_out,"nNeutral_ptCutJet0_out/I"	);
+       tree_omogeneizzato->Branch("RchgJet0"		,&RchgJet0_out		,"RchgJet0_out/F"		);
+       tree_omogeneizzato->Branch("RneutralJet0"	,&RneutralJet0_out	,"RneutralJet0_out/F"	);
+       tree_omogeneizzato->Branch("RJet0"		,&RJet0_out		,"RJet0_out/F"		);
+       tree_omogeneizzato->Branch("Rchg_QCJet0"	,&Rchg_QCJet0_out	,"Rchg_QCJet0_out/F"	);
+
+
   
   int nEntries = chain->GetEntries();
 
@@ -364,6 +487,25 @@ int main( int argc, char* argv[] ) {
     jet0.matchedToGenJet = matchedToGenJet;
     jet0.deltaPhi_jet = deltaPhi_jet;
 
+	jet0.axis1	= axis1Jet0;			
+        jet0.axis2	= axis2Jet0;		      	
+        jet0.pull	= pullJet0;		      	
+        jet0.tana	= tanaJet0;		      	
+        jet0.ptD_QC	= ptD_QCJet0;		      	
+	jet0.rmsCand_QC	= rmsCand_QCJet0;	      
+        jet0.axis1_QC	= axis1_QCJet0;		      	
+        jet0.axis2_QC	= axis2_QCJet0;		      	
+        jet0.pull_QC	= pull_QCJet0;		      	
+        jet0.tana_QC	= tana_QCJet0;		      	
+        jet0.nChg_ptCut	= nChg_ptCutJet0;	      
+        jet0.nChg_QC	= nChg_QCJet0;		      	
+        jet0.nChg_ptCut_QC	= nChg_ptCut_QCJet0;	      
+        jet0.nNeutral_ptCut	=nNeutral_ptCutJet0;		
+        jet0.Rchg	= RchgJet0;		      	
+        jet0.Rneutral	= RneutralJet0;		      	
+        jet0.R		= RJet0;		      	
+	jet0.Rchg_QC	= Rchg_QCJet0;		      	
+	
     std::vector<DummyJet> jets;
     //if( fabs(jet0.eta)<2.4 ) 
       jets.push_back(jet0);
@@ -381,6 +523,24 @@ int main( int argc, char* argv[] ) {
       jet1.QGLikelihood = QGLikelihoodJet1;
       jet1.pdgId = pdgIdJet1;
       jet1.matchedToGenJet = matchedToGenJet;
+	jet1.axis1	= axis1Jet1;			
+        jet1.axis2	= axis2Jet1;		      	
+        jet1.pull	= pullJet1;		      	
+        jet1.tana	= tanaJet1;		      	
+        jet1.ptD_QC	= ptD_QCJet1;		      	
+	jet1.rmsCand_QC	= rmsCand_QCJet1;	      
+        jet1.axis1_QC	= axis1_QCJet1;		      	
+        jet1.axis2_QC	= axis2_QCJet1;		      	
+        jet1.pull_QC	= pull_QCJet1;		      	
+        jet1.tana_QC	= tana_QCJet1;		      	
+        jet1.nChg_ptCut	= nChg_ptCutJet1;	      
+        jet1.nChg_QC	= nChg_QCJet1;		      	
+        jet1.nChg_ptCut_QC	= nChg_ptCut_QCJet1;	      
+        jet1.nNeutral_ptCut	=nNeutral_ptCutJet1;		
+        jet1.Rchg	= RchgJet1;		      	
+        jet1.Rneutral	= RneutralJet1;		      	
+        jet1.R		= RJet1;		      	
+	jet1.Rchg_QC	= Rchg_QCJet1;		      	
 
       jets.push_back(jet1);
 
@@ -454,6 +614,24 @@ bool fillFromTrigger( TTree* tree, bool passedHLT, float HLTvar, float HLTvar_th
     QGLikelihoodJet0_out = jets[i].QGLikelihood;
     matchedToGenJet_out = jets[i].matchedToGenJet;
     deltaPhi_jet_out = jets[i].deltaPhi_jet;
+	axis1Jet0_out =			jets[i].axis1		;
+	axis2Jet0_out =		        jets[i].axis2		;
+	pullJet0_out =		        jets[i].pull		;
+	tanaJet0_out =		        jets[i].tana		;
+	ptD_QCJet0_out =	        jets[i].ptD_QC		;
+	rmsCand_QCJet0_out =		jets[i].rmsCand_QC	;
+	axis1_QCJet0_out =	        jets[i].axis1_QC		;
+	axis2_QCJet0_out =	        jets[i].axis2_QC		;
+	pull_QCJet0_out =	        jets[i].pull_QC		;
+	tana_QCJet0_out =	        jets[i].tana_QC		;
+	nChg_ptCutJet0_out =	       	jets[i].nChg_ptCut	;
+	nChg_QCJet0_out =	        jets[i].nChg_QC		;
+	nChg_ptCut_QCJet0_out =	        jets[i].nChg_ptCut_QC	;
+	nNeutral_ptCutJet0_out =        jets[i].nNeutral_ptCut	;
+	RchgJet0_out =		        jets[i].Rchg		;
+	RneutralJet0_out =	        jets[i].Rneutral		;
+	RJet0_out =		       	jets[i].R		;
+	Rchg_QCJet0_out =		jets[i].Rchg_QC		;
 
     tree->Fill();
 

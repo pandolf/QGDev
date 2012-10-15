@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "TO BE CHECED: ADDED BATCH Support"
+#echo "TO BE CHECED: ADDED BATCH Support"
 
 for i in files_*.txt ; 
 	do
@@ -35,14 +35,14 @@ for i in files_*.txt ;
 		#create files_2ndLevel
 		ls $DATADIR/$DIRECTORY/$DATASET/${ANALYZER}_*.root > files_${ANALYZER}_2ndLevel_${DATASET}.txt
 		#
-	
+		mkdir -p $DATASET/merge	
 		DESTFILE=$DATASET/merge/Merge_$ANALYZER.sh
 		echo "#!/bin/bash" 					>  $DESTFILE
 		echo 'export SCRAM_ARCH=slc5_amd64_gcc434' 		>> $DESTFILE
 		echo 'cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src ; eval `scramv1 runtime -sh` ; cd -'  >> $DESTFILE
 		echo "cd $DATADIR/$DIRECTORY" >> $DESTFILE
 		echo "ls $DATADIR/$DIRECTORY/$DATASET/${ANALYZER}_*.root > files_${ANALYZER}_2ndLevel_${DATASET}.txt" >>$DESTFILE
-		echo "$CDIR/merge_and_setWeights $DATASET $ANALYZER" >> $DISTFILE
+		echo "$CDIR/merge_and_setWeights $DATASET $ANALYZER" >> $DESTFILE
 		cd $CDIR
 		
 		bsub -q 8nh -o $CDIR/${DESTFILE}_log.txt source $CDIR/$DESTFILE
