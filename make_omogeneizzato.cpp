@@ -445,33 +445,33 @@ if( controlSample=="DiJet" || controlSample=="MultiJet")
     }
 
 
-//  if( run<5 ) { //mc 
+    if( run<5 ) { //mc 
 
-//    if( ptJet0>=50. && ptJet0<100. ) {
+      if( ptJet0>=50. && ptJet0<100. ) {
 
-//      //int bin = h1_nPU_mc_Photon50->FindBin( nvertex );
-//      float mc_binvalue = h1_nPU_mc_Photon50->GetBinContent(nvertex+1);
-//      float data_binvalue = h1_nPU_data_Photon50->GetBinContent(nvertex+1);
-//      float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
-//      eventWeight *= puweight;
+        //int bin = h1_nPU_mc_Photon50->FindBin( nvertex );
+        float mc_binvalue = h1_nPU_mc_Photon50->GetBinContent(nvertex+1);
+        float data_binvalue = h1_nPU_data_Photon50->GetBinContent(nvertex+1);
+        float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
+        eventWeight *= puweight;
 
-//    } else if( ptJet0>=100. && ptJet0<150. ) {
+      } else if( ptJet0>=100. && ptJet0<150. ) {
 
-//      float mc_binvalue = h1_nPU_mc_Photon90->GetBinContent(nvertex+1);
-//      float data_binvalue = h1_nPU_data_Photon90->GetBinContent(nvertex+1);
-//      float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
-//      eventWeight *= puweight;
+        float mc_binvalue = h1_nPU_mc_Photon90->GetBinContent(nvertex+1);
+        float data_binvalue = h1_nPU_data_Photon90->GetBinContent(nvertex+1);
+        float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
+        eventWeight *= puweight;
 
-//    } else if( ptJet0>=30. && ptJet0<50. ) {
+      } else if( ptJet0>=30. && ptJet0<50. ) {
 
-//      float mc_binvalue = h1_nPU_mc_Photon30->GetBinContent(nvertex+1);
-//      float data_binvalue = h1_nPU_data_Photon30->GetBinContent(nvertex+1);
-//      float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
-//      eventWeight *= puweight;
+        float mc_binvalue = h1_nPU_mc_Photon30->GetBinContent(nvertex+1);
+        float data_binvalue = h1_nPU_data_Photon30->GetBinContent(nvertex+1);
+        float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
+        eventWeight *= puweight;
 
-//    }
+      }
 
-//  }
+    }
 
 
     DummyJet jet0;
@@ -558,16 +558,19 @@ if( controlSample=="DiJet" || controlSample=="MultiJet")
 
     } else { //photonjet
 
-      if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 32., eventWeight, jets, 30., 50.) ) continue;
-      if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 53., eventWeight, jets, 50., 100.) ) continue;
-      if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 95., eventWeight, jets, 100., 150.) ) continue;
-      if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 145., eventWeight, jets, 150., 3500.) ) continue;
+      // no HLT selection:
+      //if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 32., eventWeight, jets, 30., 50.) ) continue;
+      //if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 53., eventWeight, jets, 50., 100.) ) continue;
+      //if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 95., eventWeight, jets, 100., 150.) ) continue;
+      //if( fillFromTrigger( tree_omogeneizzato, true, ptPhot, 145., eventWeight, jets, 150., 3500.) ) continue;
 
-      //if( fillFromTrigger( tree_omogeneizzato, passed_Photon30_CaloIdVL || passed_Photon30_CaloIdVL_IsoL || run<5, ptPhot, 32., eventWeight, jets, 30., 50.) ) continue;
-      //if( fillFromTrigger( tree_omogeneizzato, passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL_IsoL || run<5, ptPhot, 53., eventWeight, jets, 50., 100.) ) continue;
-      //if( fillFromTrigger( tree_omogeneizzato, passed_Photon90_CaloIdVL || passed_Photon90_CaloIdVL_IsoL || run<5, ptPhot, 95., eventWeight, jets, 100., 150.) ) continue;
-      //if( fillFromTrigger( tree_omogeneizzato, passed_Photon135 || run<5, ptPhot, 145., eventWeight, jets, 150., 3500.) ) continue;
+      // yes HLT selection with nvertex "cheating" PU reweighting:
+      if( fillFromTrigger( tree_omogeneizzato, passed_Photon30_CaloIdVL || passed_Photon30_CaloIdVL_IsoL || run<5, ptPhot, 32., eventWeight, jets, 30., 50.) ) continue;
+      if( fillFromTrigger( tree_omogeneizzato, passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL_IsoL || run<5, ptPhot, 53., eventWeight, jets, 50., 100.) ) continue;
+      if( fillFromTrigger( tree_omogeneizzato, passed_Photon90_CaloIdVL || passed_Photon90_CaloIdVL_IsoL || run<5, ptPhot, 95., eventWeight, jets, 100., 150.) ) continue;
+      if( fillFromTrigger( tree_omogeneizzato, passed_Photon135 || run<5, ptPhot, 145., eventWeight, jets, 150., 3500.) ) continue;
 
+      // this is the "correct" HLT reweighing:
       //if( fillFromTrigger( tree_omogeneizzato, passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL_IsoL || run<5, ptPhot, eventWeight_noPU*PUWeight_Photon50, 53., jets, 50., 100.) ) continue;
       //if( fillFromTrigger( tree_omogeneizzato, passed_Photon90_CaloIdVL || passed_Photon90_CaloIdVL_IsoL || run<5, ptPhot, eventWeight_noPU*PUWeight_Photon90, 95., jets, 100., 150.) ) continue;
       //if( fillFromTrigger( tree_omogeneizzato, passed_Photon135 || run<5, ptPhot, eventWeight_noPU*PUWeight_Photon135, 145., jets, 150., 3500.) ) continue;

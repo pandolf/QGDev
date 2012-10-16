@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TFile.h"
 #include "TTree.h"
 #include "TChain.h"
@@ -15,9 +16,13 @@ int main() {
   TChain* treedata=new TChain("tree_passedEvents");
   if( use2012 )
     treedata->Add("QGStudies_Photon_Run2012_ichep.root");
-  else
-    treedata->Add("/afs/cern.ch/work/a/amarini/2ndLevel/QG/QG/QGStudies_Photon_Run2011*.root");
+  else {
+    treedata->Add("/afs/cern.ch/work/a/amarini/2ndLevel/Data/QGStudies_Photon_Run2011A-May10ReReco-v1_VGammaID.root");
+    treedata->Add("/afs/cern.ch/work/a/amarini/2ndLevel/Data/QGStudies_Photon_Run2011B-PromptReco-v1_VGammaID.root");
+    treedata->Add("/afs/cern.ch/work/a/amarini/2ndLevel/Data/QGStudies_Photon_Run2011A-PromptReco-v6_VGammaID.root");
+  }
 
+  std::cout << "-> Data tree has " << treedata->GetEntries() << " entries." << std::endl;
 
   //TTree* treedata = (TTree*)filedata->Get("tree_passedEvents");
   //TTree* treedata = (TTree*)filedata->Get("omog");
@@ -27,8 +32,11 @@ int main() {
   if( use2012 )
     treeMC->Add("QGStudies_G_Summer12.root/tree_passedEvents");
   else
-    treeMC->Add("/afs/cern.ch/work/a/amarini/2ndLevel/QG/QG/QGStudies_G_Pt*.root/tree_passedEvents");
-  treeMC->Add("/afs/cern.ch/work/a/amarini/2ndLevel/QG/QG/QGStudies_QCD_*_EMEnriched_*.root/tree_passedEvents");
+    treeMC->Add("/afs/cern.ch/work/a/amarini/2ndLevel/Summer11/QGStudies_G_Pt*pythia6*VGammaID.root");
+  treeMC->Add("/afs/cern.ch/work/a/amarini/2ndLevel/Fall11/QGStudies_QCD_Pt*EMEnriched*VGammaID.root");
+
+
+  std::cout << "-> MC tree has " << treeMC->GetEntries() << " entries." << std::endl;
 
   //TChain* treeMC = new TChain("omog");
   //treeMC->Add("Omog_QGStudies_G_Summer11.root/omog");
