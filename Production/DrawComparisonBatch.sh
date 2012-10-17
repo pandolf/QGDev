@@ -12,7 +12,7 @@ declare -a EtaBins2=(2 3 '4.7')
 for i in {0..3} ; do
 for j in {0..2} ; do
 for k in {0..2} ; do
-bsub -q 1nh "export SCRAM_ARCH=slc5_amd64_gcc434 ; cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src ; eval \`scramv1 runtime -sh\` ; cd - ; cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGDev ; ./DrawComparison 'Omog_QGStudies_Photon_Run2011_VGammaID.root' 'Omog_QGStudies_G_QCD_EMEnriched.root' ${PtBins1[i]} ${PtBins2[i]} ${RhoBins1[j]} ${RhoBins2[j]} ${EtaBins1[k]} ${EtaBins2[k]} "
+bsub -q 1nh -o DrawComparison.log "export SCRAM_ARCH=slc5_amd64_gcc434 ; cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src ; eval \`scramv1 runtime -sh\` ; cd - ; cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGDev ; ./DrawComparison 'Omog_QGStudies_Photon_Run2011_VGammaID.root' 'Omog_QGStudies_G_QCD_EMEnriched.root' ${PtBins1[i]} ${PtBins2[i]} ${RhoBins1[j]} ${RhoBins2[j]} ${EtaBins1[k]} ${EtaBins2[k]} "
 done
 done 
 done
