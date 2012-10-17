@@ -140,6 +140,9 @@ DrawComparison: DrawComparison.C
 DrawComparison.o: DrawComparison.C
 	g++ `root-config --libs --cflags` -c  DrawComparison.C
 
+.PHONY:QGDev
+QGDev:create_pileupNvertex_files merge_and_setWeights finalize_QG finalize_QGStudies finalize_MultiJet do2ndLevel_PhotonJet do2ndLevel_QG do2ndLevel_MultiJet DrawComparison drawDiMultiJetQG
 
+.PHONY:clean
 clean:
 	rm *.o
