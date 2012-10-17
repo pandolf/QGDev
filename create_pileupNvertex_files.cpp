@@ -45,6 +45,7 @@ int main() {
   createPileUpNVertexFile( treedata, treeMC, 30., 50. );
   createPileUpNVertexFile( treedata, treeMC, 50., 100. );
   createPileUpNVertexFile( treedata, treeMC, 100., 150. );
+  createPileUpNVertexFile( treedata, treeMC, 150, 8000. );
 
   return 0;
 
@@ -71,6 +72,7 @@ void createPileUpNVertexFile( TTree* treedata, TTree* treemc, float ptMin, float
   if( ptMin==30. ) ptPhotMin = 32.;
   if( ptMin==50. ) ptPhotMin = 53.;
   if( ptMin==100. ) ptPhotMin = 95.;
+  if( ptMin==150. ) ptPhotMin = 145.;
 
 
   std::string passedHLT_text;
@@ -78,18 +80,19 @@ void createPileUpNVertexFile( TTree* treedata, TTree* treemc, float ptMin, float
     passedHLT_text = "(passed_Photon30_CaloIdVL || passed_Photon30_CaloIdVL_IsoL)"; 
   } else if( ptMin==50. ) {
     passedHLT_text = "(passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL_IsoL)"; 
-  } else {
+  } else if ( ptMin==100. ) {
     passedHLT_text = "(passed_Photon90_CaloIdVL || passed_Photon90_CaloIdVL_IsoL)"; 
+  } else {
+    passedHLT_text = "(passed_Photon135)"; 
   }
 
-  char selectiondata[400];
-  //sprintf( selectiondata, "eventWeight*(ptJet0>%f && ptJet0<%f)", ptMin, ptMax );
-  //sprintf( selectiondata, "ptPhot>%f && ptJet0>%f && ptJet0<%f %s && %s", ptPhotMin, ptMin, ptMax, additionalCuts.c_str(), passedHLT_text.c_str() );
+  char selectiondata[1023];
+  sprintf( selectiondata, "ptPhot>%f && ptJet0>%f && ptJet0<%f %s && %s", ptPhotMin, ptMin, ptMax, additionalCuts.c_str(), passedHLT_text.c_str() );
 
-  // try no trigger:
-  sprintf( selectiondata, "ptPhot>%f && ptJet0>%f && ptJet0<%f %s", ptPhotMin, ptMin, ptMax, additionalCuts.c_str() );
+  //// try no trigger:
+  //sprintf( selectiondata, "ptPhot>%f && ptJet0>%f && ptJet0<%f %s", ptPhotMin, ptMin, ptMax, additionalCuts.c_str() );
 
-  char selectionmc[400];
+  char selectionmc[1023];
   sprintf( selectionmc, "eventWeight_noPU*( ptPhot>%f && ptJet0>%f && ptJet0<%f %s )", ptPhotMin, ptMin, ptMax, additionalCuts.c_str() );
 
   treedata->Project( "pileupdata", "nvertex", selectiondata ); //number of PU events is number of total -1 (primary)
