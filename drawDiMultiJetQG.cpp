@@ -701,6 +701,15 @@ void drawHistoWithQuarkGluonComponents( DrawBase* db, const std::string& treeNam
   float b_fraction = h1_b_all->Integral()/mc_int_all;
   float other_fraction = 1.-quark_fraction-gluon_fraction-b_fraction;
 
+
+  // keep shape from gamma+jet, rescale to include also QCD contribution:
+  h1_all->Scale( h1_all_all->Integral()/h1_all->Integral() );
+  h1_gluon->Scale( h1_gluon_all->Integral()/h1_gluon->Integral() );
+  h1_pu->Scale( h1_pu_all->Integral()/h1_pu->Integral() );
+  h1_quark->Scale( h1_quark_all->Integral()/h1_quark->Integral() );
+  h1_b->Scale( h1_b_all->Integral()/h1_b->Integral() );
+  
+
   char quarkText[300];
   sprintf( quarkText, "udsc (%.1f%%)", 100.*quark_fraction );
   char gluonText[300];
