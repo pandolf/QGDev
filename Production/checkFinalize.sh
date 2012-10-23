@@ -22,7 +22,7 @@ for i in files_${ANAL}_2ndLevel_*.txt ;
 	#CHANGING PREFIX DEFINITION
 	[ "$ANAL" == "PhotonJet"  ] && export PREFIX="QGStudies"
 	[ "$ANAL" == "MultiJet"   ] && export PREFIX="DiJet"
-	NUM2=$(ls ~/work/2ndLevel/${DIRECTORY}/${PREFIX}_${DATASET}_*.root 2>/dev/null | wc -l  ) ; 
+	NUM2=$(ls ~/work/2ndLevel/${DIRECTORY}/${PREFIX}_${DATASET}_*.root 2>/dev/null | grep '[0-9]\+\.root' | wc -l  ) ; 
 	
 	#ridefinition of NUM2 in case of MultiJet And only 1 submitted bjob
 	[ "$NUM1" == "1" ] && [ "$ANAL" == "MultiJet" ] && NUM2=$(ls ~/work/2ndLevel/${DIRECTORY}/${PREFIX}_${DATASET}*.root 2>/dev/null | wc -l  ) ;	

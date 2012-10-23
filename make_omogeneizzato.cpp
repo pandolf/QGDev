@@ -137,6 +137,10 @@ int main( int argc, char* argv[] ) {
   chain->SetBranchAddress( "eventWeight", &eventWeight );
   Float_t eventWeight_noPU;
   chain->SetBranchAddress( "eventWeight_noPU", &eventWeight_noPU );
+// ---- PU Re Weigthing ------------------------------------------------------------------------
+//  Float_t PUReWeight;
+//  chain->SetBranchAddress( "PUReWeight", &PUReWeight );
+// ---------------------------------------------------------------------------------------------
 
   Int_t nvertex;
   chain->SetBranchAddress( "nvertex", &nvertex );
@@ -376,6 +380,10 @@ if( controlSample=="DiJet" || controlSample=="MultiJet")
   TH1F* h1_nPU_data_Photon90 = (TH1F*)filePU_Photon90->Get("pileupdata");
   TH1F* h1_nPU_mc_Photon90 = (TH1F*)filePU_Photon90->Get("pileupmc");
 
+  std::string puFileName_Photon135 = "pileup_nvertex_QGStudies_pt150_8000.root";
+ TFile* filePU_Photon135 = TFile::Open(puFileName_Photon135.c_str());
+  TH1F* h1_nPU_data_Photon135 = (TH1F*)filePU_Photon135->Get("pileupdata");
+  TH1F* h1_nPU_mc_Photon135 = (TH1F*)filePU_Photon135->Get("pileupmc");
   
 
 
@@ -454,6 +462,9 @@ if( controlSample=="DiJet" || controlSample=="MultiJet")
         float data_binvalue = h1_nPU_data_Photon50->GetBinContent(nvertex+1);
         float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
         eventWeight *= puweight;
+// ---- PU Re Weigthing ------------------------------------------------------------------------
+//        eventWeight *= PUReWeight;
+// ---------------------------------------------------------------------------------------------
 
       } else if( ptJet0>=100. && ptJet0<150. ) {
 
@@ -461,6 +472,9 @@ if( controlSample=="DiJet" || controlSample=="MultiJet")
         float data_binvalue = h1_nPU_data_Photon90->GetBinContent(nvertex+1);
         float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
         eventWeight *= puweight;
+// ---- PU Re Weigthing ------------------------------------------------------------------------
+//        eventWeight *= PUReWeight;
+// ---------------------------------------------------------------------------------------------
 
       } else if( ptJet0>=30. && ptJet0<50. ) {
 
@@ -468,8 +482,19 @@ if( controlSample=="DiJet" || controlSample=="MultiJet")
         float data_binvalue = h1_nPU_data_Photon30->GetBinContent(nvertex+1);
         float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
         eventWeight *= puweight;
+// ---- PU Re Weigthing ------------------------------------------------------------------------
+//        eventWeight *= PUReWeight;
+// ---------------------------------------------------------------------------------------------
 
-      }
+      } else if( ptJet0 > 150){
+        float mc_binvalue = h1_nPU_mc_Photon135->GetBinContent(nvertex+1);
+        float data_binvalue = h1_nPU_data_Photon135->GetBinContent(nvertex+1);
+        float puweight = (mc_binvalue>0.) ? data_binvalue/mc_binvalue : 0.;
+        eventWeight *= puweight;
+// ---- PU Re Weigthing ------------------------------------------------------------------------
+//        eventWeight *= PUReWeight;
+// ---------------------------------------------------------------------------------------------
+	}
 
     }
 

@@ -166,6 +166,8 @@ void TreeFinalizerC_MultiJet::finalize() {
 
   Int_t nPU;
   tree_->SetBranchAddress("nPU", &nPU);
+  Float_t PUReWeight;
+  tree_->SetBranchAddress("PUReWeight", &PUReWeight);
   Float_t ptHat;
   tree_->SetBranchAddress("ptHat", &ptHat);
 
@@ -349,6 +351,8 @@ void TreeFinalizerC_MultiJet::finalize() {
   tree_passedEvents->Branch( "event", &event, "event/I" );
   tree_passedEvents->Branch( "eventWeight", &eventWeight, "eventWeight/F" );
   tree_passedEvents->Branch( "eventWeight_noPU", &eventWeight_noPU, "eventWeight_noPU/F" );
+  tree_passedEvents->Branch( "nPU", &nPU, "nPU/I" );
+  tree_passedEvents->Branch( "PUReWeight", &PUReWeight, "PUReWeight/F" );
   tree_passedEvents->Branch( "PUWeight", &PUWeight, "PUWeight/F" );
   tree_passedEvents->Branch( "PUWeight_HT150", &PUWeight_HT150, "PUWeight_HT150/F" );
   tree_passedEvents->Branch( "PUWeight_HT250", &PUWeight_HT250, "PUWeight_HT250/F" );

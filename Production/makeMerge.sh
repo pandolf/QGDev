@@ -41,7 +41,10 @@ for i in files_*.txt ;
 		echo 'export SCRAM_ARCH=slc5_amd64_gcc434' 		>> $DESTFILE
 		echo 'cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src ; eval `scramv1 runtime -sh` ; cd -'  >> $DESTFILE
 		echo "cd $DATADIR/$DIRECTORY" >> $DESTFILE
-		echo "ls $DATADIR/$DIRECTORY/$DATASET/${ANALYZER}_*.root > files_${ANALYZER}_2ndLevel_${DATASET}.txt" >>$DESTFILE
+		echo " [ -f \"files_${ANALYZER}_2ndLevel_${DATASET}.txt\" ] &&  cat files_${ANALYZER}_2ndLevel_${DATASET}.txt | grep 'eos' || ls $DATADIR/$DIRECTORY/$DATASET/${ANALYZER}_*.root > files_${ANALYZER}_2ndLevel_${DATASET}.txt" >>$DESTFILE
+		###PU
+		echo "[ -f \"pileup_Cert_160404-180252_7TeV_ReRecoNov08_Collisions11.root\" ] || [ -h \"pileup_Cert_160404-180252_7TeV_ReRecoNov08_Collisions11.root\" ] || ln -s ${CDIR}/pileup_Cert_160404-180252_7TeV_ReRecoNov08_Collisions11.root" >>$DESTFILE
+		###
 		echo "$CDIR/merge_and_setWeights $DATASET $ANALYZER" >> $DESTFILE
 		cd $CDIR
 		

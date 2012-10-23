@@ -256,6 +256,8 @@ void TreeFinalizerC_QGStudies::finalize() {
 
   Int_t nPU;
   tree_->SetBranchAddress("nPU", &nPU);
+  Int_t PUReWeight;
+  tree_->SetBranchAddress("PUReWeight", &PUReWeight);
   Float_t rhoPF;
   tree_->SetBranchAddress("rhoPF", &rhoPF);
 
@@ -454,6 +456,8 @@ void TreeFinalizerC_QGStudies::finalize() {
 
   tree_passedEvents->Branch( "run", &run, "run/I" );
   tree_passedEvents->Branch( "LS", &LS, "LS/I" );
+  tree_passedEvents->Branch( "nPU", &nPU, "nPU/I" );
+  tree_passedEvents->Branch( "PUReWeight", &PUReWeight, "PUReWeight/F" );
   tree_passedEvents->Branch( "event", &event, "event/I" );
   tree_passedEvents->Branch( "eventWeight", &eventWeight, "eventWeight/F");
   tree_passedEvents->Branch( "eventWeight_noPU", &eventWeight_noPU, "eventWeight_noPU/F");

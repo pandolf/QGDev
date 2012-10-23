@@ -25,7 +25,7 @@ for i in files_${ANAL}_2ndLevel_*.txt ;
 	
 	cd ~/work/2ndLevel/${DIRECTORY}/
 	
-	hadd ${PREFIX}_${DATASET}_VGammaID.root ${PREFIX}_${DATASET}_*.root
+	hadd -f ${PREFIX}_${DATASET}_VGammaID.root ${PREFIX}_${DATASET}_*.root
 
 	cd $CDIR	
 	

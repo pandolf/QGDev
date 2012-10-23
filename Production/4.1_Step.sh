@@ -18,6 +18,7 @@ for i in files_MultiJet_2ndLevel_*.txt ; do
 
 	DIM=$(ls -la $DATADIR/$DIRECTORY/MultiJet_2ndLevelTreeW_${DATASET}.root | tr -s ' ' | cut -d ' ' -f 5  )
 	NBLOCKS="$(( DIM / 50000000 ))"
+	[ $NBLOCKS == 0 ] && NBLOCKS=1 ;
 	for j in `eval echo {0..$(($NBLOCKS-1))}`; 
 		do
 		DESTFILE=$DATASET/finalize/MultiJet_$j
