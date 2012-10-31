@@ -1,6 +1,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
+#include "TMath.h"
 //unit definition of femtobarn vs picobarn: it may be useful to have plot normalized to 1fb
 
 #include <stdio.h>
@@ -125,8 +126,8 @@ int AddLikelihoodFriend(const char * FileName="ntuple.root", //File name
 
 		vars[0]=ptD;
 		vars[1]=nPFCand;
-		vars[2]=axis1;
-		vars[3]=axis2;
+		vars[2]=-TMath::Log(axis1);
+		vars[3]=-TMath::Log(axis2);
 		//if(F)LikelihoodFit=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,nCharged,nNeutral,ptDJetReco);
 		if(F)LikelihoodFit=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,vars);
 

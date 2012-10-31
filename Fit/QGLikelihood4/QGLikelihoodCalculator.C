@@ -321,5 +321,44 @@ if(Q==0)return 0;
 return float(Q/(Q+G));
 }
 
+int QGLikelihoodCalculator::ComputePars(float pt , float rhoPF,const char varName[], char type, double*par)
+{
+int R=0;
+TF1 *pol3=new TF1("pol3","[0]+[1]*TMath::Log(x)+[2]*TMath::Log(x)*TMath::Log(x)+[3]*TMath::Log(x)*TMath::Log(x)*TMath::Log(x)",20,3500);//LOG! ->PT
+TF1 *pol1=new TF1("pol1","[1]+[0]*x",0,20); //NOT LOG -> RHO
+float a,b;
+	printf("PAR1\n");
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(0,0)]);//par0 a
+		a=pol3->Eval(pt);
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(0,1)]);//par0 a
+		b=pol3->Eval(pt);
+	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
+		par[0]=pol1->Eval(rhoPF);
+	R++;
+
+	printf("PAR2\n");
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(1,0)]);//par0 a
+		a=pol3->Eval(pt);
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(1,1)]);//par0 a
+		b=pol3->Eval(pt);
+	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
+		par[1]=pol1->Eval(rhoPF);
+	R++;
+	
+	//to this part only if is for PtD style ... ?
+	printf("PAR3\n");
+	if((*AllPar[pair<string,char>(varName,type)])[pair<int,int>(2,0)] !=NULL){
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(2,0)]);//par0 a
+		a=pol3->Eval(pt);
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(2,1)]);//par0 a
+		b=pol3->Eval(pt);
+	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
+		par[2]=pol1->Eval(rhoPF);
+	R++;
+	}
+	return R;
+}
+
+
 
 
