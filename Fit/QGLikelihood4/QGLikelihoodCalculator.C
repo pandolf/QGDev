@@ -80,18 +80,17 @@ QGLikelihoodCalculator::~QGLikelihoodCalculator()
 {
 }
 
-inline double gammadistr_(double* x, double* par)
+double QGLikelihoodCalculator::gammadistr_(double* x, double* par)
 {
         return TMath::Exp( - x[0] *par[0]/par[1] ) * TMath::Power(x[0],par[0]-1) * TMath::Power(par[1]/par[0],-par[0])/TMath::Gamma(par[0]) ;
 }
 
 //half gamma+ offset
-inline double functionPtD_(double * x ,double*par)
+double QGLikelihoodCalculator::functionPtD_(double * x ,double*par)
 {
         if((x[0]-par[0])<0)return 0;
         return TMath::Exp( - (x[0]-par[0]) *par[1]/par[2] ) * TMath::Power((x[0]-par[0]),par[1]-1) * TMath::Power(par[2]/par[1],-par[1])/TMath::Gamma(par[1]) ;
 }
-
 
 float QGLikelihoodCalculator::computeQGLikelihoodPU( float pt, float rhoPF, int nCharged, int nNeutral, float ptD, float rmsCand ) {
 //plots are already normalized to unity.
@@ -332,6 +331,7 @@ float a,b;
 		a=pol3->Eval(pt);
 	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(0,1)]);//par0 a
 		b=pol3->Eval(pt);
+	printf("a=%f b=%f\n",a,b);
 	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
 		par[0]=pol1->Eval(rhoPF);
 	R++;
@@ -341,6 +341,7 @@ float a,b;
 		a=pol3->Eval(pt);
 	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(1,1)]);//par0 a
 		b=pol3->Eval(pt);
+	printf("a=%f b=%f\n",a,b);
 	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
 		par[1]=pol1->Eval(rhoPF);
 	R++;
