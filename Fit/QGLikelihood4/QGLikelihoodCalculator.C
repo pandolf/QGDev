@@ -99,7 +99,7 @@ double G=1;
 
 
 TF1 *pol3=new TF1("pol3","[0]+[1]*TMath::Log(x)+[2]*TMath::Log(x)*TMath::Log(x)+[3]*TMath::Log(x)*TMath::Log(x)*TMath::Log(x)",20,3500);//LOG! ->PT
-TF1 *pol1=new TF1("pol1","[1]+[0]*x",0,20); //NOT LOG -> RHO
+TF1 *pol1=new TF1("pol1","[0]+[1]*x",0,20); //NOT LOG -> RHO
 
 double *par=new double[5];
 double *x=new double[5];
@@ -225,7 +225,7 @@ double G=1;
 
 
 TF1 *pol3=new TF1("pol3","[0]+[1]*TMath::Log(x)+[2]*TMath::Log(x)*TMath::Log(x)+[3]*TMath::Log(x)*TMath::Log(x)*TMath::Log(x)",20,3500);//LOG! ->PT
-TF1 *pol1=new TF1("pol1","[1]+[0]*x",0,20); //NOT LOG -> RHO
+TF1 *pol1=new TF1("pol1","[0]+[1]*x",0,20); //NOT LOG -> RHO
 
 double *par=new double[5];
 double *x=new double[5];
@@ -233,81 +233,23 @@ double a,b;
 for(int i=0;i<nVars;i++){
 	//printf("DEBUG %s\n",varName[i].c_str());
 	//printf("DEBUG %s\n",varFunc[i].c_str());
-	
+	int R;	
 	if( varFunc[i] == string("gamma") ){
 	x[0]=vars[i];
 	//NC Q
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(0,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(0,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[0]=pol1->Eval(rhoPF);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(1,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(1,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[1]=pol1->Eval(rhoPF);
+	R=ComputePars(pt,rhoPF,varName[i].c_str(),'Q',par);if(R!=2)fprintf(stderr,"ERROR nPar=%d instead of 2\n",R);
 	Q*=gammadistr_(x,par);
 	//NC G
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(0,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(0,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[0]=pol1->Eval(rhoPF);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(1,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(1,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[1]=pol1->Eval(rhoPF);
+	R=ComputePars(pt,rhoPF,varName[i].c_str(),'G',par);if(R!=2)fprintf(stderr,"ERROR nPar=%d instead of 2\n",R);
 	G*=gammadistr_(x,par);
 	}
-	if( varFunc[i] == string("functionPtD") ){
+	if( varFunc[i] == string("functionPtD") ){ //select the right function
 	x[0]=vars[i]; 
 	//PtD Q
-	//printf("DEBUG A %s %ld %ld\n",varName[i].c_str(),AllPar[pair<string,char>(varName[i],'Q')] , (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(0,0)]);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(0,0)]);//par0 a
-		a=pol3->Eval(pt);
-	//printf("DEBUG B\n");
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(0,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[0]=pol1->Eval(rhoPF);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(1,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(1,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[1]=pol1->Eval(rhoPF);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(2,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'Q')])[pair<int,int>(2,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[2]=pol1->Eval(rhoPF);
+	R=ComputePars(pt,rhoPF,varName[i].c_str(),'Q',par);if(R!=3)fprintf(stderr,"ERROR nPar=%d instead of 3\n",R);
 	Q*=functionPtD_(x,par);
 	//PtD G
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(0,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(0,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[0]=pol1->Eval(rhoPF);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(1,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(1,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[1]=pol1->Eval(rhoPF);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(2,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName[i],'G')])[pair<int,int>(2,1)]);//par0 a
-		b=pol3->Eval(pt);
-	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
-		par[2]=pol1->Eval(rhoPF);
+	R=ComputePars(pt,rhoPF,varName[i].c_str(),'G',par);if(R!=3)fprintf(stderr,"ERROR nPar=%d instead of 3\n",R);
 	G*=functionPtD_(x,par);
 	}
  }
@@ -324,39 +266,45 @@ int QGLikelihoodCalculator::ComputePars(float pt , float rhoPF,const char varNam
 {
 int R=0;
 TF1 *pol3=new TF1("pol3","[0]+[1]*TMath::Log(x)+[2]*TMath::Log(x)*TMath::Log(x)+[3]*TMath::Log(x)*TMath::Log(x)*TMath::Log(x)",20,3500);//LOG! ->PT
-TF1 *pol1=new TF1("pol1","[1]+[0]*x",0,20); //NOT LOG -> RHO
+TF1 *pol1=new TF1("pol1","[0]+[1]*x",0,20); //NOT LOG -> RHO
 float a,b;
-	printf("PAR1\n");
+//	printf("PAR1\n");
+	if((*AllPar[pair<string,char>(varName,type)])[pair<int,int>(0,0)] !=NULL){
 	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(0,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(0,1)]);//par0 a
 		b=pol3->Eval(pt);
-	printf("a=%f b=%f\n",a,b);
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(0,1)]);//par0 a
+		a=pol3->Eval(pt);
+	//printf("a=%f b=%f\n",a,b);
 	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
 		par[0]=pol1->Eval(rhoPF);
 	R++;
+	}
 
-	printf("PAR2\n");
+	//printf("PAR2\n");
+	if((*AllPar[pair<string,char>(varName,type)])[pair<int,int>(1,0)] !=NULL){
 	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(1,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(1,1)]);//par0 a
 		b=pol3->Eval(pt);
-	printf("a=%f b=%f\n",a,b);
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(1,1)]);//par0 a
+		a=pol3->Eval(pt);
+	//printf("a=%f b=%f\n",a,b);
 	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
 		par[1]=pol1->Eval(rhoPF);
 	R++;
+	}
 	
 	//to this part only if is for PtD style ... ?
-	printf("PAR3\n");
+	//printf("PAR3\n");
 	if((*AllPar[pair<string,char>(varName,type)])[pair<int,int>(2,0)] !=NULL){
 	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(2,0)]);//par0 a
-		a=pol3->Eval(pt);
-	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(2,1)]);//par0 a
 		b=pol3->Eval(pt);
+	pol3->SetParameters( (*AllPar[pair<string,char>(varName,type)])[pair<int,int>(2,1)]);//par0 a
+		a=pol3->Eval(pt);
 	pol1->SetParameter(0,b);pol1->SetParameter(1,a);
 		par[2]=pol1->Eval(rhoPF);
 	R++;
 	}
+	//for(int i=0;i<R;i++)printf("par[%d]=%f ",i,par[i]);
+	//printf("\n");
 	return R;
 }
 

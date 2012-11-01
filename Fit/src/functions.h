@@ -1,5 +1,7 @@
 #include <string>
 using namespace std;
+#ifndef FUNC_H
+#define FUNC_H
 inline double gammadistr_(double* x, double* par)
 {
 	return TMath::Exp( - x[0] *par[0]/par[1] ) * TMath::Power(x[0],par[0]-1) * TMath::Power(par[1]/par[0],-par[0])/TMath::Gamma(par[0]) ;		
@@ -25,3 +27,4 @@ fprintf(fw,"{2 JetPt Rho 1 x ((x-[0])<0)?0:TMath::Exp(-1.*(x-[0])*[1]/[2])*TMath
 else return -1;
 return 0;
 }
+#endif

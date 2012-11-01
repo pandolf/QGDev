@@ -76,6 +76,7 @@ fprintf(stderr,"Creating Graphs\n");
 F->cd();
 
 map< TString, TGraph2D* > Pars;  //string=histoname= varnamePar
+map< TString, TGraph2D* > Chi2;  // Chi2
 
 fprintf(stderr,"Getting Bins\n");
 double RhoBins[100];
@@ -162,8 +163,15 @@ if (Histo_quark->Integral("width") ==0 ){printf("No Data\n");continue;}
 if (Histo_gluon->Integral("width") ==0 ){printf("No Data\n");continue;}
 
 //Normalize
+
+Histo_quark->Sumw2(); //Chi2
+Histo_gluon->Sumw2();//Chi2
+
 Histo_quark->Scale(1./Histo_quark->Integral("width"));
 Histo_gluon->Scale(1./Histo_gluon->Integral("width"));
+
+for(int k=0;k<=Histo_quark->GetNbinsX()+1;k++)Histo_quark->SetBinError(k,TMath::Sqrt(TMath::Power(Histo_quark->GetBinError(k),2) + TMath::Power(0.001/Histo_quark->GetBinWidth(1),2)));
+for(int k=0;k<=Histo_gluon->GetNbinsX()+1;k++)Histo_gluon->SetBinError(k,TMath::Sqrt(TMath::Power(Histo_gluon->GetBinError(k),2) + TMath::Power(0.001/Histo_gluon->GetBinWidth(1),2)));
 
 float Max=0;
 Max=TMath::Max(Histo_quark->GetMaximum(),Histo_gluon->GetMaximum());
@@ -206,14 +214,14 @@ else if( FitFunctions[VarNames[j]] == TString("gamma") )
 	gammadistr->SetName("gamma_quark");
 	gammadistr->DrawCopy("SAME");
 	gammadistr->SetName("gamma");
-	if(gammadistr->GetChisquare()/gammadistr->GetNDF() > MaxChiSquareNDF) fprintf(stderr,"WARNING FIT ERROR: %s quark pt %f %f Rho %f %f\n",VarNames[j].Data(),PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1]);
+	if(gammadistr->GetChisquare()/gammadistr->GetNDF() > MaxChiSquareNDF) fprintf(stderr,"WARNING FIT ERROR: %s quark pt %f %f Rho %f %f\n",VarNames[j].Data(),PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1]);	
 	}
 else if( FitFunctions[VarNames[j]] == TString("none") ) //useless - already done
 	{
 	continue; //don't do anything --> avoid the loop on rho 20x faster
 	}
 //filling TGraph
-	if( FitFunctions[VarNames[j]] == TString("gamma") )
+	if( FitFunctions[VarNames[j]] == TString("gamma") ){
 	for(int p=0;p<2;p++)
 		{
 		TString histoName(Form("Graph_%s_%d_quark",VarNames[j].Data(),p));
@@ -225,7 +233,16 @@ else if( FitFunctions[VarNames[j]] == TString("none") ) //useless - already done
 			}
 		Pars[ histoName ]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(), gammadistr->GetParameter(p));
 		}
-	if( FitFunctions[VarNames[j]] == TString("functionPtD") )
+		TString Chi2Name(Form("%s_quark",VarNames[j].Data()));
+	if( Chi2[ Chi2Name ] == NULL)
+		{
+			F->cd();
+			Chi2[ Chi2Name ] = new TGraph2D();	 
+			Chi2[ Chi2Name ]->SetName(( TString("Chi2_")+Chi2Name).Data());
+		}
+	Chi2[Chi2Name]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(),gammadistr->GetChisquare()/gammadistr->GetNDF());
+	}
+	if( FitFunctions[VarNames[j]] == TString("functionPtD") ){
 	for(int p=0;p<3;p++){
 		TString histoName(Form("Graph_%s_%d_quark",VarNames[j].Data(),p));
 		if(Pars[ histoName ] == NULL)
@@ -236,6 +253,15 @@ else if( FitFunctions[VarNames[j]] == TString("none") ) //useless - already done
 			}
 		Pars[ histoName ]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(), functionPtD->GetParameter(p));
 		}
+		TString Chi2Name(Form("%s_quark",VarNames[j].Data()));
+	if( Chi2[ Chi2Name ] == NULL)
+		{
+			F->cd();
+			Chi2[ Chi2Name ] = new TGraph2D();	 
+			Chi2[ Chi2Name ]->SetName(( TString("Chi2_")+Chi2Name).Data());
+		}
+	Chi2[Chi2Name]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(),functionPtD->GetChisquare()/functionPtD->GetNDF());
+	}
 	//print Result in txt form	
 	if( FitFunctions[VarNames[j]] == TString("gamma") ) fprintf(fwq,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],gammadistr->GetParameter(0),gammadistr->GetParameter(1));
 	if( FitFunctions[VarNames[j] ] == TString("functionPtD"))fprintf(fwq,"%.0f %.0f %.0f %.0f 5 0 1 %.3f %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],functionPtD->GetParameter(0),functionPtD->GetParameter(1),functionPtD->GetParameter(2));
@@ -263,7 +289,7 @@ else
 	if(gammadistr->GetChisquare()/gammadistr->GetNDF() > MaxChiSquareNDF) fprintf(stderr,"WARNING FIT ERROR: %s gluon pt %f %f Rho %f %f\n",VarNames[j].Data(),PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1]);
 	}
 //filling TGraph
-	if( FitFunctions[VarNames[j]] == TString("gamma") )
+	if( FitFunctions[VarNames[j]] == TString("gamma") ){
 	for(int p=0;p<2;p++){
 		TString histoName(Form("Graph_%s_%d_gluon",VarNames[j].Data(),p));
 		if(Pars[ histoName ] ==NULL)
@@ -274,7 +300,16 @@ else
 			}
 		Pars[ histoName ]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(), gammadistr->GetParameter(p));
 		}
-	if( FitFunctions[VarNames[j]] == TString("functionPtD") )
+		TString Chi2Name(Form("%s_gluon",VarNames[j].Data()));
+	if( Chi2[ Chi2Name ] == NULL)
+		{
+			F->cd();
+			Chi2[ Chi2Name ] = new TGraph2D();	 
+			Chi2[ Chi2Name ]->SetName(( TString("Chi2_")+Chi2Name).Data());
+		}
+	Chi2[Chi2Name]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(),gammadistr->GetChisquare()/gammadistr->GetNDF());
+	}
+	if( FitFunctions[VarNames[j]] == TString("functionPtD") ){
 	for(int p=0;p<3;p++){
 		TString histoName(Form("Graph_%s_%d_gluon",VarNames[j].Data(),p));
 		if(Pars[ histoName ] ==NULL)
@@ -285,6 +320,15 @@ else
 			}
 		Pars[ histoName ]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(), functionPtD->GetParameter(p));
 		}
+		TString Chi2Name(Form("%s_gluon",VarNames[j].Data()));
+	if( Chi2[ Chi2Name ] == NULL)
+		{
+			F->cd();
+			Chi2[ Chi2Name ] = new TGraph2D();	 
+			Chi2[ Chi2Name ]->SetName(( TString("Chi2_")+Chi2Name).Data());
+		}
+	Chi2[Chi2Name]->SetPoint(count,HistoPt_quark->GetMean(),HistoRho_quark->GetMean(),functionPtD->GetChisquare()/functionPtD->GetNDF());
+	}
 	if( FitFunctions[VarNames[j]] == TString("gamma") ) fprintf(fwg,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],gammadistr->GetParameter(0),gammadistr->GetParameter(1));
 	if( FitFunctions[VarNames[j]] == TString("functionPtD") )fprintf(fwg,"%.0f %.0f %.0f %.0f 5 0 1 %.3f %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],functionPtD->GetParameter(0),functionPtD->GetParameter(1),functionPtD->GetParameter(2));
 
@@ -314,6 +358,11 @@ remove( (string(txtFileName)+string("/")+string(VarNames[j].Data() + string("_gl
 F->cd();
 printf("WRITE ");
 for( map<TString,TGraph2D*>::iterator it=Pars.begin();it!=Pars.end();it++)
+	{
+	it->second->Write();
+	printf("%s ",it->first.Data());
+	}
+for( map<TString,TGraph2D*>::iterator it=Chi2.begin();it!=Chi2.end();it++)
 	{
 	it->second->Write();
 	printf("%s ",it->first.Data());

@@ -1,14 +1,17 @@
 #include "TMath.h"
 
+#ifndef PTBINS_H
+#define PTBINS_H
+
 class Bins{
 public:
-const static int nRhoBins=18;
-const static int nPtBins=20;
-const static double Pt0=20;
-const static double Pt1=1000;
-const static double Rho0=2;
-const static double Rho1=20;
-const static double PtLastExtend=3500;
+const static int nRhoBins=10; //18
+const static int nPtBins=10; //20
+const static double Pt0=50;  //20
+const static double Pt1=400; //1000
+const static double Rho0=5;  //2
+const static double Rho1=15; //20
+const static double PtLastExtend=400; //3500
 
 };
 
@@ -75,4 +78,4 @@ void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax
   Lower[nBins] = xmax;
 
 }
-
+#endif

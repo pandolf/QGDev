@@ -215,6 +215,7 @@ pol3->SetLineColor(kRed);pol3->DrawCopy("SAME");
 if(outFile[0]!='\0')fprintf(fw,"%d bg %f %f %f %f\n",parameter,pol3->GetParameter(0),pol3->GetParameter(1),pol3->GetParameter(2),pol3->GetParameter(3));
 
 if(outFile[0]!='\0')c1->SaveAs( (string(outFile)+string("_allPlots.pdf")).c_str());
+if(outFile[0]!='\0')c1->SaveAs( (string(outFile)+string("_allPlots.root")).c_str());
 
 
 }//enf of Fit_2ndStep function
