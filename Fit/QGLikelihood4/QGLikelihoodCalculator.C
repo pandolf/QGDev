@@ -230,7 +230,7 @@ TF1 *pol1=new TF1("pol1","[0]+[1]*x",0,20); //NOT LOG -> RHO
 double *par=new double[5];
 double *x=new double[5];
 double a,b;
-for(int i=0;i<nVars;i++){
+for(int i=0;i<varName.size();++i){
 	//printf("DEBUG %s\n",varName[i].c_str());
 	//printf("DEBUG %s\n",varFunc[i].c_str());
 	int R;	

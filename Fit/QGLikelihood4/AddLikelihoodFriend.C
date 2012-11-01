@@ -154,5 +154,6 @@ int main(int argc,char**argv)
 			"F",//what I will add F:LikelihoodFit
 			A.ReadParameterFromFile("data/config.ini","TREENAME")
 		   	);
+	return 0;
 }
 #endif
