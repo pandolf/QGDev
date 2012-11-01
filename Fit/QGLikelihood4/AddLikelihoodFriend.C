@@ -157,3 +157,17 @@ int main(int argc,char**argv)
 	return 0;
 }
 #endif
+#ifdef SPLIT
+int main(int argc,char**argv)
+{
+	Read A;
+	if(argc<3)return 1;
+	 AddLikelihoodFriend(
+			argv[1],
+			argv[2],
+			"F",//what I will add F:LikelihoodFit
+			A.ReadParameterFromFile("data/config.ini","TREENAME")
+		   	);
+	return 0;
+}
+#endif

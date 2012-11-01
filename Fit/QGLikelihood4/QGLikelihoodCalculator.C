@@ -224,8 +224,8 @@ double Q=1;
 double G=1;
 
 
-TF1 *pol3=new TF1("pol3","[0]+[1]*TMath::Log(x)+[2]*TMath::Log(x)*TMath::Log(x)+[3]*TMath::Log(x)*TMath::Log(x)*TMath::Log(x)",20,3500);//LOG! ->PT
-TF1 *pol1=new TF1("pol1","[0]+[1]*x",0,20); //NOT LOG -> RHO
+//TF1 *pol3=new TF1("pol3","[0]+[1]*TMath::Log(x)+[2]*TMath::Log(x)*TMath::Log(x)+[3]*TMath::Log(x)*TMath::Log(x)*TMath::Log(x)",20,3500);//LOG! ->PT
+//TF1 *pol1=new TF1("pol1","[0]+[1]*x",0,20); //NOT LOG -> RHO
 
 double *par=new double[5];
 double *x=new double[5];
@@ -256,8 +256,8 @@ for(int i=0;i<varName.size();++i){
 
 delete[] par;
 delete[] x;
-delete pol3;
-delete pol1;
+//delete pol3;
+//delete pol1;
 if(Q==0)return 0;
 return float(Q/(Q+G));
 }
@@ -305,9 +305,9 @@ float a,b;
 	}
 	//for(int i=0;i<R;i++)printf("par[%d]=%f ",i,par[i]);
 	//printf("\n");
+	delete pol3;
+	delete pol1;
 	return R;
-delete pol3;
-delete pol1;
 }
 
 
