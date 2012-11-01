@@ -306,6 +306,8 @@ float a,b;
 	//for(int i=0;i<R;i++)printf("par[%d]=%f ",i,par[i]);
 	//printf("\n");
 	return R;
+delete pol3;
+delete pol1;
 }
 
 
