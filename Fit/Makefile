@@ -26,3 +26,8 @@ Fit_2ndLevel:
 AddBranches: 	
 	cd src ; make AddBranches
 	cp src/AddBranches ./
+
+.PHONY: AddLikelihoodFriend
+AddLikelihoodFriend: 	
+	cd QGLikelihood4 ; make AddLikelihoodFriend
+	cp QGLikelihood4/AddLikelihoodFriend ./
