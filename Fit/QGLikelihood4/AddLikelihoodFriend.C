@@ -18,23 +18,20 @@ using namespace std;
 
 int AddLikelihoodFriend(const char * FileName="ntuple.root", //File name
 			const char * outFileName="ntuple_2.root",
-			const char * What="L C N P R",//what I will add F:LikelihoodFit
+			const char * What="F L H",//what I will add F:LikelihoodFit
 			const char* TreeName="jetTree" // Tree Name in the directory Chosen
 		   	)
 {
 	//reading what
 	const char *pointer=What;
 	int n;char a;
-	bool L=false,C=false,N=false,P=false,R=false,F=false;
+	bool L=false,C=false,N=false,P=false,R=false,F=false,H=false;
 	while(sscanf(pointer,"%c %n",&a,&n)==1)
 		{
 		pointer+=n;
 		switch (a){
 		case 'L': L=true;fprintf(stderr,"L ");break;
-		case 'C': C=true;fprintf(stderr,"C ");break;
-		case 'N': N=true;fprintf(stderr,"N ");break;
-		case 'P': P=true;fprintf(stderr,"P ");break;
-		case 'R': R=true;fprintf(stderr,"R ");break;
+		case 'H': H=true;fprintf(stderr,"H ");break;
 		case 'F': F=true;fprintf(stderr,"F ");break;
 		}
 		};
@@ -64,6 +61,8 @@ int AddLikelihoodFriend(const char * FileName="ntuple.root", //File name
 		return 2;
 		}
 	float LikelihoodFit;
+	float LikelihoodFit2;
+	float Likelihood;
 	
 	//Opening outfile
 	TFile *FOut=TFile::Open(outFileName,"RECREATE");
@@ -73,6 +72,8 @@ int AddLikelihoodFriend(const char * FileName="ntuple.root", //File name
 	//Creating an empty branch in the tree
 	fprintf(stderr,"Creating the branches and setting the address\n");
 	TBranch *b5;if(F)b5=T->Branch("QGFit4",&LikelihoodFit,"QGFit4/F"); //used LikelihoodFit
+	TBranch *b4;if(L)b4=T->Branch("QGFit2",&LikelihoodFit2,"QGFit2/F"); //used LikelihoodFit
+	TBranch *b3;if(H)b3=T->Branch("QGL",&Likelihood,"QGL/F"); //used LikelihoodFit
 	
 	//Getting the Number of entries in the tree
 	long long int NumberEntries=t->GetEntries();
@@ -96,40 +97,21 @@ int AddLikelihoodFriend(const char * FileName="ntuple.root", //File name
 //	const char *AllVars=A.ReadParameterFromFile("data/config.ini","QGFIT4VARS");
 //	
 	float vars[1023];
-//	vector<pair<int,float> > fVar;
-//	vector<pair<int,int  > > iVar;
-//	int count=0;
-//	while(sscanf(AllVars,"%s%n",str,&n) == 1)
-//		{
-//		AllVars+=n;
-//		fprintf(stderr,"VarName=%s",str);
-//		if(  (string(str)==string("nPFCandJet0")) || (string(str)==string("nPFCand_QCJet0")) ||(string(str)==string("nChargedJet0")) ||(string(str)==string("nChg_QCJet0")) ||(string(str)==string("nNeutralJet0")) ) //int
-//			{
-//			iVar.push_back(pair<int,int>(count,0));
-//			t->SetBranchAddress(str, &(iVar[ iVar.size() - 1 ].second) );
-//			}
-//		else
-//			{
-//			fVar.push_back(pair<int,float>(count,0.));
-//			t->SetBranchAddress(str, &(fVar[ fVar.size() - 1 ].second) );
-//			}
-//		count++;
-//		}
 	
 	//looping on the entries in order to add the correct number of entries in the branch
 	fprintf(stderr,"Beginning the loop over the entries\n");
 	for(long long int i=0;i<NumberEntries;i++){
 		t->GetEntry(i);
 			//update vars array.
-		//	for(int k=0;k<fVar.size();k++){vars[fVar[k].first]=fVar[k].second; fprintf(stderr," --- %f\n",fVar[k].second);}
-		//	for(int k=0;k<iVar.size();k++)vars[iVar[k].first]=float(iVar[k].second);
 
 		vars[0]=ptD;
 		vars[1]=nPFCand;
-		vars[2]=-TMath::Log(axis1);
-		vars[3]=-TMath::Log(axis2);
-		//if(F)LikelihoodFit=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,nCharged,nNeutral,ptDJetReco);
+		vars[2]=-TMath::Log(axis2);
+	//	vars[2]=-TMath::Log(axis1);
+
 		if(F)LikelihoodFit=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,vars);
+		if(L)LikelihoodFit2=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,vars);
+		if(H)Likelihood=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,vars);
 
 		if((i&131071)==1)fprintf(stderr,"entry %lld of %lld: ptJet=%f,rho=%f, LikelihoodFit=%f\n",i,NumberEntries,ptJetReco,rhoPF,LikelihoodFit);
 		
@@ -162,12 +144,21 @@ int main(int argc,char**argv)
 {
 	Read A;
 	if(argc<3)return 1;
+	if(argc==3){
 	 AddLikelihoodFriend(
 			argv[1],
 			argv[2],
 			"F",//what I will add F:LikelihoodFit
 			A.ReadParameterFromFile("data/config.ini","TREENAME")
 		   	);
+	}else{
+	 AddLikelihoodFriend(
+			argv[1],
+			argv[2],
+			argv[3],//what I will add F:LikelihoodFit
+			A.ReadParameterFromFile("data/config.ini","TREENAME")
+		   	);
+	}
 	return 0;
 }
 #endif
