@@ -156,6 +156,7 @@ for(int j=0; j<nVars;j++) //loop on VarNames
 	} //end par loop --> Got all pars
 
 	//I get all the par for VarNames[j] - Interpolate
+	x[0]=vars[j];
 	#ifdef DEBUG
 	fprintf(stderr,"%s: par[0]=%.3lf par[1]=%.3lf par[2]=%.3lf\n",varName[j].c_str(),par_q[0],par_q[1],par_q[2]);
 	#endif
