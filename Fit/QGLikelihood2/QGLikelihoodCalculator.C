@@ -11,7 +11,7 @@
 #include <map>
 using namespace std;
 
-#define DEBUG
+//#define DEBUG
 
 
 // constructor:
@@ -67,8 +67,13 @@ QGLikelihoodCalculator::QGLikelihoodCalculator( const char * configName){
 		if(varFunc[i]==string("gamma"))nPar=2;
 		if(varFunc[i]==string("functionPtD"))nPar=3;
 		for(int p=0;p<nPar;p++){
-		plots[Form("%s_%d_quark",varName[i].c_str(),p)]=(TGraph2D*)histoFile_->Get(Form("Grahp_%s_%d_quark",varName[i].c_str(),p));
-		plots[Form("%s_%d_gluon",varName[i].c_str(),p)]=(TGraph2D*)histoFile_->Get(Form("Grahp_%s_%d_gluon",varName[i].c_str(),p));
+		plots[Form("%s_%d_quark",varName[i].c_str(),p)]=(TGraph2D*)histoFile_->Get(Form("Graph_%s_%d_quark",varName[i].c_str(),p));
+		plots[Form("%s_%d_gluon",varName[i].c_str(),p)]=(TGraph2D*)histoFile_->Get(Form("Graph_%s_%d_gluon",varName[i].c_str(),p));
+		if(plots[Form("%s_%d_quark",varName[i].c_str(),p)]==NULL) fprintf(stderr,"Error GRAPH - .root file\n");
+		if(plots[Form("%s_%d_gluon",varName[i].c_str(),p)]==NULL) fprintf(stderr,"Error GRAPH - .root file\n");
+		#ifdef DEBUG
+		fprintf(stderr,"Loading Histos: %s\n",Form("Graph_%s_%d_quark",varName[i].c_str(),p));
+		#endif
 		}
 	}
 }
@@ -106,11 +111,17 @@ double x[10];
 //string VarNames[]={"nCharged","nNeutral","ptD"};
 for(int j=0; j<nVars;j++) //loop on VarNames
 	{
+	#ifdef DEBUG
+	fprintf(stderr,"%d %s - %s\n",j,varName[j].c_str(),varFunc[j].c_str());
+	#endif
 	int nPar=0;
 	if(varFunc[j].c_str() == string("gamma") ) nPar=2;	
 	if(varFunc[j].c_str() == string("functionPtD") ) nPar=3;	
-	for(int i=0; i<3; i++) // loop on the number of params
+	for(int i=0; i<nPar; i++) // loop on the number of params
 	{
+	#ifdef DEBUG
+	fprintf(stderr,"Par %d\n",i);
+	#endif	
 	//interpolations
 	bool INTERP=true;
 	if( INTERP )
