@@ -20,7 +20,7 @@ TChain *c=new TChain("tree_passedEvents");
 
 cout << "1st chain "<<a->Add("~/work/2ndLevel/QG/QG/QGSplit/QG_QCD_Split*.root") <<endl;
 cout << "2nd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit4Friend_QG_QCD_Split*.root") <<endl;
-cout << "3rd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit2Friend_QG_QCD_Split*.root") <<endl;
+//cout << "3rd chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit2Friend_QG_QCD_Split*.root") <<endl;
 
 
 a->AddFriend(b);
@@ -39,11 +39,11 @@ TH1F* h1=new TH1F("h1","h1",100,0,1.0001); //QGFit
 TH1F* h2=new TH1F("h2","h2",100,0,1.0001);
 
 
-a->Draw("qglPaolo>>g1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
-a->Draw("qglPaolo>>g2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("qglPaoloJet0>>g1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("qglPaoloJet0>>g2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
 
-a->Draw("QGFit2>>l1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
-a->Draw("QGFit2>>l2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
+//a->Draw("QGFit2>>l1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
+//a->Draw("QGFit2>>l2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
 
 a->Draw("QGFit4>>f1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
 a->Draw("QGFit4>>f2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
@@ -87,8 +87,8 @@ f1->GetXaxis()->SetTitle("QGL 4");
 
 g->GetXaxis()->SetTitle("Quark eff.");
 g->GetYaxis()->SetTitle("Gluon rej.");
-g->GetXaxis()->SetRangeUse(0,1.0);
-g->GetYaxis()->SetRangeUse(0,1.0);
+g->GetXaxis()->SetRangeUser(0,1.0);
+g->GetYaxis()->SetRangeUser(0,1.0);
 
 //Draw
 TLegend *L;
