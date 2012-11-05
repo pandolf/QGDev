@@ -1,4 +1,4 @@
-#include "../interface/QGLikelihoodCalculator.h"
+#include "QGLikelihoodCalculator.h"
 
 #include <iostream>
 #include <fstream>
@@ -9,10 +9,11 @@
 #include <map>
 using namespace std;
 
+#include "ReadParameters.C"
+#include "PtBins.h"
 
-
-void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog=true);
-void getBins( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog=true);
+//void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog=true);
+//void getBins( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog=true);
 
 
 
@@ -27,6 +28,33 @@ QGLikelihoodCalculator::QGLikelihoodCalculator( const std::string& fileName, uns
   nRhoBins_ = nRhoBins;
 
 }
+QGLikelihoodCalculator::QGLikelihoodCalculator( const char * configName){
+
+  Read A;
+  histoFile_ = TFile::Open(A.ReadParameterFromFile(configName,"HISTO"));
+
+const char * vars=A.ReadParameterFromFile(configName,"QGFIT4VARS");
+        const char * funcs=A.ReadParameterFromFile(configName,"QGFIT4FUNCS");
+        
+        char str[1023];int n; 
+        nVars=0;
+        while(sscanf(vars,"%s%n",str,&n)==1)
+                {
+                vars+=n;
+                varName.push_back( string(str) );
+                nVars++;
+                }
+        while(sscanf(funcs,"%s%n",str,&n)==1)
+                {
+                funcs+=n;
+                varFunc.push_back( string(str) );
+                }
+
+
+  nPtBins_ = Bins::nPtBins;
+  nRhoBins_ = Bins::nRhoBins;
+
+}
 
 // ADD map destructor
 QGLikelihoodCalculator::~QGLikelihoodCalculator()
@@ -37,9 +65,6 @@ for(it=plots_.begin();it!=plots_.end();it++)
 	delete it->second;
 	}
 }
-
-
-
 
 float QGLikelihoodCalculator::computeQGLikelihood( float pt, int nCharged, int nNeutral, float ptD, float rmsCand ) {
 
@@ -112,6 +137,46 @@ float QGLikelihoodCalculator::computeQGLikelihood( float pt, int nCharged, int n
 
 }
 
+//new
+float QGLikelihoodCalculator::computeQGLikelihoodPU( float pt, float rho, float *vars ) {
+double RhoBins[100];
+double PtBins[100];
+
+getBins_int(Bins::nPtBins+1,PtBins,Bins::Pt0,Bins::Pt1,true);
+PtBins[Bins::nPtBins+1]=Bins::PtLastExtend;
+getBins_int(Bins::nRhoBins+1,RhoBins,Bins::Rho0,Bins::Rho1,false);
+
+
+double ptMin=0.;
+double ptMax=0;
+double rhoMin=0.;
+double rhoMax=0;
+
+if(getBin(Bins::nPtBins,PtBins,pt,&ptMin,&ptMax) <0 ) return -1;
+if(getBin(Bins::nRhoBins,RhoBins,rho,&rhoMax,&rhoMax) <0 ) return -1;
+//get Histo
+
+float Q=1;
+float G=1;
+char histoName[1023];
+for(int i=0;i<nVars;i++){
+//get Histo
+  	sprintf( histoName, "rhoBins_pt%.0lf_%.0lf/%s_quark_pt%.0lf_%.0lf_rho%.0lf", ptMin, ptMax,varName[i].c_str(), ptMin, ptMax, rhoMin);
+	if( plots_[histoName] == NULL ){plots_[histoName]=(TH1F*)histoFile_->Get(histoName); plots_[ histoName]->Scale(1./plots_[histoName]->Integral("width")); }
+	
+	Q*=plots_[histoName]->GetBinContent(plots_[histoName]->FindBin(vars[i]));
+	
+  	sprintf( histoName, "rhoBins_pt%.0lf_%.0lf/%s_gluon_pt%.0lf_%.0lf_rho%.0lf", ptMin, ptMax,varName[i].c_str(), ptMin, ptMax, rhoMin);
+	if( plots_[histoName] == NULL ){plots_[histoName]=(TH1F*)histoFile_->Get(histoName);plots_[ histoName]->Scale(1./plots_[histoName]->Integral("width")); }
+
+	G*=plots_[histoName]->GetBinContent(plots_[histoName]->FindBin(vars[i]));
+	}
+
+
+return Q/(Q+G);
+
+}
+
 
 
 float QGLikelihoodCalculator::computeQGLikelihoodPU( float pt, float rhoPF, int nCharged, int nNeutral, float ptD, float rmsCand ) {
@@ -150,7 +215,7 @@ float QGLikelihoodCalculator::computeQGLikelihoodPU( float pt, float rhoPF, int 
 
   const int nRhoBinsPlusOne(nRhoBins_+1);
   Double_t* rhoBins = new Double_t[nRhoBinsPlusOne];
-  getBins( nRhoBinsPlusOne, rhoBins, 0., (float)nRhoBins_, false );
+ // getBins( nRhoBinsPlusOne, rhoBins, 0., (float)nRhoBins_, false );
 
   int rhoBin=-1;
 
@@ -252,43 +317,43 @@ float QGLikelihoodCalculator::likelihoodProduct( float nCharged, float nNeutral,
 }
 
 
-void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog) {
-
-  Double_t Lower_exact;
-  int nBins = nBins_total-1;
-  const double dx = (plotLog) ? pow((xmax / xmin), (1. / (double)nBins)) : ((xmax - xmin) / (double)nBins);
-  Lower[0] = xmin;
-  Lower_exact = Lower[0];
-  for (int i = 1; i != nBins; ++i) {
-
-    if (plotLog) {
-      Lower_exact *= dx;
-      Lower[i] = TMath::Ceil(Lower_exact);
-    } else {
-      Lower[i] = TMath::Ceil(Lower[i-1] + dx);
-    }
-
-  }
-
-  Lower[nBins] = xmax;
-
-}
-
-
-
-void getBins( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog) {
-
-  int nBins = nBins_total-1;
-  const double dx = (plotLog) ? pow((xmax / xmin), (1. / (double)nBins)) : ((xmax - xmin) / (double)nBins);
-  Lower[0] = xmin;
-  for (int i = 1; i != nBins; ++i) {
-
-    if (plotLog) Lower[i] = Lower[i-1] * dx;
-    else         Lower[i] = Lower[i-1] + dx;
-
-  }
-
-  Lower[nBins] = xmax;
-
-}
-
+//void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog) {
+//
+//  Double_t Lower_exact;
+//  int nBins = nBins_total-1;
+//  const double dx = (plotLog) ? pow((xmax / xmin), (1. / (double)nBins)) : ((xmax - xmin) / (double)nBins);
+//  Lower[0] = xmin;
+//  Lower_exact = Lower[0];
+//  for (int i = 1; i != nBins; ++i) {
+//
+//    if (plotLog) {
+//      Lower_exact *= dx;
+//      Lower[i] = TMath::Ceil(Lower_exact);
+//    } else {
+//      Lower[i] = TMath::Ceil(Lower[i-1] + dx);
+//    }
+//
+//  }
+//
+//  Lower[nBins] = xmax;
+//
+//}
+//
+//
+//
+//void getBins( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog) {
+//
+//  int nBins = nBins_total-1;
+//  const double dx = (plotLog) ? pow((xmax / xmin), (1. / (double)nBins)) : ((xmax - xmin) / (double)nBins);
+//  Lower[0] = xmin;
+//  for (int i = 1; i != nBins; ++i) {
+//
+//    if (plotLog) Lower[i] = Lower[i-1] * dx;
+//    else         Lower[i] = Lower[i-1] + dx;
+//
+//  }
+//
+//  Lower[nBins] = xmax;
+//
+//}
+//

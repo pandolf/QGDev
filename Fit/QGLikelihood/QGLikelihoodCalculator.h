@@ -15,6 +15,9 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include <map>
+#include <vector>
+#include <string>
+using namespace std;
 
 
 
@@ -22,11 +25,13 @@ class QGLikelihoodCalculator {
 
  public:
 
-  QGLikelihoodCalculator( const std::string& fileName="QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root", unsigned nPtBins=18, unsigned int nRhoBins=20 );
+  QGLikelihoodCalculator( const std::string& fileName, unsigned nPtBins, unsigned int nRhoBins);
+  QGLikelihoodCalculator( const char * configName="../data/config.ini");//new
    ~QGLikelihoodCalculator();
 
   float computeQGLikelihood( float pt, int nCharged, int nNeutral, float ptD, float rmsCand=-1. );
   float computeQGLikelihoodPU( float pt, float rhoPF, int nCharged, int nNeutral, float ptD, float rmsCand=-1. );
+  float computeQGLikelihoodPU( float pt, float rho, float *vars ); //new
 
   float likelihoodProduct( float nCharged, float nNeutral, float ptD, float rmsCand, TH1F* h1_nCharged, TH1F* h1_nNeutral, TH1F* h1_ptD, TH1F* h1_rmsCand);
 
@@ -38,6 +43,11 @@ class QGLikelihoodCalculator {
   std::map<std::string,TH1F*> plots_;
   unsigned int nPtBins_;
   unsigned int nRhoBins_;
+
+        int nVars;
+        vector<string> varName;
+        vector<string> varFunc;
+
 
 };
 
