@@ -248,6 +248,7 @@ int main(){
 	funcs+=n;
 	int nPar=0;
 	if( string(funcName) == "gamma") 	nPar =  2;
+	if( string(funcName) == "gamma2") 	nPar =  2;
 	if( string(funcName) == "functionPtD") 	nPar =  3;
 	if( string(funcName) == "none") 	nPar = -1;
 	for(int p=0;p<nPar;p++){

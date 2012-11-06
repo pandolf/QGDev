@@ -1,7 +1,16 @@
 #include "TMath.h"
+#include <map>
+#include <vector>
+#include <string>
+#include "TH1F.h"
+
+using namespace std;
+
+#include "ReadParameters.C"
 
 #ifndef PTBINS_H
 #define PTBINS_H
+
 
 class Bins{
 public:
@@ -13,11 +22,85 @@ const static double Rho0=5;  //2
 const static double Rho1=15; //20
 const static double PtLastExtend=400; //3500
 
+const static int getMeans(double *PtMeans,double *RhoMeans,const char *configName);
+const static int getSigmas(double *PtSigmas,double*RhoSigmas,const char *configName);
+const static int getObj(double*x,double *y,const char*configName,char type='M');
+
 };
-
-
+//TO BE INCLUDED IN THE CLASS
 int getBins(double  *Bins,int nBins,double MinBin=15.0,double MaxBin=1000.,bool log=false);
 int getBin(int nBins,double  *Bins,double value,double*x0=0,double*x1=0);
+void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog=true); 
+//
+
+const int Bins::getMeans(double *PtMeans,double *RhoMeans,const char *configName){
+	return Bins::getObj(PtMeans,RhoMeans,configName,'M');
+	}
+const int Bins::getSigmas(double *PtSigmas,double*RhoSigmas,const char *configName){
+	return Bins::getObj(PtSigmas,RhoSigmas,configName,'S');
+	}
+
+const int Bins::getObj(double*x,double*y,const char*configName,char type){
+Read A;
+TFile *f=TFile::Open(A.ReadParameterFromFile(configName,"HISTO"));
+
+double RhoBins[100];
+double PtBins[100];
+
+getBins_int(Bins::nPtBins+1,PtBins,Bins::Pt0,Bins::Pt1,true);
+PtBins[Bins::nPtBins+1]=Bins::PtLastExtend;
+getBins_int(Bins::nRhoBins+1,RhoBins,Bins::Rho0,Bins::Rho1,false);
+
+map<string,TH1F*> plots;
+string histoName,targetHisto;
+for(int p=0;p<Bins::nPtBins;++p)
+for(int r=0;r<Bins::nRhoBins;++r)
+	{
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	plots[histoName]=(TH1F*)f->Get(histoName.c_str());
+	histoName=Form("rhoBins_pt%.0f_%.0f/rhoPF_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	plots[histoName]=(TH1F*)f->Get(histoName.c_str());
+	}
+for(int r=0;r<Bins::nRhoBins;++r){
+	targetHisto=Form("RhoMean_rho%.0f",floor(RhoBins[r]));
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[0]),ceil(PtBins[1]),ceil(PtBins[0]),ceil(PtBins[1]),RhoBins[r]);
+	plots[targetHisto]=(TH1F*)plots[histoName]->Clone(targetHisto.c_str());
+	for(int p=1;p<Bins::nPtBins;++p){//calcola RhoMean
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	plots[targetHisto]->Add(plots[histoName]);
+	}
+	}
+for(int p=0;p<Bins::nPtBins;++p){//calcola RhoMean
+	targetHisto=Form("PtMean_pt%.0f_%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]));
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[0]));
+	plots[targetHisto]=(TH1F*)plots[histoName]->Clone(targetHisto.c_str());
+	for(int r=1;r<Bins::nRhoBins;++r){
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	plots[targetHisto]->Add(plots[histoName]);
+	}
+	}
+if(type=='M'){
+		for(int p=0;p<Bins::nPtBins;++p){
+		targetHisto=Form("PtMean_pt%.0f_%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]));
+		x[p]=plots[targetHisto]->GetMean();
+		}
+		for(int r=0;r<Bins::nRhoBins;++r){
+		targetHisto=Form("RhoMean_rho%.0f",floor(RhoBins[r]));
+		y[r]=plots[targetHisto]->GetMean();
+		}
+	}
+if(type=='S'){
+		for(int p=0;p<Bins::nPtBins;++p){
+		targetHisto=Form("PtMean_pt%.0f_%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]));
+		x[p]=plots[targetHisto]->GetRMS();
+		}
+		for(int r=0;r<Bins::nRhoBins;++r){
+		targetHisto=Form("RhoMean_rho%.0f",floor(RhoBins[r]));
+		y[r]=plots[targetHisto]->GetRMS();
+		}
+	}
+return 0;		
+}
 
 
 int getBins(double  *Bins,int nBins,double MinBin,double MaxBin,bool log)
@@ -57,7 +140,7 @@ if(x1) *x1=Bins[R+1];
 return R;	
 }
 
-void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog=true) {
+void getBins_int( int nBins_total, Double_t* Lower, Double_t xmin, Double_t xmax, bool plotLog) {
 
   Double_t Lower_exact;
   int nBins = nBins_total-1;
