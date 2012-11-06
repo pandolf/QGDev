@@ -18,11 +18,13 @@ TChain *a=new TChain("tree_passedEvents");
 TChain *b=new TChain("tree_passedEvents");
 TChain *c=new TChain("tree_passedEvents");
 TChain *d=new TChain("tree_passedEvents");
+TChain *e=new TChain("tree_passedEvents");
 
 cout << "1st chain "<<a->Add("~/work/2ndLevel/QG/QG/QGSplit/QG_QCD_Split*.root") <<endl;
 cout << "2nd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit4Friend_QG_QCD_Split*.root") <<endl;
 cout << "3rd chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit2Friend_QG_QCD_Split*.root") <<endl;
-cout << "4th chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_QG_QCD_Split*.root") <<endl;
+cout << "4th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_QG_QCD_Split*.root") <<endl;
+cout << "5th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_QCD_Split*.root") <<endl;
 
 
 
@@ -37,6 +39,9 @@ TH1F* l2=new TH1F("l2","l2",100,0,1.0001);
 
 TH1F* h1=new TH1F("h1","h1",100,0,1.0001); //QGFit
 TH1F* h2=new TH1F("h2","h2",100,0,1.0001);
+
+TH1F* v1=new TH1F("v1","v1",100,0,1.0001); //QGL1 4v
+TH1F* v2=new TH1F("v2","v2",100,0,1.0001);
 
 cout<<"QGLPAOLO"<<endl;
 a->Draw("qglPaoloJet0>>g1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
@@ -57,10 +62,18 @@ cout<<"QGL"<<endl;
 a->Draw("QGL>>h1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
 a->Draw("QGL>>h2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
 
+
+a->AddFriend(e,"4var");
+cout<<"QGL 4var"<<endl;
+a->Draw("4var.QGL>>v1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("4var.QGL>>v2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
+cout<<"DONE"<<endl;
+
 TGraph *g=new TGraph(); g->SetName("g");
 TGraph *f=new TGraph(); f->SetName("f");
 TGraph *l=new TGraph(); l->SetName("l");
 TGraph *h=new TGraph(); h->SetName("h");
+TGraph *v=new TGraph(); v->SetName("v");
 
 //Norm
 g1->Scale(1./g1->Integral(0,g1->GetNbinsX()+1));
@@ -71,11 +84,14 @@ l1->Scale(1./l1->Integral(0,l1->GetNbinsX()+1));
 l2->Scale(1./l2->Integral(0,l2->GetNbinsX()+1));
 h1->Scale(1./h1->Integral(0,h1->GetNbinsX()+1));
 h2->Scale(1./h2->Integral(0,h2->GetNbinsX()+1));
+v1->Scale(1./v1->Integral(0,v1->GetNbinsX()+1));
+v2->Scale(1./v2->Integral(0,v2->GetNbinsX()+1));
 
-for(int i=0;i<=g1->GetNbinsX()+1;i++)g->SetPoint(i, 1-g1->Integral(0,i),g2->Integral(0,i)  );
-for(int i=0;i<=f1->GetNbinsX()+1;i++)f->SetPoint(i, f1->Integral(0,i),1-f2->Integral(0,i)  );
-for(int i=0;i<=l1->GetNbinsX()+1;i++)l->SetPoint(i, l1->Integral(0,i),1-l2->Integral(0,i)  );
+for(int i=0;i<=g1->GetNbinsX()+1;i++)g->SetPoint(i, g1->Integral(0,i),1-g2->Integral(0,i)  );
+for(int i=0;i<=f1->GetNbinsX()+1;i++)f->SetPoint(i, 1-f1->Integral(0,i),f2->Integral(0,i)  );
+for(int i=0;i<=l1->GetNbinsX()+1;i++)l->SetPoint(i, 1-l1->Integral(0,i),l2->Integral(0,i)  );
 for(int i=0;i<=h1->GetNbinsX()+1;i++)h->SetPoint(i, 1-h1->Integral(0,i),h2->Integral(0,i)  );
+for(int i=0;i<=v1->GetNbinsX()+1;i++)v->SetPoint(i, 1-v1->Integral(0,i),v2->Integral(0,i)  );
 
 //Set Style
 gROOT->SetStyle("Plain");
@@ -87,16 +103,20 @@ gStyle->SetHatchesLineWidth(2);
 g->SetMarkerStyle(24); g->SetMarkerColor(kBlue+2);
 f->SetMarkerStyle(29); f->SetMarkerColor(kRed+2);
 h->SetMarkerStyle(20); h->SetMarkerColor(kGreen+2);
+l->SetMarkerStyle(20); l->SetMarkerColor(kOrange+2);
+v->SetMarkerStyle(30); v->SetMarkerColor(kCyan);
 
 g1->SetLineColor(38);g2->SetLineColor(46);g1->SetFillColor(38);g2->SetFillColor(46);g1->SetFillStyle(3554); g2->SetFillStyle(3545); g1->SetLineWidth(2);g2->SetLineWidth(2);
 f1->SetLineColor(38);f2->SetLineColor(46);f1->SetFillColor(38);f2->SetFillColor(46);f1->SetFillStyle(3554); f2->SetFillStyle(3545); f1->SetLineWidth(2);f2->SetLineWidth(2);
 h1->SetLineColor(38);h2->SetLineColor(46);h1->SetFillColor(38);h2->SetFillColor(46);h1->SetFillStyle(3554); h2->SetFillStyle(3545); h1->SetLineWidth(2);h2->SetLineWidth(2);
 l1->SetLineColor(38);l2->SetLineColor(46);l1->SetFillColor(38);l2->SetFillColor(46);l1->SetFillStyle(3554); l2->SetFillStyle(3545); l1->SetLineWidth(2);l2->SetLineWidth(2);
+v1->SetLineColor(38);v2->SetLineColor(46);v1->SetFillColor(38);v2->SetFillColor(46);v1->SetFillStyle(3554); v2->SetFillStyle(3545); v1->SetLineWidth(2);v2->SetLineWidth(2);
 
 g1->GetXaxis()->SetTitle("QGL (BDT)");
 l1->GetXaxis()->SetTitle("QGL 2");
 f1->GetXaxis()->SetTitle("QGL 4");
-h1->GetXaxis()->SetTitle("QGL 4");
+h1->GetXaxis()->SetTitle("QGL 1");
+v1->GetXaxis()->SetTitle("QGL 1 (4var)");
 
 g->GetXaxis()->SetTitle("Quark eff.");
 g->GetYaxis()->SetTitle("Gluon rej.");
@@ -131,12 +151,15 @@ TCanvas*c4=new TCanvas("c4","c4",800,800);
 	f->Draw("P SAME");
 	l->Draw("P SAME");
 	h->Draw("P SAME");
+	v->Draw("P SAME");
 	TGraph *k=new TGraph(); k->SetName("line"); k->SetPoint(0,0,1);k->SetPoint(1,1,0);k->SetLineColor(kBlack);k->SetLineWidth(1);
 	k->Draw("L SAME");
-	L=new TLegend(0.15,0.15,.5,.45,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L=new TLegend(0.15,0.15,.5,.45,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax)); L->SetFillStyle(0);L->SetBorderSize(0);
 	L->AddEntry(g,"QGL (BDT)","P");
 	L->AddEntry(f,"QGL 4","P");
 	L->AddEntry(l,"QGL 2","P");
+	L->AddEntry(h,"QGL 1","P");
+	L->AddEntry(v,"QGL 1 (4var)","P");
 	L->Draw();
 TCanvas*c5=new TCanvas("c5","c5",800,600);
 	h1->Draw("HIST");
@@ -150,5 +173,6 @@ c1->SaveAs("../Output/c1.pdf");
 c2->SaveAs("../Output/c2.pdf");
 c3->SaveAs("../Output/c3.pdf");
 c4->SaveAs("../Output/c4.pdf");
+c5->SaveAs("../Output/c5.pdf");
 return 0;
 }
