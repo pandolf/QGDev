@@ -51,31 +51,38 @@ getBins_int(Bins::nPtBins+1,PtBins,Bins::Pt0,Bins::Pt1,true);
 PtBins[Bins::nPtBins+1]=Bins::PtLastExtend;
 getBins_int(Bins::nRhoBins+1,RhoBins,Bins::Rho0,Bins::Rho1,false);
 
+string component[]={"quark","gluon"};
 map<string,TH1F*> plots;
 string histoName,targetHisto;
 for(int p=0;p<Bins::nPtBins;++p)
 for(int r=0;r<Bins::nRhoBins;++r)
+for(int c=0;c<2;c++)
 	{
-	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),component[c].c_str(),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
 	plots[histoName]=(TH1F*)f->Get(histoName.c_str());
-	histoName=Form("rhoBins_pt%.0f_%.0f/rhoPF_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	if(plots[histoName]==NULL) fprintf(stderr,"PLOT %s does not exists\n",histoName.c_str());
+	histoName=Form("rhoBins_pt%.0f_%.0f/rhoPF_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),component[c].c_str(),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
 	plots[histoName]=(TH1F*)f->Get(histoName.c_str());
 	}
+
 for(int r=0;r<Bins::nRhoBins;++r){
 	targetHisto=Form("RhoMean_rho%.0f",floor(RhoBins[r]));
-	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[0]),ceil(PtBins[1]),ceil(PtBins[0]),ceil(PtBins[1]),RhoBins[r]);
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[0]),ceil(PtBins[1]),component[0].c_str(),ceil(PtBins[0]),ceil(PtBins[1]),RhoBins[r]);
 	plots[targetHisto]=(TH1F*)plots[histoName]->Clone(targetHisto.c_str());
+	for(int c=0;c<2;c++)
 	for(int p=1;p<Bins::nPtBins;++p){//calcola RhoMean
-	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),component[c].c_str(),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
 	plots[targetHisto]->Add(plots[histoName]);
 	}
 	}
+
 for(int p=0;p<Bins::nPtBins;++p){//calcola RhoMean
 	targetHisto=Form("PtMean_pt%.0f_%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]));
-	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[0]));
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),component[0].c_str(),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[0]));
 	plots[targetHisto]=(TH1F*)plots[histoName]->Clone(targetHisto.c_str());
+	for(int c=0;c<2;c++)
 	for(int r=1;r<Bins::nRhoBins;++r){
-	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),component[c].c_str(),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
 	plots[targetHisto]->Add(plots[histoName]);
 	}
 	}
