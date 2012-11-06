@@ -123,47 +123,46 @@ for(int j=0; j<nVars;j++) //loop on VarNames
 	fprintf(stderr,"Par %d\n",i);
 	#endif	
 	//interpolations
-	bool INTERP=true;
+	bool INTERP=false;
 	if( INTERP )
 	{
 		sprintf(plotName,"%s_%d_quark",varName[j].c_str(),i);
 		par_q[i]=plots[plotName]->Interpolate(pt,rhoPF);
 		sprintf(plotName,"%s_%d_gluon",varName[j].c_str(),i);
 		par_g[i]=plots[plotName]->Interpolate(pt,rhoPF);
-	} 
-//	else {
-//	//not interpolate
-//		sprintf(plotName,"%s%d_quark",VarNames[j].c_str(),i);
-//		{
-//		double *Pt=plots[plotName]->GetX();
-//		double *Rho=plots[plotName]->GetY();
-//		double *param=plots[plotName]->GetZ();
-//		int k=0;
-//		for(int z=0;z<plots[plotName]->GetN();z++)
-//			{
-//			if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
-//			}
-//		par_q[i]=param[k];
-//		#ifdef DEBUG
-//		fprintf(stderr,"pt=%.0f - %.0f Rho=%.2f - %.2f param=%.5f\n",pt,Pt[k],rhoPF,Rho[k],param[k]);
-//		#endif
-//		}
-//		sprintf(plotName,"%s%d_gluon",VarNames[j].c_str(),i);
-//		{
-//		double *Pt=plots[plotName]->GetX();
-//		double *Rho=plots[plotName]->GetY();
-//		double *param=plots[plotName]->GetZ();
-//		int k=0;
-//		for(int z=0;z<plots[plotName]->GetN();z++)
-//			{
-//			if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
-//			}
-//		par_g[i]=param[k];
-//		#ifdef DEBUG
-//		fprintf(stderr,"pt=%.0f - %.0f Rho=%.2f - %.2f param=%.5f\n",pt,Pt[k],rhoPF,Rho[k],param[k]);
-//		#endif
-//		}
-//	}
+	} else {
+	//not interpolate
+		sprintf(plotName,"%s_%d_quark",varName[j].c_str(),i);
+		{
+		double *Pt=plots[plotName]->GetX();
+		double *Rho=plots[plotName]->GetY();
+		double *param=plots[plotName]->GetZ();
+		int k=0;
+		for(int z=0;z<plots[plotName]->GetN();z++)
+			{
+			if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
+			}
+		par_q[i]=param[k];
+		#ifdef DEBUG
+		fprintf(stderr,"pt=%.0f - %.0f Rho=%.2f - %.2f param=%.5f\n",pt,Pt[k],rhoPF,Rho[k],param[k]);
+		#endif
+		}
+		sprintf(plotName,"%s_%d_gluon",varName[j].c_str(),i);
+		{
+		double *Pt=plots[plotName]->GetX();
+		double *Rho=plots[plotName]->GetY();
+		double *param=plots[plotName]->GetZ();
+		int k=0;
+		for(int z=0;z<plots[plotName]->GetN();z++)
+			{
+			if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
+			}
+		par_g[i]=param[k];
+		#ifdef DEBUG
+		fprintf(stderr,"pt=%.0f - %.0f Rho=%.2f - %.2f param=%.5f\n",pt,Pt[k],rhoPF,Rho[k],param[k]);
+		#endif
+		}
+	}
 	} //end par loop --> Got all pars
 
 	//I get all the par for VarNames[j] - Interpolate
