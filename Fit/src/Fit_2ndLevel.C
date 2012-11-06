@@ -56,9 +56,12 @@ getBins_int(Bins::nPtBins+1,PtBins,Bins::Pt0,Bins::Pt1,true);
 PtBins[Bins::nPtBins+1]=Bins::PtLastExtend;
 getBins_int(Bins::nRhoBins+1,RhoBins,Bins::Rho0,Bins::Rho1,false);
 
-//TODO -- ChosenPt 
-double PtBinsMean[100];for(int i=0;i<Bins::nPtBins;++i){PtBinsMean[i]=(PtBins[i]+PtBins[i+1])/2.;}  
-double RhoBinsMean[100];for(int i=0;i<Bins::nRhoBins;++i){RhoBinsMean[i]=(RhoBins[i]+RhoBins[i+1])/2.;}  
+
+//double PtBinsMean[100];for(int i=0;i<Bins::nPtBins;++i){PtBinsMean[i]=(PtBins[i]+PtBins[i+1])/2.;}  
+//double RhoBinsMean[100];for(int i=0;i<Bins::nRhoBins;++i){RhoBinsMean[i]=(RhoBins[i]+RhoBins[i+1])/2.;}  
+double PtBinsMean[100];
+double RhoBinsMean[100];
+Bins::getMeans(PtBinsMean,RhoBinsMean,"data/config.ini");
 //---
 TH2F *quark=new TH2F("quark","quark",Bins::nPtBins,PtBins,Bins::nRhoBins,RhoBins);
 TH2F *gluon=new TH2F("gluon","gluon",Bins::nPtBins,PtBins,Bins::nRhoBins,RhoBins);
@@ -121,7 +124,7 @@ char name[1023];
 for(int PtBin=0;PtBin<Bins::nPtBins;++PtBin)
 {
 c1->cd(PtBin+1);
-float ChosenPt=(PtBins[PtBin]+PtBins[PtBin+1])/2;
+float ChosenPt=PtBinsMean[PtBin];
 sprintf(name,"_qpy%.0f",PtBins[PtBin]);
 TH1D *q2=(TH1D*)quark->ProjectionY(name, quark->GetXaxis()->FindBin( ChosenPt),quark->GetXaxis()->FindBin(ChosenPt ) );
 sprintf(name,"_gpy%.0f",PtBins[PtBin]);
