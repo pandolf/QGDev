@@ -62,6 +62,11 @@ double PtBinsSigma[100];
 double RhoBinsSigma[100];
 Bins::getMeans(PtBinsMean,RhoBinsMean,"data/config.ini");
 Bins::getSigmas(PtBinsSigma,RhoBinsSigma,"data/config.ini");
+fprintf(stderr,"DEBUG P ");
+for(int k=0;k<Bins::nPtBins;k++)fprintf(stderr,"[%.0f-%.0f]:%.1f-%.1f | ",PtBins[k],PtBins[k+1],PtBinsMean[k],PtBinsSigma[k]);
+fprintf(stderr,"\nDEBUG R ");
+for(int k=0;k<Bins::nRhoBins;k++)fprintf(stderr,"[%.0f-%.0f]:%.1f-%.1f | ",RhoBins[k],RhoBins[k+1],RhoBinsMean[k],RhoBinsSigma[k]);
+fprintf(stderr,"\n\n");
 
 map<string,TH1F*> plots;
 string histoName,targetHisto;
@@ -190,21 +195,24 @@ for(int t=0;t<2;t++){
 	double MuR=RhoBinsMean[r];
 	double S1FP= sigma1p* sigma->GetBinContent(p,r)/MuP  ;//d sF^2/d p^2
 	double S1FR= sigma1r* sigma->GetBinContent(p,r)/MuR  ;//d sF^2/d p^2
+		fprintf(stderr,"DEBUG 0 PtBins=[%.0f-%.0f] RhoBins=[%.0f-%.0f] \n",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1]);
+		fprintf(stderr,"DEBUG B sigma0=%.2f S1FP=%.5f sigma1p=%.2f sigma1r=%.2f mu1p=%.2f mu1r=%.2f sf=%f MuP=%f MuR=%f SigmaP=%f SigmaR=%f\n",sigma0,S1FP,sigma1p,sigma1r,mu1p,mu1r,sigma->GetBinContent(p,r),MuP,MuR,SigmaP,SigmaR);
 	for(int k=0;k<10;k++){ //iterative
-		sigma0= (-MuP*sigma1p-MuR*sigma1r) + TMath::Sqrt(   
-					        4 *MuP *MuR*sigma1p *sigma1r
-						+TMath::Power(sigma->GetBinContent(p,r),2) 
-						-TMath::Power(mu1p*SigmaP,2)
-						-TMath::Power(sigma1p*SigmaP,2)
-						//-2*sigma1P*sigma1R *SigmaPR
-						-TMath::Power(mu1r*SigmaR,2)
-						-TMath::Power(sigma1r*SigmaR,2)
-						);
+		double D=4 *MuP *MuR*sigma1p *sigma1r + TMath::Power(sigma->GetBinContent(p,r),2)
+                                                -TMath::Power(mu1p*SigmaP,2)
+                                                -TMath::Power(sigma1p*SigmaP,2)
+                                                //-2*sigma1P*sigma1R *SigmaPR
+                                                -TMath::Power(mu1r*SigmaR,2)
+                                                -TMath::Power(sigma1r*SigmaR,2);
+
+		sigma0= (-MuP*sigma1p-MuR*sigma1r) + TMath::Sqrt(D);
 		double b=sigma0/(2*TMath::Sqrt(MuP)) -MuR/TMath::Sqrt(MuP)*sigma1r;
 		sigma1p= (-b + TMath::Sqrt(b*b+4*S1FP))/2.0;
 		b=sigma0/(2*TMath::Sqrt(MuR)) -MuP/TMath::Sqrt(MuR)*sigma1p;
 		sigma1r= (-b + TMath::Sqrt(b*b+4*S1FR))/2.0;
+		fprintf(stderr,"DEBUG L sigma0=%.2f sigma1p=%.2f sigma1r=%.2f b=%f D=%f\n",sigma0,sigma1p,sigma1r,b);
 		}
+		fprintf(stderr,"DEBUG A sigma0=%.2f S1FP=%.2f sigma1p=%.2f sigma1r=%.2f mu1p=%.2f mu1r=%.2f\n",sigma0,S1FP,sigma1p,sigma1r,mu1p,mu1r);
 	//3_ Print Output :: sigma0 should be the solution + sigma1p*pM?
 //	if( FitFunctions[VarNames[j]] == TString("gamma2") ) 
 	fprintf(fw,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1],sigma0,mean->GetBinContent(p,r));
