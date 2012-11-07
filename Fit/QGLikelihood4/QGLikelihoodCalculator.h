@@ -56,6 +56,7 @@ class QGLikelihoodCalculator {
 	map< pair< string, char>, map< pair<int,int> ,double* >* >  AllPar;
    bool isOldStyle;
 double gammadistr_(double* x, double* par);
+double gammadistr2_(double* x, double* par);
 double functionPtD_(double * x ,double*par);
 
 };

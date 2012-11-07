@@ -64,11 +64,15 @@ Read A;
 		//printf("DEBUG gamma\n");
 		ReadParTxt( (varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ] );
 		}
+	else if( varFunc[i] == string("gamma2") ){
+		//printf("DEBUG gamma\n");
+		ReadParTxt( (varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ] );
+		}
 	else if (varFunc[i] == string("functionPtD") ){
 		//printf("DEBUG functionPtD\n");
 		ReadParTxt( (varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ],3);
 		}
-	else printf("DEBUG function ERROR\n");
+	else printf("DEBUG function ERROR ---%s---\n",varFunc[i].c_str());
 	
 	}	
 	isOldStyle=false;
@@ -83,6 +87,12 @@ QGLikelihoodCalculator::~QGLikelihoodCalculator()
 double QGLikelihoodCalculator::gammadistr_(double* x, double* par)
 {
         return TMath::Exp( - x[0] *par[0]/par[1] ) * TMath::Power(x[0],par[0]-1) * TMath::Power(par[1]/par[0],-par[0])/TMath::Gamma(par[0]) ;
+}
+double QGLikelihoodCalculator::gammadistr2_(double* x, double* par)
+{
+	double alpha=par[1] * par[1]/ (par[0]*par[0]); //par 0 = sigma;  par 1= mean
+	double beta=par[1];
+	return TMath::Exp( - x[0] *alpha/beta ) * TMath::Power(x[0],alpha-1) * TMath::Power(beta/alpha,-alpha)/TMath::Gamma(alpha) ;		
 }
 
 //half gamma+ offset
@@ -243,7 +253,14 @@ for(int i=0;i<varName.size();++i){
 	R=ComputePars(pt,rhoPF,varName[i].c_str(),'G',par);if(R!=2)fprintf(stderr,"ERROR nPar=%d instead of 2\n",R);
 	G*=gammadistr_(x,par);
 	}
-	if( varFunc[i] == string("functionPtD") ){ //select the right function
+	else if( varFunc[i] == string("gamma2") ){
+		x[0]=vars[i];
+		R=ComputePars(pt,rhoPF,varName[i].c_str(),'Q',par);if(R!=2)fprintf(stderr,"ERROR nPar=%d instead of 2\n",R);
+		Q*=gammadistr2_(x,par);
+		R=ComputePars(pt,rhoPF,varName[i].c_str(),'G',par);if(R!=2)fprintf(stderr,"ERROR nPar=%d instead of 2\n",R);
+		G*=gammadistr2_(x,par);
+	}
+	else if( varFunc[i] == string("functionPtD") ){ //select the right function
 	x[0]=vars[i]; 
 	//PtD Q
 	R=ComputePars(pt,rhoPF,varName[i].c_str(),'Q',par);if(R!=3)fprintf(stderr,"ERROR nPar=%d instead of 3\n",R);
