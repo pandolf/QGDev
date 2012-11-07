@@ -23,6 +23,7 @@
 
 #include "PtBins.h"
 #include "ReadParameters.C"
+#include "functions.h"
 
 using namespace std;
 
@@ -30,6 +31,10 @@ char GetChar(FILE *fr);
 
 int Fit_1stLevel_Corrections(const char fileName[]="nCharged.txt",const char outFile[]="")
 {
+
+string VarName("nChargedJet0_CorrectedJet0");
+string pureVarName("nChargedJet0_Corrected");
+string FitFunction("gamma2");
 
 FILE *fr=fopen(fileName,"r");
 char c; //testing character
@@ -41,7 +46,7 @@ gStyle->SetOptStat(kFALSE);
 
 //Open Histo File
 Read A;
-TFile *f=TFile::Open(A.ReadParameterFromFile("data/config.ini","HISTO"));
+//TFile *f=TFile::Open(A.ReadParameterFromFile("data/config.ini","HISTO"));
 
 //getting binnig
 double RhoBins[100];
@@ -83,7 +88,7 @@ while (( GetChar(fr) != '[') && (GetChar(fr)!= EOF) )
 	//read a formatted line
 	float ptmin, ptmax, rhomin, rhomax,par[10];int nPar;
 	fscanf(fr,"%f %f %f %f %d %*f %*f",&ptmin,&ptmax,&rhomin,&rhomax,&nPar);nPar-=2;
-	fprintf(stderr,"%f %f %f %f %d %d\n",ptmin,ptmax,rhomin,rhomax,nPar,parameter);	
+	fprintf(stderr,"%f %f %f %f %d \n",ptmin,ptmax,rhomin,rhomax,nPar);	
 
 	for(int i=0;i<nPar;++i)fscanf(fr,"%f",&par[i]);
 	c='\0';while(c!='\n'){fscanf(fr,"%c",&c);} //go to the end of line
@@ -91,7 +96,7 @@ while (( GetChar(fr) != '[') && (GetChar(fr)!= EOF) )
 	if((nPar<=parMean)||(nPar<=parRMS)){perror("I do not have that parameter\n");break;}
 	//filling the histogram
 	quark_mean->SetBinContent(quark_mean->FindBin((ptmin+ptmax)/2.,(rhomin+rhomax)/2.), par[parMean] );
-	quark_RMS->SetBinContent(quark_RMS->FindBin((ptmin+ptmax)/2.,(rhomin+rhomax)/2.), par[parRMS] );
+	quark_rms->SetBinContent(quark_rms->FindBin((ptmin+ptmax)/2.,(rhomin+rhomax)/2.), par[parRMS] );
 }//end of while: loop on the lines
 
 //skip lines that begin with [ or { -> useless     //par matc }]
@@ -105,7 +110,7 @@ while (( GetChar(fr) != '[') && (GetChar(fr)!= EOF))
 	//read a formatted line
 	float ptmin, ptmax, rhomin, rhomax,par[10];int nPar;
 	fscanf(fr,"%f %f %f %f %d %*f %*f",&ptmin,&ptmax,&rhomin,&rhomax,&nPar);nPar-=2;
-	fprintf(stderr,"%f %f %f %f %d %d\n",ptmin,ptmax,rhomin,rhomax,nPar,parameter);	
+	fprintf(stderr,"%f %f %f %f %d\n",ptmin,ptmax,rhomin,rhomax,nPar);	
 
 	for(int i=0;i<nPar;++i)fscanf(fr,"%f",&par[i]);
 	c='\0';while(c!='\n'){fscanf(fr,"%c",&c);} //go to the end of line
@@ -113,7 +118,7 @@ while (( GetChar(fr) != '[') && (GetChar(fr)!= EOF))
 	if((nPar<=parMean)||(nPar<=parRMS)){perror("I do not have that parameter\n");break;}
 	//filling the histogram
 	gluon_mean->SetBinContent(gluon_mean->FindBin((ptmin+ptmax)/2.,(rhomin+rhomax)/2.), par[parMean] );
-	gluon_RMS->SetBinContent(gluon_RMS->FindBin((ptmin+ptmax)/2.,(rhomin+rhomax)/2.), par[parRMS] );
+	gluon_rms->SetBinContent(gluon_rms->FindBin((ptmin+ptmax)/2.,(rhomin+rhomax)/2.), par[parRMS] );
 }//end of while: loop on the lines
 fclose(fr);
 
@@ -121,7 +126,7 @@ fclose(fr);
 
 //now I have in 
 /*    PtBinsMean RhoBinsMean PtBinsSigma RhoBinsSigma
- *    quark_mean quark_RMS gluon_mean gluon_RMS
+ *    quark_mean quark_rms gluon_mean gluon_rms
  */
 
 //  For each Bins of q/g rho and pt : do
@@ -131,24 +136,22 @@ fclose(fr);
 
 FILE *fw=fopen(outFile,"w");
 
-string type[2]={"quark","gluon"};
-
-const int lenght=2;  //number of adiacent points to use for fit
+const int length=2;  //number of adiacent points to use for fit
 TF1 *mu_p_F=new TF1("mu_p_F","[0]+[1]*x",0,4000);
 TF1 *mu_r_F=new TF1("mu_r_F","[0]+[1]*x",0,50);
 TF1 *si_p_F=new TF1("si_p_F","[0]+[1]*x",0,4000);
 TF1 *si_r_F=new TF1("si_r_F","[0]+[1]*x",0,50);
 
 for(int t=0;t<2;t++){
-	TH1F* mean,sigma;
+	TH2F *mean,*sigma;
 	if(t==0){
-	Print(FitFunctions[VarNames[j]].Data(),pureVarName.c_str(),fw,"quark");
-	fprintf(fwq,"[quark]\n");
-	mean=quark_mean;sigma=quark_RMS;
+	Print( FitFunction.c_str(),pureVarName.c_str(),fw,"quark");
+	fprintf(fw,"[quark]\n");
+	mean=quark_mean;sigma=quark_rms;
 	} else if(t==1){
-	Print(FitFunctions[VarNames[j]].Data(),pureVarName.c_str(),fw,"gluon");
-	fprintf(fwg,"[gluon]\n");
-	mean=gluon_mean;sigma=gluon_RMS;
+	Print(FitFunction.c_str(),pureVarName.c_str(),fw,"gluon");
+	fprintf(fw,"[gluon]\n");
+	mean=gluon_mean;sigma=gluon_rms;
 	}
 	for(int p=0;p<Bins::nPtBins;p++)
 	for(int r=0;r<Bins::nRhoBins;r++){
@@ -188,23 +191,23 @@ for(int t=0;t<2;t++){
 	double S1FP= sigma1p* sigma->GetBinContent(p,r)/MuP  ;//d sF^2/d p^2
 	double S1FR= sigma1r* sigma->GetBinContent(p,r)/MuR  ;//d sF^2/d p^2
 	for(int k=0;k<10;k++){ //iterative
-		sigma0= (-MuP*sigma1p-MuR*sigma1R) + TMath::Sqrt(   
+		sigma0= (-MuP*sigma1p-MuR*sigma1r) + TMath::Sqrt(   
 					        4 *MuP *MuR*sigma1p *sigma1r
 						+TMath::Power(sigma->GetBinContent(p,r),2) 
 						-TMath::Power(mu1p*SigmaP,2)
 						-TMath::Power(sigma1p*SigmaP,2)
 						//-2*sigma1P*sigma1R *SigmaPR
-						-TMath::Power(mu1R*SigmaR,2)
+						-TMath::Power(mu1r*SigmaR,2)
 						-TMath::Power(sigma1r*SigmaR,2)
 						);
 		double b=sigma0/(2*TMath::Sqrt(MuP)) -MuR/TMath::Sqrt(MuP)*sigma1r;
 		sigma1p= (-b + TMath::Sqrt(b*b+4*S1FP))/2.0;
-		double b=sigma0/(2*TMath::Sqrt(MuR)) -MuP/TMath::Sqrt(MuR)*sigma1p;
+		b=sigma0/(2*TMath::Sqrt(MuR)) -MuP/TMath::Sqrt(MuR)*sigma1p;
 		sigma1r= (-b + TMath::Sqrt(b*b+4*S1FR))/2.0;
 		}
 	//3_ Print Output :: sigma0 should be the solution + sigma1p*pM?
 //	if( FitFunctions[VarNames[j]] == TString("gamma2") ) 
-	fprintf(fw,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],sigma0,mean->GetBinContent(p,r));
+	fprintf(fw,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1],sigma0,mean->GetBinContent(p,r));
 	
 	delete m_r;
 	delete m_p;
@@ -214,6 +217,17 @@ for(int t=0;t<2;t++){
 
 }
 
-
 return 0;
+}
+
+
+char GetChar(FILE *fr)
+{
+fpos_t pos;//position in the file
+char c;
+//get position of the line to be analized;
+fgetpos(fr,&pos);
+c=fgetc(fr);
+fsetpos(fr,&pos); //moving back to the beginning of the line
+return c;
 }
