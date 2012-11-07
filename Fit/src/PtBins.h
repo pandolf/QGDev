@@ -71,7 +71,7 @@ for(int r=0;r<Bins::nRhoBins;++r){
 	plots[targetHisto]=(TH1F*)plots[histoName]->Clone(targetHisto.c_str());
 	for(int c=0;c<2;c++)
 	for(int p=1;p<Bins::nPtBins;++p){//calcola RhoMean
-	histoName=Form("rhoBins_pt%.0f_%.0f/ptJet0_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),component[c].c_str(),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
+	histoName=Form("rhoBins_pt%.0f_%.0f/rhoPF_%s_pt%.0f_%.0f_rho%.0f",ceil(PtBins[p]),ceil(PtBins[p+1]),component[c].c_str(),ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));
 	plots[targetHisto]->Add(plots[histoName]);
 	}
 	}
