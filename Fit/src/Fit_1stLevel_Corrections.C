@@ -213,9 +213,10 @@ for(int t=0;t<2;t++){
 		fprintf(stderr,"DEBUG L sigma0=%.2f sigma1p=%.2f sigma1r=%.2f b=%f D=%f\n",sigma0,sigma1p,sigma1r,b);
 		}
 		fprintf(stderr,"DEBUG A sigma0=%.2f S1FP=%.2f sigma1p=%.2f sigma1r=%.2f mu1p=%.2f mu1r=%.2f\n",sigma0,S1FP,sigma1p,sigma1r,mu1p,mu1r);
+		fprintf(stderr,"DEBUG A sigma_EXTR=%.2f\n",sigma0 + sigma1p*MuP + sigma1r*MuR);
 	//3_ Print Output :: sigma0 should be the solution + sigma1p*pM?
 //	if( FitFunctions[VarNames[j]] == TString("gamma2") ) 
-	fprintf(fw,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1],sigma0,mean->GetBinContent(p,r));
+	fprintf(fw,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1],sigma0 + sigma1p*MuP + sigma1r*MuR,mean->GetBinContent(p,r));
 	
 	delete m_r;
 	delete m_p;
