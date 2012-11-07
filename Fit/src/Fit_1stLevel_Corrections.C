@@ -203,6 +203,9 @@ for(int t=0;t<2;t++){
 		sigma1r= (-b + TMath::Sqrt(b*b+4*S1FR))/2.0;
 		}
 	//3_ Print Output :: sigma0 should be the solution + sigma1p*pM?
+//	if( FitFunctions[VarNames[j]] == TString("gamma2") ) 
+	fprintf(fw,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],sigma0,mean->GetBinContent(p,r));
+	
 	delete m_r;
 	delete m_p;
 	delete s_r;
