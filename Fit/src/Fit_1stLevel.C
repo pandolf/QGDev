@@ -228,6 +228,8 @@ else if( FitFunctions[VarNames[j]] == TString("gamma2") ){
 	gammadistr2->SetName("gamma2_quark");
 	gammadistr2->DrawCopy("SAME");
 	gammadistr2->SetName("gamma2");
+	//QUARK CHECK ON gamma2
+	//fprintf(stderr,"DEBUG %.2f =?= %.2f\n",gammadistr2->GetParameter(0),Histo_quark->GetRMS());
 	if(gammadistr2->GetChisquare()/gammadistr2->GetNDF() > MaxChiSquareNDF) fprintf(stderr,"WARNING FIT ERROR: %s quark pt %f %f Rho %f %f\n",VarNames[j].Data(),PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1]);	
 	}
 else if( FitFunctions[VarNames[j]] == TString("none") ) //useless - already done
@@ -301,6 +303,7 @@ else if( FitFunctions[VarNames[j]] == TString("none") ) //useless - already done
 	if( FitFunctions[VarNames[j]] == TString("gamma") ) fprintf(fwq,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],gammadistr->GetParameter(0),gammadistr->GetParameter(1));
 	if( FitFunctions[VarNames[j]] == TString("gamma2") ) fprintf(fwq,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],gammadistr2->GetParameter(0),gammadistr2->GetParameter(1));
 	if( FitFunctions[VarNames[j] ] == TString("functionPtD"))fprintf(fwq,"%.0f %.0f %.0f %.0f 5 0 1 %.3f %.3f %.3f\n",PtBins[PtBin],PtBins[PtBin+1],RhoBins[RhoBin],RhoBins[RhoBin+1],functionPtD->GetParameter(0),functionPtD->GetParameter(1),functionPtD->GetParameter(2));
+
 // GLUON 
 if( FitFunctions[ VarNames[j] ] == TString("functionPtD"))
 {
