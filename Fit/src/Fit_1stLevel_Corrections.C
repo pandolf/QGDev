@@ -158,8 +158,10 @@ for(int t=0;t<2;t++){
 	fprintf(fw,"[gluon]\n");
 	mean=gluon_mean;sigma=gluon_rms;
 	}
+
 	for(int p=0;p<Bins::nPtBins;p++)
 	for(int r=0;r<Bins::nRhoBins;r++){
+//	int p=5;int r=5;
 	//  1_ Find mu0 mu1p mu1r sigma0F sigma1pF sigma1rF  by fitting n adiacent bins with a straigh line
 		TGraph*m_r=new TGraph();
 		TGraph*m_p=new TGraph();
@@ -198,19 +200,29 @@ for(int t=0;t<2;t++){
 		fprintf(stderr,"DEBUG 0 PtBins=[%.0f-%.0f] RhoBins=[%.0f-%.0f] \n",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1]);
 		fprintf(stderr,"DEBUG B sigma0=%.2f S1FP=%.5f sigma1p=%.2f sigma1r=%.2f mu1p=%.2f mu1r=%.2f sf=%f MuP=%f MuR=%f SigmaP=%f SigmaR=%f\n",sigma0,S1FP,sigma1p,sigma1r,mu1p,mu1r,sigma->GetBinContent(p,r),MuP,MuR,SigmaP,SigmaR);
 	for(int k=0;k<10;k++){ //iterative
-		double D=4 *MuP *MuR*sigma1p *sigma1r + TMath::Power(sigma->GetBinContent(p,r),2)
-                                                -TMath::Power(mu1p*SigmaP,2)
-                                                -TMath::Power(sigma1p*SigmaP,2)
-                                                //-2*sigma1P*sigma1R *SigmaPR
-                                                -TMath::Power(mu1r*SigmaR,2)
-                                                -TMath::Power(sigma1r*SigmaR,2);
-
-		sigma0= (-MuP*sigma1p-MuR*sigma1r) + TMath::Sqrt(D);
-		double b=sigma0/(2*TMath::Sqrt(MuP)) -MuR/TMath::Sqrt(MuP)*sigma1r;
-		sigma1p= (-b + TMath::Sqrt(b*b+4*S1FP))/2.0;
-		b=sigma0/(2*TMath::Sqrt(MuR)) -MuP/TMath::Sqrt(MuR)*sigma1p;
-		sigma1r= (-b + TMath::Sqrt(b*b+4*S1FR))/2.0;
-		fprintf(stderr,"DEBUG L sigma0=%.2f sigma1p=%.2f sigma1r=%.2f b=%f D=%f\n",sigma0,sigma1p,sigma1r,b);
+		{
+		double a=1;
+		double b=2*sigma1p*MuP + 2*sigma1r*MuR;
+		double c=TMath::Power(sigma1p,2)*(TMath::Power(SigmaP,2)+TMath::Power(MuP,2)) 
+			+TMath::Power(sigma1r,2)*(TMath::Power(SigmaR,2)+TMath::Power(MuR,2))
+			+2*sigma1p*sigma1r*MuP*MuR
+			+TMath::Power(mu1p*SigmaP,2) + TMath::Power(mu1r*SigmaR,2)
+			-TMath::Power( sigma->GetBinContent(p,r),2);
+		sigma0=-b/2+TMath::Sqrt(b*b-4*a*c)/2;
+		}
+		{
+		double a=1;
+		double b= (sigma0 - sigma1r*MuR)/MuP;
+		double c= -S1FP;
+//		sigma1p= -b/2  +TMath::Sqrt(b*b-4*a*c)/2; 
+		}
+		{
+		double a=1;
+		double b= (sigma0 - sigma1p*MuP)/MuR;
+		double c= -S1FR;
+//		sigma1r= -b/2 + TMath::Sqrt(b*b-4*a*c)/2; 
+		}
+		fprintf(stderr,"DEBUG L sigma0=%.2f sigma1p=%.2f sigma1r=%.2f\n",sigma0,sigma1p,sigma1r);
 		}
 		fprintf(stderr,"DEBUG A sigma0=%.2f S1FP=%.2f sigma1p=%.2f sigma1r=%.2f mu1p=%.2f mu1r=%.2f\n",sigma0,S1FP,sigma1p,sigma1r,mu1p,mu1r);
 		fprintf(stderr,"DEBUG A sigma_EXTR=%.2f\n",sigma0 + sigma1p*MuP + sigma1r*MuR);
@@ -218,11 +230,22 @@ for(int t=0;t<2;t++){
 //	if( FitFunctions[VarNames[j]] == TString("gamma2") ) 
 	fprintf(fw,"%.0f %.0f %.0f %.0f 4 0 100 %.3f %.3f\n",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1],sigma0 + sigma1p*MuP + sigma1r*MuR,mean->GetBinContent(p,r));
 	
+//	new TCanvas();
+//	m_r->SetMarkerStyle(20);m_r->DrawClone("AP");
+//	s_r->SetMarkerStyle(30);s_r->DrawClone("P SAME");
+//	mu_r_F->DrawClone("SAME");
+//	si_r_F->SetLineColor(kRed);si_r_F->DrawClone("SAME");
+//	new TCanvas(); 
+//	m_p->SetMarkerStyle(20);m_p->DrawClone("AP "); 
+//	s_p->SetMarkerStyle(30);s_p->DrawClone("P SAME");
+//	mu_p_F->DrawClone("SAME");
+//	si_p_F->SetLineColor(kRed);si_p_F->DrawClone("SAME");
+	
 	delete m_r;
 	delete m_p;
 	delete s_r;
 	delete s_p;
-	}
+	}//for p,r
 
 }
 
