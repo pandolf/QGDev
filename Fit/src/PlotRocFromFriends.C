@@ -8,11 +8,13 @@
 #include "TStyle.h"
 
 #include <iostream>
+#include "TProof.h"
 
 using namespace std;
 
 int PlotRocFromFriends(){
 float PtMin=80;float PtMax=120.; float RhoMin=5; float RhoMax=15;
+TProof::Open("");
 
 TChain *a=new TChain("tree_passedEvents");
 TChain *b=new TChain("tree_passedEvents");
@@ -24,7 +26,7 @@ cout << "1st chain "<<a->Add("~/work/2ndLevel/QG/QG/QGSplit/QG_QCD_Split*.root")
 cout << "2nd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit4Friend_QG_QCD_Split*.root") <<endl;
 cout << "3rd chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit2Friend_QG_QCD_Split*.root") <<endl;
 cout << "4th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_QG_QCD_Split*.root") <<endl;
-cout << "5th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_QCD_Split*.root") <<endl;
+cout << "5th chain "<<e->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_QCD_Split*.root") <<endl;
 
 
 
@@ -75,7 +77,11 @@ TGraph *l=new TGraph(); l->SetName("l");
 TGraph *h=new TGraph(); h->SetName("h");
 TGraph *v=new TGraph(); v->SetName("v");
 
-//Norm
+//Norm --- OVERFLOW - UNDERFLOW
+
+bool overflow = false;
+
+if ( overflow ) {
 g1->Scale(1./g1->Integral(0,g1->GetNbinsX()+1));
 g2->Scale(1./g2->Integral(0,g2->GetNbinsX()+1));
 f1->Scale(1./f1->Integral(0,f1->GetNbinsX()+1));
@@ -86,12 +92,28 @@ h1->Scale(1./h1->Integral(0,h1->GetNbinsX()+1));
 h2->Scale(1./h2->Integral(0,h2->GetNbinsX()+1));
 v1->Scale(1./v1->Integral(0,v1->GetNbinsX()+1));
 v2->Scale(1./v2->Integral(0,v2->GetNbinsX()+1));
-
 for(int i=0;i<=g1->GetNbinsX()+1;i++)g->SetPoint(i, g1->Integral(0,i),1-g2->Integral(0,i)  );
 for(int i=0;i<=f1->GetNbinsX()+1;i++)f->SetPoint(i, 1-f1->Integral(0,i),f2->Integral(0,i)  );
 for(int i=0;i<=l1->GetNbinsX()+1;i++)l->SetPoint(i, 1-l1->Integral(0,i),l2->Integral(0,i)  );
 for(int i=0;i<=h1->GetNbinsX()+1;i++)h->SetPoint(i, 1-h1->Integral(0,i),h2->Integral(0,i)  );
 for(int i=0;i<=v1->GetNbinsX()+1;i++)v->SetPoint(i, 1-v1->Integral(0,i),v2->Integral(0,i)  );
+}else{
+g1->Scale(1./g1->Integral(1,g1->GetNbinsX()));
+g2->Scale(1./g2->Integral(1,g2->GetNbinsX()));
+f1->Scale(1./f1->Integral(1,f1->GetNbinsX()));
+f2->Scale(1./f2->Integral(1,f2->GetNbinsX()));
+l1->Scale(1./l1->Integral(1,l1->GetNbinsX()));
+l2->Scale(1./l2->Integral(1,l2->GetNbinsX()));
+h1->Scale(1./h1->Integral(1,h1->GetNbinsX()));
+h2->Scale(1./h2->Integral(1,h2->GetNbinsX()));
+v1->Scale(1./v1->Integral(1,v1->GetNbinsX()));
+v2->Scale(1./v2->Integral(1,v2->GetNbinsX()));
+for(int i=1;i<=g1->GetNbinsX();i++)g->SetPoint(i-1,   g1->Integral(1,i),1-g2->Integral(1,i)  );
+for(int i=1;i<=f1->GetNbinsX();i++)f->SetPoint(i-1, 1-f1->Integral(1,i),  f2->Integral(1,i)  );
+for(int i=1;i<=l1->GetNbinsX();i++)l->SetPoint(i-1, 1-l1->Integral(1,i),  l2->Integral(1,i)  );
+for(int i=1;i<=h1->GetNbinsX();i++)h->SetPoint(i-1, 1-h1->Integral(1,i),  h2->Integral(1,i)  );
+for(int i=1;i<=v1->GetNbinsX();i++)v->SetPoint(i-1, 1-v1->Integral(1,i),  v2->Integral(1,i)  );
+}
 
 //Set Style
 gROOT->SetStyle("Plain");
