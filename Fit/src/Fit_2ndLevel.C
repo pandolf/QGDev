@@ -76,8 +76,10 @@ while (( GetChar(fr) != '[') && (GetChar(fr)!= EOF) )
 {
 	//read a formatted line
 	float ptmin, ptmax, rhomin, rhomax,par[10];int nPar;
-	fscanf(fr,"%f %f %f %f %d %*f %*f",&ptmin,&ptmax,&rhomin,&rhomax,&nPar);nPar-=2;
+	int R=fscanf(fr,"%f %f %f %f %d %*f %*f",&ptmin,&ptmax,&rhomin,&rhomax,&nPar);nPar-=2;
 	fprintf(stderr,"%f %f %f %f %d %d\n",ptmin,ptmax,rhomin,rhomax,nPar,parameter);	
+	
+	if(R==EOF){ perror("EOF\n");break;}
 
 	for(int i=0;i<nPar;++i)fscanf(fr,"%f",&par[i]);
 	c='\0';while(c!='\n'){fscanf(fr,"%c",&c);} //go to the end of line
@@ -97,8 +99,10 @@ while (( GetChar(fr) != '[') && (GetChar(fr)!= EOF))
 {
 	//read a formatted line
 	float ptmin, ptmax, rhomin, rhomax,par[10];int nPar;
-	fscanf(fr,"%f %f %f %f %d %*f %*f",&ptmin,&ptmax,&rhomin,&rhomax,&nPar);nPar-=2;
+	int R=fscanf(fr,"%f %f %f %f %d %*f %*f",&ptmin,&ptmax,&rhomin,&rhomax,&nPar);nPar-=2;
 	fprintf(stderr,"%f %f %f %f %d %d\n",ptmin,ptmax,rhomin,rhomax,nPar,parameter);	
+
+	if(R==EOF){ perror("EOF\n");break;}
 
 	for(int i=0;i<nPar;++i)fscanf(fr,"%f",&par[i]);
 	c='\0';while(c!='\n'){fscanf(fr,"%c",&c);} //go to the end of line

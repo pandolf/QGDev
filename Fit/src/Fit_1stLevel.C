@@ -101,10 +101,10 @@ int count=0;
 string pureVarName(VarNames[j].Data());
 string Suffix("Jet0");
 if ( pureVarName.find(Suffix)!=string::npos) pureVarName.erase(pureVarName.find(Suffix),Suffix.length());
-Print(FitFunctions[VarNames[j]].Data(),pureVarName.c_str(),fwq,"quark");
 fprintf(fwq,"[quark]\n");
-Print(FitFunctions[VarNames[j]].Data(),pureVarName.c_str(),fwg,"gluon");
+Print(FitFunctions[VarNames[j]].Data(),pureVarName.c_str(),fwq,"quark");
 fprintf(fwg,"[gluon]\n");
+Print(FitFunctions[VarNames[j]].Data(),pureVarName.c_str(),fwg,"gluon");
 
 //il set dei parametri e' messo qui in modo da 'seguire' i risultati dei fit precedenti
 gammadistr->SetParLimits(0,1,20);
