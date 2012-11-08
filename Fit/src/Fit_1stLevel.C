@@ -112,6 +112,7 @@ gammadistr->SetParLimits(1,1,50);
 
 gammadistr2->SetParLimits(0,.5,50);
 gammadistr2->SetParLimits(1,.5,100);
+
 	functionPtD->SetParLimits(0,0.,0.4);//offset
 	functionPtD->SetParLimits(1,1,50);
 	functionPtD->SetParLimits(2,0.001,0.99);
@@ -470,8 +471,8 @@ int SetParametersGamma(TH1F*Histo){
 	return 0;
 }
 int SetParametersGamma2(TH1F*Histo){
-	gammadistr->SetParameter(1,Histo->GetMean());
-	gammadistr->SetParameter(0,Histo->GetRMS());
+	gammadistr2->SetParameter(1,Histo->GetMean());
+	gammadistr2->SetParameter(0,Histo->GetRMS());
 	return 0;
 }
 
