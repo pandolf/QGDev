@@ -31,17 +31,17 @@ cout << "5th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_Q
 TH1F* g1=new TH1F("g1","g1",100,-.5,.5); //qglPaolo
 TH1F* g2=new TH1F("g2","g2",100,-.5,.5);
 
-TH1F* f1=new TH1F("f1","f1",100,0,1.0001); //QGFit4
-TH1F* f2=new TH1F("f2","f2",100,0,1.0001);
+TH1F* f1=new TH1F("f1","f1",400,-20,20); //QGFit4
+TH1F* f2=new TH1F("f2","f2",400,-20,20);
 
-TH1F* l1=new TH1F("l1","l1",100,0,1.0001); //QGFit2
-TH1F* l2=new TH1F("l2","l2",100,0,1.0001);
+TH1F* l1=new TH1F("l1","l1",400,-20,20); //QGFit2
+TH1F* l2=new TH1F("l2","l2",400,-20,20);
 
-TH1F* h1=new TH1F("h1","h1",100,0,1.0001); //QGFit
-TH1F* h2=new TH1F("h2","h2",100,0,1.0001);
+TH1F* h1=new TH1F("h1","h1",400,-20,20); //QGFit
+TH1F* h2=new TH1F("h2","h2",400,-20,20);
 
-TH1F* v1=new TH1F("v1","v1",100,0,1.0001); //QGL1 4v
-TH1F* v2=new TH1F("v2","v2",100,0,1.0001);
+TH1F* v1=new TH1F("v1","v1",400,-20,20); //QGL1 4v
+TH1F* v2=new TH1F("v2","v2",400,-20,20);
 
 cout<<"QGLPAOLO"<<endl;
 a->Draw("qglPaoloJet0>>g1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
@@ -49,24 +49,24 @@ a->Draw("qglPaoloJet0>>g2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f 
 
 cout<<"QGFit2"<<endl;
 a->AddFriend(c);
-a->Draw("QGFit2>>l1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
-a->Draw("QGFit2>>l2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*QGFit2)>>l1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*QGFit2)>>l2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
 
 a->AddFriend(b);
 cout<<"QGFit4"<<endl;
-a->Draw("QGFit4>>f1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
-a->Draw("QGFit4>>f2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*QGFit4)>>f1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*QGFit4)>>f2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
 
 a->AddFriend(d);
 cout<<"QGL"<<endl;
-a->Draw("QGL>>h1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
-a->Draw("QGL>>h2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*QGL)>>h1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*QGL)>>h2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
 
 
 a->AddFriend(e,"4var");
 cout<<"QGL 4var"<<endl;
-a->Draw("4var.QGL>>v1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
-a->Draw("4var.QGL>>v2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*4var.QGL)>>v1",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)<4",PtMin,PtMax,RhoMin,RhoMax),"goff");
+a->Draw("1./TMath::Tan(TMath::TwoPi()*4var.QGL)>>v2",Form("%f<ptJet0 && ptJet0<%f && %f<rhoPF && rhoPF<%f && abs(etaJet0)<2.0 && abs(pdgIdPartJet0)==21",PtMin,PtMax,RhoMin,RhoMax),"goff");
 cout<<"DONE"<<endl;
 
 TGraph *g=new TGraph(); g->SetName("g");
