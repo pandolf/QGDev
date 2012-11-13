@@ -140,6 +140,9 @@ for(int j=0; j<q2->GetNbinsX();++j) {
 					if((q2->GetBinContent(j+1)==0)||(g2->GetBinContent(j+1)==0))continue;
 					q->SetPoint(k,RhoBinsMean[j],q2->GetBinContent(j+1));
 					g->SetPoint(k,RhoBinsMean[j],g2->GetBinContent(j+1));
+
+					q->SetPointError(k,RhoBinsMean[j],1); //TODO: check errors - now 1
+					g->SetPointError(k,RhoBinsMean[j],1);
 					k++;
 					}
 
@@ -163,8 +166,8 @@ char text[1023];sprintf(text,"P_{T} %.0f - %.0f [GeV]",PtBins[PtBin],PtBins[PtBi
 lat->DrawLatex(0.5,0.88,text);
 
 //I want to fit with lines and same the parameters in to histos (vs Pt)
-q->Fit("line","RQN");
-q->Fit("line","RQNM");
+q->Fit("line","RQNW");
+q->Fit("line","RQNMW");
 line->SetLineColor(kBlack);line->DrawCopy("SAME");
 //aq->SetBinContent(aq->FindBin( (PtBins[PtBin]+PtBins[PtBin+1])/2 ),line->GetParameter(1));
 //bq->SetBinContent(bq->FindBin( (PtBins[PtBin]+PtBins[PtBin+1])/2 ),line->GetParameter(0));
@@ -172,8 +175,8 @@ aq->SetPoint(graphCount,PtBinsMean[PtBin],line->GetParameter(1));
 bq->SetPoint(graphCount,PtBinsMean[PtBin],line->GetParameter(0));
 aq->SetPointError(graphCount,0,line->GetParError(1));
 bq->SetPointError(graphCount,0,line->GetParError(0));
-g->Fit("line","RQN");
-g->Fit("line","RQNM");
+g->Fit("line","RQNW");
+g->Fit("line","RQNMW");
 line->SetLineColor(kRed);line->DrawCopy("SAME");
 //ag->SetBinContent(ag->FindBin( (PtBins[PtBin]+PtBins[PtBin+1])/2 ),line->GetParameter(1));
 //bg->SetBinContent(bg->FindBin( (PtBins[PtBin]+PtBins[PtBin+1])/2 ),line->GetParameter(0));
@@ -205,19 +208,19 @@ TPad *Pad;
 c1->cd(TMath::Min(Bins::nPtBins+1,48));sprintf(name,"c1_%d",TMath::Min(Bins::nPtBins+1,48));Pad=(TPad*)c1->FindObject(name);Pad->SetLogx();
 aq->Draw("AP");
 ag->Draw("P SAME");
-aq->Fit("pol3","NQ");aq->Fit("pol3","NQM");
+aq->Fit("pol3","NQW");aq->Fit("pol3","NQMW");
 pol3->SetLineColor(kBlack);pol3->DrawCopy("SAME");
 if(outFile[0]!='\0')fprintf(fw,"%d aq %f %f %f %f\n",parameter,pol3->GetParameter(0),pol3->GetParameter(1),pol3->GetParameter(2),pol3->GetParameter(3));
-ag->Fit("pol3","NQ");ag->Fit("pol3","NQM");
+ag->Fit("pol3","NQW");ag->Fit("pol3","NQMW");
 pol3->SetLineColor(kRed);pol3->DrawCopy("SAME");
 if(outFile[0]!='\0')fprintf(fw,"%d ag %f %f %f %f\n",parameter,pol3->GetParameter(0),pol3->GetParameter(1),pol3->GetParameter(2),pol3->GetParameter(3));
 c1->cd(TMath::Min(Bins::nPtBins+2,49));sprintf(name,"c1_%d",TMath::Min(Bins::nPtBins+2,49));Pad=(TPad*)c1->FindObject(name);Pad->SetLogx();
 bq->Draw("AP");
 bg->Draw("P SAME");
-bq->Fit("pol3","NQ");bq->Fit("pol3","NQM");
+bq->Fit("pol3","NQW");bq->Fit("pol3","NQMW");
 pol3->SetLineColor(kBlack);pol3->DrawCopy("SAME");
 if(outFile[0]!='\0')fprintf(fw,"%d bq %f %f %f %f\n",parameter,pol3->GetParameter(0),pol3->GetParameter(1),pol3->GetParameter(2),pol3->GetParameter(3));
-bg->Fit("pol3","NQ");bg->Fit("pol3","NQM");
+bg->Fit("pol3","NQW");bg->Fit("pol3","NQMW");
 pol3->SetLineColor(kRed);pol3->DrawCopy("SAME");
 if(outFile[0]!='\0')fprintf(fw,"%d bg %f %f %f %f\n",parameter,pol3->GetParameter(0),pol3->GetParameter(1),pol3->GetParameter(2),pol3->GetParameter(3));
 

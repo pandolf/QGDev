@@ -14,13 +14,13 @@ using namespace std;
 
 class Bins{
 public:
-const static int nRhoBins=10; //18
-const static int nPtBins=10; //20
-const static double Pt0=50;  //20
-const static double Pt1=400; //1000
-const static double Rho0=5;  //2
-const static double Rho1=15; //20
-const static double PtLastExtend=400; //3500
+const static int nRhoBins=25; //18
+const static int nPtBins=20; //20
+const static double Pt0=20;  //20
+const static double Pt1=1000; //1000
+const static double Rho0=0;  //2
+const static double Rho1=25; //20
+const static double PtLastExtend=1000; //3500
 
 const static int getMeans(double *PtMeans,double *RhoMeans,const char *configName);
 const static int getSigmas(double *PtSigmas,double*RhoSigmas,const char *configName);
