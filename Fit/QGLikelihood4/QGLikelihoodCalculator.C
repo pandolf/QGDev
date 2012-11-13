@@ -39,6 +39,8 @@ QGLikelihoodCalculator::QGLikelihoodCalculator( const char * configName)
 Read A;
 	const char * vars=A.ReadParameterFromFile(configName,"QGFIT4VARS");
 	const char * funcs=A.ReadParameterFromFile(configName,"QGFIT4FUNCS");
+	const char * dir=A.ReadParameterFromFile(configName,"QGFIT4TXTDIR");
+	string dirName(dir);
 	
 	char str[1023];int n; 
 	nVars=0;
@@ -62,15 +64,15 @@ Read A;
 	//printf("DEBUG Map %s'G'\n",varName[i].c_str());
 	if( varFunc[i] == string("gamma") ){
 		//printf("DEBUG gamma\n");
-		ReadParTxt( (varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ] );
+		ReadParTxt( (dirName+varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ] );
 		}
 	else if( varFunc[i] == string("gamma2") ){
 		//printf("DEBUG gamma\n");
-		ReadParTxt( (varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ] );
+		ReadParTxt( (dirName+varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ] );
 		}
 	else if (varFunc[i] == string("functionPtD") ){
 		//printf("DEBUG functionPtD\n");
-		ReadParTxt( (varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ],3);
+		ReadParTxt( ( dirName+varName[i]+string(".txt")).c_str(),AllPar[ pair<string,char>( varName[i], 'Q') ],AllPar[ pair<string,char>( varName[i], 'G') ],3);
 		}
 	else printf("DEBUG function ERROR ---%s---\n",varFunc[i].c_str());
 	

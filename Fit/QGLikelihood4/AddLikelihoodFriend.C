@@ -85,14 +85,21 @@ int AddLikelihoodFriend(const char * FileName="ntuple.root", //File name
 	float axis2;
 	float ptD;
 	int  nPFCand;
+	int nCharged;
+	int nNeutral;
 
 	t->SetBranchAddress("ptJet0",&ptJetReco);
 	t->SetBranchAddress("etaJet0",&etaJetReco);
 	t->SetBranchAddress("rhoPF",&rhoPF);
+
 	t->SetBranchAddress("axis1_QCJet0",&axis1);
 	t->SetBranchAddress("axis2_QCJet0",&axis2);
 	t->SetBranchAddress("ptD_QCJet0",&ptD);
 	t->SetBranchAddress("nPFCand_QCJet0",&nPFCand);
+
+	//t->SetBranchAddress("ptDJet0",&ptD);
+	//t->SetBranchAddress("nChargedJet0",&nCharged);
+	//t->SetBranchAddress("nNeutralJet0",&nNeutral);
 
 //	const char *AllVars=A.ReadParameterFromFile("data/config.ini","QGFIT4VARS");
 //	
@@ -108,6 +115,12 @@ int AddLikelihoodFriend(const char * FileName="ntuple.root", //File name
 		vars[1]=nPFCand;
 		vars[2]=-TMath::Log(axis2);
 		vars[3]=-TMath::Log(axis1);
+
+		//vars[0]=ptD;
+		//vars[1]=nCharged;
+		//vars[2]=nNeutral;
+
+		//vars[0]=nCharged;
 
 		if(F)LikelihoodFit=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,vars);
 		if(L)LikelihoodFit2=qglikeli->computeQGLikelihoodPU(ptJetReco,rhoPF,vars);
