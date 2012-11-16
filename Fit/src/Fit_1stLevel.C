@@ -117,12 +117,16 @@ gammadistr2->SetParLimits(1,.5,100);
 	functionPtD->SetParLimits(1,1,50);
 	functionPtD->SetParLimits(2,0.001,0.99);
 if(string(VarNames[j].Data()).find(string("PFCand")) != string::npos){//limiti un po piu' loose
+	gammadistr=new TF1("gamma",gammadistr_,0,100,2);//
 	gammadistr->SetParLimits(0,1,50);
 	gammadistr->SetParLimits(1,1,100);
 	}
 
 if(string(VarNames[j].Data()).find(string("axis")) != string::npos)
 	{
+	gammadistr=new TF1("gamma",gammadistr_,0,20,2);//
+	gammadistr->SetParLimits(0,1,100);
+	gammadistr->SetParLimits(1,1,100);
 	functionPtD=new TF1("functionPtD",functionPtD_,0,10,3);//
 	functionPtD->SetParLimits(0,0.,4);//offset
 	functionPtD->SetParLimits(1,.01,50);

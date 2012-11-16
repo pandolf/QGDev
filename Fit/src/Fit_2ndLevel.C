@@ -20,6 +20,8 @@
 #include "TTree.h"
 #include "TLatex.h"
 
+#include "TApplication.h"
+
 #include "PtBins.h"
 
 using namespace std;
@@ -137,7 +139,7 @@ TGraphErrors *q=new TGraphErrors();q->SetName("q");
 TGraphErrors *g=new TGraphErrors();g->SetName("g");
 int k=0;
 for(int j=0; j<q2->GetNbinsX();++j) {
-					if((q2->GetBinContent(j+1)==0)||(g2->GetBinContent(j+1)==0))continue;
+					//if((q2->GetBinContent(j+1)==0)||(g2->GetBinContent(j+1)==0))continue;
 					q->SetPoint(k,RhoBinsMean[j],q2->GetBinContent(j+1));
 					g->SetPoint(k,RhoBinsMean[j],g2->GetBinContent(j+1));
 
@@ -245,7 +247,7 @@ return c;
 
 #ifdef STANDALONE
 #include "ReadParameters.C"
-int main(){
+int main(int argc,char**argv){
 	Read A;
 	const char*vars=A.ReadParameterFromFile("data/config.ini","VARS");
 	const char*txt=A.ReadParameterFromFile("data/config.ini","TXTFITOUTPUT1");

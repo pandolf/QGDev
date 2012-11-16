@@ -2,7 +2,7 @@ CFLAGS=`root-config --libs --cflags`
 CPP=g++
 
 .PHONY:all
-all: CreateHisto Fit_1stLevel Fit_2ndLevel AddBranches
+all: CreateHisto Fit_1stLevel Fit_2ndLevel AddBranches PlotRocFromFriends2
 
 CreateHisto: CreateHisto.C ReadParameters.C PtBins.h
 	g++ -D STANDALONE $(CFLAGS) CreateHisto.C -o CreateHisto
@@ -12,4 +12,5 @@ Fit_2ndLevel: Fit_2ndLevel.C ReadParameters.C PtBins.h
 	g++ -D STANDALONE $(CFLAGS) Fit_2ndLevel.C -o Fit_2ndLevel
 AddBranches: AddBranches.C ReadParameters.C
 	g++ -D STANDALONE $(CFLAGS) AddBranches.C -o AddBranches
-	
+PlotRocFromFriends2: PlotRocFromFriends2.C	
+	g++ -D STANDALONE $(CFLAGS) PlotRocFromFriends2.C -o PlotRocFromFriends2

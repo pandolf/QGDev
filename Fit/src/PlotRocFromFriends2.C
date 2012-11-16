@@ -15,7 +15,7 @@ using namespace std;
 
 int PlotRocFromFriends2(float PtMin=80,float PtMax=120., float RhoMin=5, float RhoMax=15 ){
 
-TProof::Open("");
+//TProof::Open("");
 
 TChain *a=new TChain("tree_passedEvents");
 TChain *b=new TChain("tree_passedEvents");
@@ -24,32 +24,32 @@ TChain *d=new TChain("tree_passedEvents");
 TChain *e=new TChain("tree_passedEvents");
 TChain *t=new TChain("tree_passedEvents");
 
-cout << "1st chain "<<a->Add("~/work/2ndLevel/QG/QG/QGSplit/QG_QCD_Split*.root") <<endl;
-cout << "2nd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit4Friend_QG_QCD_Split*.root") <<endl;
-cout << "3rd chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit2Friend_QG_QCD_Split*.root") <<endl;
-cout << "4th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_QG_QCD_Split*.root") <<endl;
-cout << "5th chain "<<e->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_QCD_Split*.root") <<endl;
-cout << "6th chain "<<t->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_Old_QG_QCD_Split*.root") <<endl;
+cout << "1st chain "<<a->Add("~/work/2ndLevel/QG/QG/QGSplit/QG_QCD_Split*.root") 		;cout<<" Entries="<<a->GetEntries() <<endl;
+cout << "2nd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit4Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<b->GetEntries()<<endl;
+cout << "3rd chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit2Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<c->GetEntries()<<endl;
+cout << "4th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<d->GetEntries()<<endl;
+cout << "5th chain "<<e->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_QCD_Split*.root");cout<<" Entries="<<e->GetEntries()<<endl;
+cout << "6th chain "<<t->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_Old_QG_QCD_Split*.root") ;cout<<" Entries="<<t->GetEntries()<<endl;
 
 
 
 TH1F* g1=new TH1F("g1","g1",100,-.5,.5); //qglPaolo
 TH1F* g2=new TH1F("g2","g2",100,-.5,.5);
 
-TH1F* f1=new TH1F("f1","f1",400,0,1.00001); //QGFit4
-TH1F* f2=new TH1F("f2","f2",400,0,1.00001);
+TH1F* f1=new TH1F("f1","f1",500,0.0,1.00001); //QGFit4
+TH1F* f2=new TH1F("f2","f2",500,0.0,1.00001);
 
-TH1F* l1=new TH1F("l1","l1",400,0,1.00001); //QGFit2
-TH1F* l2=new TH1F("l2","l2",400,0,1.00001);
+TH1F* l1=new TH1F("l1","l1",500,0.0,1.00001); //QGFit2
+TH1F* l2=new TH1F("l2","l2",500,0.0,1.00001);
 
-TH1F* h1=new TH1F("h1","h1",400,0,1.00001); //QGFit
-TH1F* h2=new TH1F("h2","h2",400,0,1.00001);
+TH1F* h1=new TH1F("h1","h1",500,0.0,1.00001); //QGFit
+TH1F* h2=new TH1F("h2","h2",500,0.0,1.00001);
 
-TH1F* v1=new TH1F("v1","v1",400,0,1.00001); //QGL1 4v
-TH1F* v2=new TH1F("v2","v2",400,0,1.00001);
+TH1F* v1=new TH1F("v1","v1",500,0.0,1.00001); //QGL1 4v
+TH1F* v2=new TH1F("v2","v2",500,0.0,1.00001);
 
-TH1F* o1=new TH1F("o1","o1",400,0,1.00001); //QGL1 old
-TH1F* o2=new TH1F("o2","o2",400,0,1.00001);
+TH1F* o1=new TH1F("o1","o1",500,0.0,1.00001); //QGL1 old
+TH1F* o2=new TH1F("o2","o2",500,0.0,1.00001);
 
 a->AddFriend(c);
 a->AddFriend(b);
@@ -101,13 +101,13 @@ for(int iEntry=0;iEntry<a->GetEntries();++iEntry)
 		if( !( rhoPF  > RhoMax ) )continue;
 		if( !( fabs(etaJet0)  < 2.0 ) )continue;
 		
-		if(  fabs(pdgIdPartJet0)<4 ){
+		if(  fabs(pdgIdPartJet0)<4 && pdgIdPartJet0!=0){
 			g1->Fill( qglPaoloJet0 );
-			l1->Fill( QGFit2 );
-			f1->Fill( QGFit4 );
-			h1->Fill( QGL) ;
-			v1->Fill( varQGL );
-			o1->Fill( oldQGL );
+			l1->Fill( QGFit2  )	;
+			f1->Fill( QGFit4 )	;
+			h1->Fill( QGL ) 	;
+			v1->Fill( varQGL )	;
+			o1->Fill( oldQGL )	;
 			} else if (pdgIdPartJet0==21){
 			g2->Fill( qglPaoloJet0 );
 			l2->Fill( QGFit2) ;
@@ -128,7 +128,7 @@ TGraph *o=new TGraph(); o->SetName("o");
 
 //Norm --- OVERFLOW - UNDERFLOW
 
-bool overflow = false;
+bool overflow = true;
 
 if ( overflow ) {
 g1->Scale(1./g1->Integral(0,g1->GetNbinsX()+1));
@@ -177,12 +177,12 @@ gStyle->SetOptStat(0);
 gStyle->SetOptTitle(0);
 gStyle->SetHatchesLineWidth(2);
 
-g->SetMarkerStyle(24); g->SetMarkerColor(kBlue+2);
-f->SetMarkerStyle(29); f->SetMarkerColor(kRed+2);
-h->SetMarkerStyle(20); h->SetMarkerColor(kGreen+2);
-l->SetMarkerStyle(20); l->SetMarkerColor(kOrange+2);
-v->SetMarkerStyle(30); v->SetMarkerColor(kCyan);
-o->SetMarkerStyle(30); v->SetMarkerColor(kMagenta);
+g->SetMarkerSize(0.4);g->SetMarkerStyle(24); g->SetMarkerColor(kBlue+2);
+f->SetMarkerSize(0.4);f->SetMarkerStyle(29); f->SetMarkerColor(kRed+2);
+h->SetMarkerSize(0.4);h->SetMarkerStyle(20); h->SetMarkerColor(kGreen+2);
+l->SetMarkerSize(0.4);l->SetMarkerStyle(20); l->SetMarkerColor(kOrange+2);
+v->SetMarkerSize(0.4);v->SetMarkerStyle(30); v->SetMarkerColor(kCyan);
+o->SetMarkerSize(0.4);o->SetMarkerStyle(30); v->SetMarkerColor(kMagenta);
 
 g1->SetLineColor(38);g2->SetLineColor(46);g1->SetFillColor(38);g2->SetFillColor(46);g1->SetFillStyle(3554); g2->SetFillStyle(3545); g1->SetLineWidth(2);g2->SetLineWidth(2);
 f1->SetLineColor(38);f2->SetLineColor(46);f1->SetFillColor(38);f2->SetFillColor(46);f1->SetFillStyle(3554); f2->SetFillStyle(3545); f1->SetLineWidth(2);f2->SetLineWidth(2);
@@ -266,3 +266,18 @@ c5->SaveAs(Form("../Output/RoC/c5_%.0f_%.0f.pdf",PtMin,PtMax));
 c6->SaveAs(Form("../Output/RoC/c6_%.0f_%.0f.pdf",PtMin,PtMax));
 return 0;
 }
+
+
+#ifdef STANDALONE
+int main(int argc,char**argv)
+{
+if (argc<3) return 1;
+float PtMin,PtMax,RhoMin,RhoMax;
+sscanf(argv[1],"%f",&PtMin);
+sscanf(argv[2],"%f",&PtMax);
+sscanf(argv[3],"%f",&RhoMin);
+sscanf(argv[4],"%f",&RhoMax);
+PlotRocFromFriends2(PtMin,PtMax,RhoMin,RhoMax);
+return 0;
+}
+#endif
