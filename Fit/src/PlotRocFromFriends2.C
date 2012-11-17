@@ -290,20 +290,22 @@ int SuperImposeRatio(TCanvas *c,TH1F*q,TH1F*g)
 {
  //build ratio
    TH1F*R=(TH1F*)q->Clone(Form("%s_Ratio",q->GetName()));
-	for(int i=0;i<=q->GetNbinsX()+1;i++)if(q->GetBinContent(i)==0)R->SetBinContent(i,0);else R->SetBinContent(i,q->GetBinContent(i)/(q->GetBinContent(i)+g->GetBinContent(i)));
+	for(int i=0;i<=q->GetNbinsX()+1;i++)
+			if(q->GetBinContent(i)==0)R->SetBinContent(i,0);
+			else R->SetBinContent(i,q->GetBinContent(i)/(q->GetBinContent(i)+g->GetBinContent(i)));
 	
    //TPad *P=(TPad*)c->GetPad(0);
  //scale hint1 to the pad coordinates
    Float_t rightmax = 1.1*R->GetMaximum();
-   Float_t scale = gPad->GetUymax()/rightmax;
+   Float_t scale = c->GetUymax()/rightmax;
    R->SetLineColor(kBlack);
    R->SetFillColor(0);
    R->SetLineWidth(2);
    R->Scale(scale);
    R->Draw("same HIST");
    //draw an axis on the right side
-   TGaxis *axis = new TGaxis(gPad->GetUxmax(),gPad->GetUymin(),gPad->GetUxmax(),
-                             gPad->GetUymax(),0,rightmax,510,"+L");
+   TGaxis *axis = new TGaxis(c->GetUxmax(),c->GetUymin(),c->GetUxmax(),
+                             c->GetUymax(),0,rightmax,510,"+L");
    axis->SetLineColor(kBlack);
    axis->SetLabelColor(kBlack);
    axis->Draw();
