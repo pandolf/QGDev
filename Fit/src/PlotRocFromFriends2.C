@@ -7,11 +7,16 @@
 #include "TROOT.h"
 #include "TStyle.h"
 #include "TMath.h"
+#include "TGaxis.h"
+#include "TPad.h"
 
 #include <iostream>
 #include "TProof.h"
 
 using namespace std;
+
+
+int SuperImposeRatio(TCanvas *c,TH1F*q,TH1F*g);
 
 int PlotRocFromFriends2(float PtMin=80,float PtMax=120., float RhoMin=5, float RhoMax=15 ){
 
@@ -212,6 +217,7 @@ TCanvas*c1=new TCanvas("c1","c1",800,600);
 	L->AddEntry(g1,"quark","F");
 	L->AddEntry(g2,"gluon","F");
 	L->Draw();
+	SuperImposeRatio(c1,g1,g2);
 TCanvas*c2=new TCanvas("c2","c2",800,600);
 	f1->Draw("HIST");
 	f2->Draw("HIST SAME");
@@ -219,6 +225,7 @@ TCanvas*c2=new TCanvas("c2","c2",800,600);
 	L->AddEntry(f1,"quark","F");
 	L->AddEntry(f2,"gluon","F");
 	L->Draw();
+	SuperImposeRatio(c2,f1,f2);
 TCanvas*c3=new TCanvas("c3","c3",800,600);
 	l1->Draw("HIST");
 	l2->Draw("HIST SAME");
@@ -226,6 +233,7 @@ TCanvas*c3=new TCanvas("c3","c3",800,600);
 	L->AddEntry(l1,"quark","F");
 	L->AddEntry(l2,"gluon","F");
 	L->Draw();
+	SuperImposeRatio(c3,l1,l2);
 TCanvas*c4=new TCanvas("c4","c4",800,800);
 	g->Draw("AP");
 	f->Draw("P SAME");
@@ -250,6 +258,7 @@ TCanvas*c5=new TCanvas("c5","c5",800,600);
 	L->AddEntry(h1,"quark","F");
 	L->AddEntry(h2,"gluon","F");
 	L->Draw();
+	SuperImposeRatio(c5,h1,h2);
 TCanvas*c6=new TCanvas("c6","c6",800,600);
 	v1->Draw("HIST");
 	v2->Draw("HIST SAME");
@@ -257,6 +266,15 @@ TCanvas*c6=new TCanvas("c6","c6",800,600);
 	L->AddEntry(v1,"quark","F");
 	L->AddEntry(v2,"gluon","F");
 	L->Draw();
+	SuperImposeRatio(c6,v1,v2);
+TCanvas*c7=new TCanvas("c7","c7",800,600);
+	o1->Draw("HIST");
+	o2->Draw("HIST SAME");
+	L=new TLegend(0.3,0.5,.7,.7,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L->AddEntry(o1,"quark","F");
+	L->AddEntry(o2,"gluon","F");
+	L->Draw();
+	SuperImposeRatio(c7,o1,o2);
 
 c1->SaveAs(Form("../Output/RoC/c1_%.0f_%.0f.pdf",PtMin,PtMax));
 c2->SaveAs(Form("../Output/RoC/c2_%.0f_%.0f.pdf",PtMin,PtMax));
@@ -264,9 +282,32 @@ c3->SaveAs(Form("../Output/RoC/c3_%.0f_%.0f.pdf",PtMin,PtMax));
 c4->SaveAs(Form("../Output/RoC/c4_%.0f_%.0f.pdf",PtMin,PtMax));
 c5->SaveAs(Form("../Output/RoC/c5_%.0f_%.0f.pdf",PtMin,PtMax));
 c6->SaveAs(Form("../Output/RoC/c6_%.0f_%.0f.pdf",PtMin,PtMax));
+c7->SaveAs(Form("../Output/RoC/c7_%.0f_%.0f.pdf",PtMin,PtMax));
 return 0;
 }
 
+int SuperImposeRatio(TCanvas *c,TH1F*q,TH1F*g)
+{
+ //build ratio
+   TH1F*R=(TH1F*)q->Clone(Form("%s_Ratio",q->GetName()));
+	for(int i=0;i<=q->GetNbinsX()+1;i++)if(q->GetBinContent(i)==0)R->SetBinContent(i,0);else R->SetBinContent(i,q->GetBinContent(i)/(q->GetBinContent(i)+g->GetBinContent(i)));
+	
+   //TPad *P=(TPad*)c->GetPad(0);
+ //scale hint1 to the pad coordinates
+   Float_t rightmax = 1.1*R->GetMaximum();
+   Float_t scale = gPad->GetUymax()/rightmax;
+   R->SetLineColor(kBlack);
+   R->SetFillColor(0);
+   R->SetLineWidth(2);
+   R->Scale(scale);
+   R->Draw("same HIST");
+   //draw an axis on the right side
+   TGaxis *axis = new TGaxis(gPad->GetUxmax(),gPad->GetUymin(),gPad->GetUxmax(),
+                             gPad->GetUymax(),0,rightmax,510,"+L");
+   axis->SetLineColor(kBlack);
+   axis->SetLabelColor(kBlack);
+   axis->Draw();
+}
 
 #ifdef STANDALONE
 int main(int argc,char**argv)
