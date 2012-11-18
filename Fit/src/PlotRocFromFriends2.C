@@ -133,9 +133,10 @@ TGraph *o=new TGraph(); o->SetName("o");
 
 //Norm --- OVERFLOW - UNDERFLOW
 
-bool overflow = true;
+bool overflow = false;
 
 if ( overflow ) {
+printf("OVERFLOW\n");
 g1->Scale(1./g1->Integral(0,g1->GetNbinsX()+1));
 g2->Scale(1./g2->Integral(0,g2->GetNbinsX()+1));
 f1->Scale(1./f1->Integral(0,f1->GetNbinsX()+1));
@@ -155,6 +156,7 @@ for(int i=0;i<=h1->GetNbinsX()+1;i++)h->SetPoint(i, 1-h1->Integral(0,i),h2->Inte
 for(int i=0;i<=v1->GetNbinsX()+1;i++)v->SetPoint(i, 1-v1->Integral(0,i),v2->Integral(0,i)  );
 for(int i=0;i<=o1->GetNbinsX()+1;i++)o->SetPoint(i, 1-o1->Integral(0,i),o2->Integral(0,i)  );
 }else{
+printf("NOT OVERFLOW\n");
 g1->Scale(1./g1->Integral(1,g1->GetNbinsX()));
 g2->Scale(1./g2->Integral(1,g2->GetNbinsX()));
 f1->Scale(1./f1->Integral(1,f1->GetNbinsX()));
@@ -173,6 +175,7 @@ for(int i=1;i<=l1->GetNbinsX();i++)l->SetPoint(i-1, 1-l1->Integral(1,i),  l2->In
 for(int i=1;i<=h1->GetNbinsX();i++)h->SetPoint(i-1, 1-h1->Integral(1,i),  h2->Integral(1,i)  );
 for(int i=1;i<=v1->GetNbinsX();i++)v->SetPoint(i-1, 1-v1->Integral(1,i),  v2->Integral(1,i)  );
 for(int i=1;i<=o1->GetNbinsX();i++)o->SetPoint(i-1, 1-o1->Integral(1,i),  o2->Integral(1,i)  );
+printf("O1 =%f O2=%f\n",o1->Integral(1,1),o2->Integral(1,1));
 }
 
 //Set Style
@@ -213,27 +216,30 @@ TLegend *L;
 TCanvas*c1=new TCanvas("c1","c1",800,600);
 	g1->Draw("HIST");
 	g2->Draw("HIST SAME");
-	L=new TLegend(0.3,0.5,.7,.7,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L=new TLegend(0.3,0.7,.7,.89,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L->SetFillStyle(0);L->SetBorderSize(0);
 	L->AddEntry(g1,"quark","F");
 	L->AddEntry(g2,"gluon","F");
-	L->Draw();
 	SuperImposeRatio(c1,g1,g2);
+	L->Draw();
 TCanvas*c2=new TCanvas("c2","c2",800,600);
 	f1->Draw("HIST");
 	f2->Draw("HIST SAME");
-	L=new TLegend(0.3,0.5,.7,.7,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L=new TLegend(0.3,0.7,.7,.89,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L->SetFillStyle(0);L->SetBorderSize(0);
 	L->AddEntry(f1,"quark","F");
 	L->AddEntry(f2,"gluon","F");
-	L->Draw();
 	SuperImposeRatio(c2,f1,f2);
+	L->Draw();
 TCanvas*c3=new TCanvas("c3","c3",800,600);
 	l1->Draw("HIST");
 	l2->Draw("HIST SAME");
-	L=new TLegend(0.3,0.5,.7,.7,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L=new TLegend(0.3,0.7,.7,.89,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L->SetFillStyle(0);L->SetBorderSize(0);
 	L->AddEntry(l1,"quark","F");
 	L->AddEntry(l2,"gluon","F");
-	L->Draw();
 	SuperImposeRatio(c3,l1,l2);
+	L->Draw();
 TCanvas*c4=new TCanvas("c4","c4",800,800);
 	g->Draw("AP");
 	f->Draw("P SAME");
@@ -254,27 +260,30 @@ TCanvas*c4=new TCanvas("c4","c4",800,800);
 TCanvas*c5=new TCanvas("c5","c5",800,600);
 	h1->Draw("HIST");
 	h2->Draw("HIST SAME");
-	L=new TLegend(0.3,0.5,.7,.7,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L=new TLegend(0.3,0.7,.7,.89,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L->SetFillStyle(0);L->SetBorderSize(0);
 	L->AddEntry(h1,"quark","F");
 	L->AddEntry(h2,"gluon","F");
-	L->Draw();
 	SuperImposeRatio(c5,h1,h2);
+	L->Draw();
 TCanvas*c6=new TCanvas("c6","c6",800,600);
 	v1->Draw("HIST");
 	v2->Draw("HIST SAME");
-	L=new TLegend(0.3,0.5,.7,.7,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L=new TLegend(0.3,0.7,.7,.89,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L->SetFillStyle(0);L->SetBorderSize(0);
 	L->AddEntry(v1,"quark","F");
 	L->AddEntry(v2,"gluon","F");
-	L->Draw();
 	SuperImposeRatio(c6,v1,v2);
+	L->Draw();
 TCanvas*c7=new TCanvas("c7","c7",800,600);
 	o1->Draw("HIST");
 	o2->Draw("HIST SAME");
-	L=new TLegend(0.3,0.5,.7,.7,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L=new TLegend(0.3,0.7,.7,.89,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax));
+	L->SetFillStyle(0);L->SetBorderSize(0);
 	L->AddEntry(o1,"quark","F");
 	L->AddEntry(o2,"gluon","F");
-	L->Draw();
 	SuperImposeRatio(c7,o1,o2);
+	L->Draw();
 
 c1->SaveAs(Form("../Output/RoC/c1_%.0f_%.0f.pdf",PtMin,PtMax));
 c2->SaveAs(Form("../Output/RoC/c2_%.0f_%.0f.pdf",PtMin,PtMax));
@@ -296,8 +305,10 @@ int SuperImposeRatio(TCanvas *c,TH1F*q,TH1F*g)
 	
    //TPad *P=(TPad*)c->GetPad(0);
  //scale hint1 to the pad coordinates
-   Float_t rightmax = 1.1*R->GetMaximum();
-   Float_t scale = c->GetUymax()/rightmax;
+	q->SetMaximum(q->GetMaximum()*1.1);
+	
+   Float_t rightmax = 1.0;
+   Float_t scale = q->GetMaximum()/rightmax;
    R->SetLineColor(kBlack);
    R->SetFillColor(0);
    R->SetLineWidth(2);
@@ -305,7 +316,7 @@ int SuperImposeRatio(TCanvas *c,TH1F*q,TH1F*g)
    R->Draw("same HIST");
    //draw an axis on the right side
    TGaxis *axis = new TGaxis(c->GetUxmax(),c->GetUymin(),c->GetUxmax(),
-                             c->GetUymax(),0,rightmax,510,"+L");
+                            /* c->GetUymax()*/q->GetMaximum(),0,rightmax,510,"+L");
    axis->SetLineColor(kBlack);
    axis->SetLabelColor(kBlack);
    axis->Draw();
