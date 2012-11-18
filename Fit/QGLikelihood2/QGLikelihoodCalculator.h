@@ -30,9 +30,9 @@ class QGLikelihoodCalculator {
 
   float computeQGLikelihoodPU( float pt, float rhoPF, float *vars );
 
+//double gammadistr_(double* x, double* par);
+//double functionPtD_(double * x ,double*par);
  private:
-double gammadistr_(double* x, double* par);
-double functionPtD_(double * x ,double*par);
 
   TFile* histoFile_;
   std::map<std::string,TGraph2D*> plots;

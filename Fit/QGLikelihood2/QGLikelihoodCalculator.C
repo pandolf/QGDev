@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "TMath.h"
 #include "TGraph2D.h"
+#include "TF1.h"
 
 #include <map>
 using namespace std;
@@ -87,13 +88,15 @@ for(it=plots.begin();it!=plots.end();it++)
 	}
 }
 
-double QGLikelihoodCalculator::gammadistr_(double* x, double* par)
+//double QGLikelihoodCalculator::gammadistr_(double* x, double* par)
+double gammadistr_(double* x, double* par)
 {
         return TMath::Exp( - x[0] *par[0]/par[1] ) * TMath::Power(x[0],par[0]-1) * TMath::Power(par[1]/par[0],-par[0])/TMath::Gamma(par[0]) ;
 }
 
 //half gamma+ offset
-double QGLikelihoodCalculator::functionPtD_(double * x ,double*par)
+//double QGLikelihoodCalculator::functionPtD_(double * x ,double*par)
+double functionPtD_(double * x ,double*par)
 {
         if((x[0]-par[0])<0)return 0;
         return TMath::Exp( - (x[0]-par[0]) *par[1]/par[2] ) * TMath::Power((x[0]-par[0]),par[1]-1) * TMath::Power(par[2]/par[1],-par[1])/TMath::Gamma(par[1]) ;
@@ -171,11 +174,43 @@ for(int j=0; j<nVars;j++) //loop on VarNames
 	fprintf(stderr,"%s: par[0]=%.3lf par[1]=%.3lf par[2]=%.3lf\n",varName[j].c_str(),par_q[0],par_q[1],par_q[2]);
 	#endif
 	if(varFunc[j] == string("gamma") ){
+			if( gammadistr_(x,par_q) ==0  && gammadistr_(x,par_g)==0)
+				{
+				TF1 f1("tmp_gamma_1",gammadistr_,0,150,2);
+				f1.SetParameters(par_q);
+				double meanq=f1.Mean(0,150);
+				f1.SetParameters(par_g);
+				double meang=f1.Mean(0,150);
+				if(meanq > meang) 
+					if(x[0]>meanq) {Q*=1.0;G*=0;}
+					else if(x[0]<meang) {G*=1.0;Q*=0;}
+				if(meang>meanq)
+					if(x[0]<meanq) {Q*=1.0;G*=0;}
+					else if(x[0]>meang) {G*=1.0;Q*=0;}
+				}
+			else{
 			Q*=gammadistr_(x,par_q);
 			G*=gammadistr_(x,par_g);
+			}
 	} else if (varFunc[j] == string("functionPtD") ){
+			if( functionPtD_(x,par_q) ==0  && functionPtD_(x,par_g)==0)
+				{
+				TF1 f1("tmp_funcPtD_1",functionPtD_,0,10,3);
+				f1.SetParameters(par_q);
+				double meanq=f1.Mean(0,150);
+				f1.SetParameters(par_g);
+				double meang=f1.Mean(0,150);
+				if(meanq > meang) 
+					if(x[0]>meanq) {Q*=1.0;G*=0;}
+					else if(x[0]<meang) {G*=1.0;Q*=0;}
+				if(meang>meanq)
+					if(x[0]<meanq) {Q*=1.0;G*=0;}
+					else if(x[0]>meang) {G*=1.0;Q*=0;}
+				}
+			else{
 			Q*=functionPtD_(x,par_q);
 			G*=functionPtD_(x,par_g);
+			}
 			}
 	} //for j in varNames
 	#ifdef DEBUG
