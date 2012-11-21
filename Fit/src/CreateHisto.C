@@ -150,7 +150,7 @@ for(plots_iterator=plots.begin();plots_iterator!=plots.end();plots_iterator++)
 	sscanf(plots_iterator->first.c_str(),"%s",tmp);
 	//sscanf works properly with %s with space on newline ...
 	//sprintf(plotName,"%s_gluon_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));//construction of plot name
-	for(int i=0;;i++)if((tmp[i]=='_')&&(tmp[i+1]!='Q'))tmp[i]=' '; else if(tmp[i]=='\0') break;
+	for(int i=0;;i++)if((tmp[i]=='_')&&(tmp[i+1]!='Q') && !(tmp[i+1]=='p' && tmp[i+2]=='t' && tmp[i+3]=='C') )tmp[i]=' '; else if(tmp[i]=='\0') break;
 	sscanf(tmp,"%s %s pt%f %f rho%f",pdg,var,&Pt0,&Pt1,&Rho0);//no ceil	
 	sprintf(Dir,"rhoBins_pt%.0f_%.0f",Pt0,Pt1);
 	fprintf(stderr,"  Dir: %s\n",Dir);

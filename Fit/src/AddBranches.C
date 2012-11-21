@@ -11,7 +11,7 @@ Read A;
 TFile *f=TFile::Open(A.ReadParameterFromFile("data/config.ini","TREE"),"UPDATE");
 TTree *t=(TTree*)f->Get(A.ReadParameterFromFile("data/config.ini","TREENAME"));
 
-int nPFCandJet0,nPFCand_QCJet0; 
+int nPFCandJet0,nPFCand_QCJet0,nPFCand_QC_ptCutJet0; 
 TBranch *b1=t->Branch("nPFCandJet0",&nPFCandJet0,"nPFCandJet0/I");
 TBranch *b2=t->Branch("nPFCand_QCJet0",&nPFCand_QCJet0,"nPFCand_QCJet0/I");
 TBranch *b3=t->Branch("nPFCand_QC_ptCutJet0",&nPFCand_QC_ptCutJet0,"nPFCand_QC_ptCutJet0/I");
