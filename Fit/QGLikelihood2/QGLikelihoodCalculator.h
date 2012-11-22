@@ -39,5 +39,6 @@ class QGLikelihoodCalculator {
 	int nVars;
 	vector<string> varName;
 	vector<string> varFunc;
+float Distance(float x1,float y1,float x2,float y2);
 };
 

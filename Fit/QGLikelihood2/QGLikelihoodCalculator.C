@@ -12,7 +12,7 @@
 #include <map>
 using namespace std;
 
-//#define DEBUG
+#define DEBUG
 
 
 // constructor:
@@ -143,7 +143,8 @@ for(int j=0; j<nVars;j++) //loop on VarNames
 		int k=0;
 		for(int z=0;z<plots[plotName]->GetN();z++)
 			{
-			if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
+			//if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
+			if( Distance(pt,rhoPF,Pt[k],Rho[k]) > Distance(pt,rhoPF,Pt[z],Rho[z]) ) k=z;
 			}
 		par_q[i]=param[k];
 		#ifdef DEBUG
@@ -158,7 +159,8 @@ for(int j=0; j<nVars;j++) //loop on VarNames
 		int k=0;
 		for(int z=0;z<plots[plotName]->GetN();z++)
 			{
-			if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
+			//if((fabs(pt-Pt[k])>=fabs(pt-Pt[z])) && (fabs(rhoPF-Rho[k])>=fabs(rhoPF-Rho[z])))k=z;
+			if( Distance(pt,rhoPF,Pt[k],Rho[k]) > Distance(pt,rhoPF,Pt[z],Rho[z]) ) k=z;
 			}
 		par_g[i]=param[k];
 		#ifdef DEBUG
@@ -173,8 +175,9 @@ for(int j=0; j<nVars;j++) //loop on VarNames
 	#ifdef DEBUG
 	fprintf(stderr,"%s: par[0]=%.3lf par[1]=%.3lf par[2]=%.3lf\n",varName[j].c_str(),par_q[0],par_q[1],par_q[2]);
 	#endif
+	const double epsilon=0.00001;
 	if(varFunc[j] == string("gamma") ){
-			if( gammadistr_(x,par_q) ==0  && gammadistr_(x,par_g)==0)
+			if( gammadistr_(x,par_q) <epsilon  && gammadistr_(x,par_g) < epsilon)
 				{
 				TF1 f1("tmp_gamma_1",gammadistr_,0,150,2);
 				f1.SetParameters(par_q);
@@ -193,7 +196,7 @@ for(int j=0; j<nVars;j++) //loop on VarNames
 			G*=gammadistr_(x,par_g);
 			}
 	} else if (varFunc[j] == string("functionPtD") ){
-			if( functionPtD_(x,par_q) ==0  && functionPtD_(x,par_g)==0)
+			if( functionPtD_(x,par_q) <epsilon  && functionPtD_(x,par_g)<epsilon)
 				{
 				TF1 f1("tmp_funcPtD_1",functionPtD_,0,10,3);
 				f1.SetParameters(par_q);
@@ -221,3 +224,7 @@ if(Q==0.0) return 0.;
 return float(Q/(Q+G));
 }
 
+
+float QGLikelihoodCalculator::Distance(float x1,float y1,float x2,float y2){
+   return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2);
+}
