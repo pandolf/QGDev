@@ -30,6 +30,7 @@ QGLikelihoodCalculator::QGLikelihoodCalculator( const std::string& fileName, uns
 }
 QGLikelihoodCalculator::QGLikelihoodCalculator( const char * configName){
 
+  Bins::SetParameters(configName);
   Read A;
   histoFile_ = TFile::Open(A.ReadParameterFromFile(configName,"HISTO"));
 	if(histoFile_==NULL) fprintf(stderr,"FILE %s does not exists\n",A.ReadParameterFromFile(configName,"HISTO"));
@@ -50,7 +51,6 @@ const char * vars=A.ReadParameterFromFile(configName,"QGFIT4VARS");
                 funcs+=n;
                 varFunc.push_back( string(str) );
                 }
-
 
   nPtBins_ = Bins::nPtBins;
   nRhoBins_ = Bins::nRhoBins;
