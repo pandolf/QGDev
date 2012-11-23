@@ -83,6 +83,7 @@ fprintf(stderr,"Getting Bins\n");
 double RhoBins[100];
 double PtBins[100];
 
+Bins::SetParameters("data/config.ini");
 getBins_int(Bins::nPtBins+1,PtBins,Bins::Pt0,Bins::Pt1,true);
 PtBins[Bins::nPtBins+1]=Bins::PtLastExtend;
 getBins_int(Bins::nRhoBins+1,RhoBins,Bins::Rho0,Bins::Rho1,false);

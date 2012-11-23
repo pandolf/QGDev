@@ -54,6 +54,7 @@ double PtBins[100];//int nPtBins=18;
 //getBins_int(18,PtBins,20,1000,true);
 //PtBins[18]=3500;
 //getBins_int(21,RhoBins,0,20,false);
+Bins::SetParameters("data/config.ini");
 getBins_int(Bins::nPtBins+1,PtBins,Bins::Pt0,Bins::Pt1,true);
 PtBins[Bins::nPtBins+1]=Bins::PtLastExtend;
 getBins_int(Bins::nRhoBins+1,RhoBins,Bins::Rho0,Bins::Rho1,false);

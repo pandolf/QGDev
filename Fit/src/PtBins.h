@@ -12,21 +12,53 @@ using namespace std;
 #define PTBINS_H
 
 
-class Bins{
-public:
-const static int nRhoBins=25; //18
-const static int nPtBins=20; //20
-const static double Pt0=20;  //20
-const static double Pt1=1000; //1000
-const static double Rho0=0;  //2
-const static double Rho1=25; //20
-const static double PtLastExtend=1000; //3500
+//class Bins{
+//public:
+namespace Bins{
 
-const static int getMeans(double *PtMeans,double *RhoMeans,const char *configName);
-const static int getSigmas(double *PtSigmas,double*RhoSigmas,const char *configName);
-const static int getObj(double*x,double *y,const char*configName,char type='M');
+int nRhoBins=25; //18
+int nPtBins=20; //20
+double Pt0=20;  //20
+double Pt1=1000; //1000
+double Rho0=0;  //2
+double Rho1=25; //20
+double PtLastExtend=1000; //3500
+double EtaBins0[]={0,3};
+double EtaBins1[]={2,4.7};
 
-};
+int SetParameters(const char *configName);
+
+const int getMeans(double *PtMeans,double *RhoMeans,const char *configName);
+const int getSigmas(double *PtSigmas,double*RhoSigmas,const char *configName);
+const int getObj(double*x,double *y,const char*configName,char type='M');
+
+}
+
+int Bins::SetParameters(const char *configName){
+	float x;int n,i;
+	const char*str;
+	Read A;
+		str=A.ReadParameterFromFile(configName,"NRHOBINS");sscanf(str,"%d",&n);
+	Bins::nRhoBins=n;
+		str=A.ReadParameterFromFile(configName,"NPTBINS");sscanf(str,"%d",&n);
+	Bins::nPtBins=n;
+		str=A.ReadParameterFromFile(configName,"PTMIN");sscanf(str,"%f",&x);
+	Bins::Pt0=x;
+		str=A.ReadParameterFromFile(configName,"PTMAX");sscanf(str,"%f",&x);
+	Bins::Pt1=x;
+		str=A.ReadParameterFromFile(configName,"PTLAST");sscanf(str,"%f",&x);
+	Bins::PtLastExtend=x;
+		str=A.ReadParameterFromFile(configName,"RHOMIN");sscanf(str,"%f",&x);
+	Bins::Rho0=x;
+		str=A.ReadParameterFromFile(configName,"RHOMAX");sscanf(str,"%f",&x);
+	Bins::Rho1=x;
+		str=A.ReadParameterFromFile(configName,"ETABINS0");sscanf(str,"%f",&x);
+	i=0;while(sscanf(str,"%f%n",&x,&n)==1){Bins::EtaBins0[i]=x; str+=n;++i;}
+		str=A.ReadParameterFromFile(configName,"ETABINS1");sscanf(str,"%f",&x);
+	i=0;while(sscanf(str,"%f%n",&x,&n)==1){Bins::EtaBins1[i]=x; str+=n;++i;}
+	return 0;
+}
+
 //TO BE INCLUDED IN THE CLASS
 int getBins(double  *Bins,int nBins,double MinBin=15.0,double MaxBin=1000.,bool log=false);
 int getBin(int nBins,double  *Bins,double value,double*x0=0,double*x1=0);
