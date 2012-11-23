@@ -23,8 +23,9 @@ double Pt1=1000; //1000
 double Rho0=0;  //2
 double Rho1=25; //20
 double PtLastExtend=1000; //3500
-double EtaBins0[]={0,3};
-double EtaBins1[]={2,4.7};
+int    nEtaBins=2;
+double EtaBins0[1023]={0,3};
+double EtaBins1[1023]={2,4.7};
 
 int SetParameters(const char *configName);
 
@@ -42,6 +43,8 @@ int Bins::SetParameters(const char *configName){
 	Bins::nRhoBins=n;
 		str=A.ReadParameterFromFile(configName,"NPTBINS");sscanf(str,"%d",&n);
 	Bins::nPtBins=n;
+		str=A.ReadParameterFromFile(configName,"NETABINS");sscanf(str,"%d",&n);
+	Bins::nEtaBins=n;
 		str=A.ReadParameterFromFile(configName,"PTMIN");sscanf(str,"%f",&x);
 	Bins::Pt0=x;
 		str=A.ReadParameterFromFile(configName,"PTMAX");sscanf(str,"%f",&x);

@@ -62,7 +62,7 @@ t->SetBranchAddress("eventWeight",&eventWeight);
 t->SetBranchAddress("rhoPF",&rhoPF);
 
 char str[1023];
-char cut[1023];
+//char cut[1023];
 char plotName[1023];
 char VarName[1023];
 const char *VariablesPointer=variables; int n;
@@ -98,18 +98,21 @@ while(sscanf(VariablesPointer,"%s%n",VarName,&n)==1)
 	{
 	sprintf(plotName,"%s_gluon_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));//construction of plot name
 	plots[string(plotName)]=new TH1F(plotName,plotName,nBinsX,xMin,xMax);
-	sprintf(str,"%s>>%s",VarName,plotName);
-	sprintf(cut,"eventWeight*(pdgIdPartJet0==21 && %lf< ptJet0 && ptJet0<%lf && %lf< rhoPF && rhoPF<%lf && abs(etaJet0)<2.0)",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1]);
+
+	sprintf(plotName,"%s_F_gluon_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));//construction of plot name
+	plots[string(plotName)]=new TH1F(plotName,plotName,nBinsX,xMin,xMax);
+
 	//quark
 	sprintf(plotName,"%s_quark_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));//construction of plot name
-
 	plots[string(plotName)]=new TH1F(plotName,plotName,nBinsX,xMin,xMax);
-	sprintf(str,"%s>>%s",VarName,plotName);
-	//quark = uds not cb
-	sprintf(cut,"eventWeight*(abs(pdgIdPartJet0)<4 && %lf< ptJet0 && ptJet0<%lf && %lf< rhoPF && rhoPF<%lf && abs(etaJet0)<2.0 )",PtBins[p],PtBins[p+1],RhoBins[r],RhoBins[r+1]);
+
+	sprintf(plotName,"%s_F_quark_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(PtBins[p]),ceil(PtBins[p+1]),floor(RhoBins[r]));//construction of plot name
+	plots[string(plotName)]=new TH1F(plotName,plotName,nBinsX,xMin,xMax);
 	}//loop on rho Bins
 	}//loop on pt bins
 	//tree loop
+	bool isForward=false;
+	bool isCentral=false;
 	for(long long int entry=0;entry<t->GetEntries();entry++)
 	{
 		t->GetEntry(entry);
@@ -117,13 +120,25 @@ while(sscanf(VariablesPointer,"%s%n",VarName,&n)==1)
 		if(getBin(Bins::nPtBins,PtBins,ptJetReco,&ptBin0,&ptBin1)<0)continue;
 		if(getBin(Bins::nRhoBins,RhoBins,rhoPF,&rhoBin0,&rhoBin1)<0)continue;
 		
-		//construct plotname
-		if(pdgIdPart==21)sprintf(plotName,"%s_gluon_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(ptBin0),ceil(ptBin1),floor(rhoBin0));
-		else if((-4<pdgIdPart)&&(pdgIdPart)<4)sprintf(plotName,"%s_quark_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(ptBin0),ceil(ptBin1),floor(rhoBin0));
-		else continue;
 		//selection
-		if(etaJetReco>2.0)continue;
-		if(etaJetReco<-2.0)continue;
+		if( Bins::EtaBins0[0]<=fabs(etaJetReco) && fabs(etaJetReco)<Bins::EtaBins1[0])
+				isCentral=true;
+				else isCentral=false;
+
+		if( Bins::EtaBins0[1]<=fabs(etaJetReco) && fabs(etaJetReco)<Bins::EtaBins1[1])
+				isForward=true;
+				else isForward=false;
+
+		//construct plotname
+		if(isCentral)
+			{if(pdgIdPart==21)sprintf(plotName,"%s_gluon_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(ptBin0),ceil(ptBin1),floor(rhoBin0));
+			else if((-4<pdgIdPart)&&(pdgIdPart)<4)sprintf(plotName,"%s_quark_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(ptBin0),ceil(ptBin1),floor(rhoBin0));
+			else continue;}
+		else if(isForward)
+			{if(pdgIdPart==21)sprintf(plotName,"%s_F_gluon_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(ptBin0),ceil(ptBin1),floor(rhoBin0));
+			else if((-4<pdgIdPart)&&(pdgIdPart)<4)sprintf(plotName,"%s_F_quark_pt%.0lf_%.0lf_rho%.0lf",VarName,ceil(ptBin0),ceil(ptBin1),floor(rhoBin0));
+			else continue;}
+		else continue; //nor central nor fwd
 		//Fill
 		//plots[PlotName]->Fill(*(int)Variable,eventWeight);
 		switch(VarName[1])
