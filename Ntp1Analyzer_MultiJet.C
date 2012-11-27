@@ -50,7 +50,6 @@ void Ntp1Analyzer_MultiJet::CreateOutputFile() {
   reducedTree_->Branch("phiJet", phiJet_, "phiJet_[nJet_]/F");
   reducedTree_->Branch( "ptDJet",  ptDJet_,  "ptDJet_[nJet_]/F");
   reducedTree_->Branch( "rmsCandJet",  rmsCandJet_,  "rmsCandJet_[nJet_]/F");
-  reducedTree_->Branch( "QGLikelihoodJet",  QGLikelihoodJet_,  "QGLikelihoodJet_[nJet_]/F");
   reducedTree_->Branch("trackCountingHighEffBJetTagsJet",  trackCountingHighEffBJetTagsJet_,  "trackCountingHighEffBJetTagsJet_[nJet_]/F");
   reducedTree_->Branch("simpleSecondaryVertexHighEffBJetTagsJet",  simpleSecondaryVertexHighEffBJetTagsJet_,  "simpleSecondaryVertexHighEffBJetTagsJet_[nJet_]/F");
   //reducedTree_->Branch(  "eJetGen",   eJetGen_,   "eJetGen_[nJet_]/F");
@@ -151,7 +150,6 @@ void Ntp1Analyzer_MultiJet::Loop()
 
 
 
-   QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
 
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -364,11 +362,6 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        etaPartJet_[iJet] = jets[iJet]->etaPart;
        pdgIdPartJet_[iJet] = jets[iJet]->pdgIdPart;
        //pdgIdMomJet_[iJet] = jets[iJet]->pdgIdMom;
-
-       if( fabs(jets[iJet]->Eta())<2.4 ) 
-         QGLikelihoodJet_[iJet] = qglikeli->computeQGLikelihoodPU( jets[iJet]->Pt(), rhoPF_, jets[iJet]->nChargedHadrons, jets[iJet]->nPhotons+jets[iJet]->nNeutralHadrons, jets[iJet]->ptD );
-       else
-         QGLikelihoodJet_[iJet] = 0.;
 
 
      }
