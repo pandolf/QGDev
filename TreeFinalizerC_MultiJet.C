@@ -220,9 +220,7 @@ void TreeFinalizerC_MultiJet::finalize() {
   Int_t nChg_QCJet[20];
   tree_->SetBranchAddress("nChg_QCJet", nChg_QCJet);
   Int_t nNeutral_ptCutJet[20];
-  tree_->SetBranchAddress("nNeutral_ptCutJet", nChg_QCJet);
-  Int_t nPFCand_QC_ptCutJet[20];
-  tree_->SetBranchAddress("nPFCand_QC_ptCutJet", nPFCand_QC_ptCutJet);
+  tree_->SetBranchAddress("nNeutral_ptCutJet", nNeutral_ptCutJet);
 
   Float_t ePartJet[20];
   tree_->SetBranchAddress("ePartJet", ePartJet);
@@ -267,55 +265,55 @@ void TreeFinalizerC_MultiJet::finalize() {
 
 
 
-  std::string puType = "Spring11_Flat10";
-  if( dataset_tstr.Contains("Summer11") ) puType = "Summer11_S4";
-  PUWeight* fPUWeight = new PUWeight(-1, "2011A", puType);
-  std::string puFileName;
-  //if( PUType_=="Run2011A_73pb" )
-  //puFileName = "all2011A.pileup_v2.root";
-  //puFileName = "PUTarget.Run2011B.175832-180252.root";
+//std::string puType = "Spring11_Flat10";
+//if( dataset_tstr.Contains("Summer11") ) puType = "Summer11_S4";
+//PUWeight* fPUWeight = new PUWeight(-1, "2011A", puType);
+//std::string puFileName;
+////if( PUType_=="Run2011A_73pb" )
+////puFileName = "all2011A.pileup_v2.root";
+////puFileName = "PUTarget.Run2011B.175832-180252.root";
 
-  PUWeight* fPUWeightRunA = new PUWeight(-1, "2011A", puType);
-  std::string puFileNameRunA = "/afs/cern.ch/user/p/pandolf/public/all2011A.pileup_v2_73mb.root";
-  TFile* filePURunA = TFile::Open(puFileNameRunA.c_str());
-  TH1F* h1_nPU_dataRunA = (TH1F*)filePURunA->Get("pileup");
-  fPUWeightRunA->SetDataHistogram(h1_nPU_dataRunA);
+//PUWeight* fPUWeightRunA = new PUWeight(-1, "2011A", puType);
+//std::string puFileNameRunA = "/afs/cern.ch/user/p/pandolf/public/all2011A.pileup_v2_73mb.root";
+//TFile* filePURunA = TFile::Open(puFileNameRunA.c_str());
+//TH1F* h1_nPU_dataRunA = (TH1F*)filePURunA->Get("pileup");
+//fPUWeightRunA->SetDataHistogram(h1_nPU_dataRunA);
 
-  PUWeight* fPUWeight_HT150 = new PUWeight(-1, "HT150", puType);
-  std::string puFileName_HT150 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT150.root";
-  TFile* filePU_HT150 = TFile::Open(puFileName_HT150.c_str());
-  TH1F* h1_nPU_data_HT150 = (TH1F*)filePU_HT150->Get("pileup");
-  fPUWeight_HT150->SetDataHistogram(h1_nPU_data_HT150);
+//PUWeight* fPUWeight_HT150 = new PUWeight(-1, "HT150", puType);
+//std::string puFileName_HT150 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT150.root";
+//TFile* filePU_HT150 = TFile::Open(puFileName_HT150.c_str());
+//TH1F* h1_nPU_data_HT150 = (TH1F*)filePU_HT150->Get("pileup");
+//fPUWeight_HT150->SetDataHistogram(h1_nPU_data_HT150);
 
-  PUWeight* fPUWeight_HT250 = new PUWeight(-1, "HT250", puType);
-  std::string puFileName_HT250 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT250.root";
-  TFile* filePU_HT250 = TFile::Open(puFileName_HT250.c_str());
-  TH1F* h1_nPU_data_HT250 = (TH1F*)filePU_HT250->Get("pileup");
-  fPUWeight_HT250->SetDataHistogram(h1_nPU_data_HT250);
+//PUWeight* fPUWeight_HT250 = new PUWeight(-1, "HT250", puType);
+//std::string puFileName_HT250 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT250.root";
+//TFile* filePU_HT250 = TFile::Open(puFileName_HT250.c_str());
+//TH1F* h1_nPU_data_HT250 = (TH1F*)filePU_HT250->Get("pileup");
+//fPUWeight_HT250->SetDataHistogram(h1_nPU_data_HT250);
 
-  PUWeight* fPUWeight_HT350 = new PUWeight(-1, "HT350", puType);
-  std::string puFileName_HT350 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT350.root";
-  TFile* filePU_HT350 = TFile::Open(puFileName_HT350.c_str());
-  TH1F* h1_nPU_data_HT350 = (TH1F*)filePU_HT350->Get("pileup");
-  fPUWeight_HT350->SetDataHistogram(h1_nPU_data_HT350);
+//PUWeight* fPUWeight_HT350 = new PUWeight(-1, "HT350", puType);
+//std::string puFileName_HT350 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT350.root";
+//TFile* filePU_HT350 = TFile::Open(puFileName_HT350.c_str());
+//TH1F* h1_nPU_data_HT350 = (TH1F*)filePU_HT350->Get("pileup");
+//fPUWeight_HT350->SetDataHistogram(h1_nPU_data_HT350);
 
-  PUWeight* fPUWeight_HT400 = new PUWeight(-1, "HT400", puType);
-  std::string puFileName_HT400 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT400.root";
-  TFile* filePU_HT400 = TFile::Open(puFileName_HT400.c_str());
-  TH1F* h1_nPU_data_HT400 = (TH1F*)filePU_HT400->Get("pileup");
-  fPUWeight_HT400->SetDataHistogram(h1_nPU_data_HT400);
+//PUWeight* fPUWeight_HT400 = new PUWeight(-1, "HT400", puType);
+//std::string puFileName_HT400 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT400.root";
+//TFile* filePU_HT400 = TFile::Open(puFileName_HT400.c_str());
+//TH1F* h1_nPU_data_HT400 = (TH1F*)filePU_HT400->Get("pileup");
+//fPUWeight_HT400->SetDataHistogram(h1_nPU_data_HT400);
 
-  PUWeight* fPUWeight_HT500 = new PUWeight(-1, "HT500", puType);
-  std::string puFileName_HT500 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT500.root";
-  TFile* filePU_HT500 = TFile::Open(puFileName_HT500.c_str());
-  TH1F* h1_nPU_data_HT500 = (TH1F*)filePU_HT500->Get("pileup");
-  fPUWeight_HT500->SetDataHistogram(h1_nPU_data_HT500);
+//PUWeight* fPUWeight_HT500 = new PUWeight(-1, "HT500", puType);
+//std::string puFileName_HT500 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT500.root";
+//TFile* filePU_HT500 = TFile::Open(puFileName_HT500.c_str());
+//TH1F* h1_nPU_data_HT500 = (TH1F*)filePU_HT500->Get("pileup");
+//fPUWeight_HT500->SetDataHistogram(h1_nPU_data_HT500);
 
-  PUWeight* fPUWeight_HT600 = new PUWeight(-1, "HT600", puType);
-  std::string puFileName_HT600 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT600.root";
-  TFile* filePU_HT600 = TFile::Open(puFileName_HT600.c_str());
-  TH1F* h1_nPU_data_HT600 = (TH1F*)filePU_HT600->Get("pileup");
-  fPUWeight_HT600->SetDataHistogram(h1_nPU_data_HT600);
+//PUWeight* fPUWeight_HT600 = new PUWeight(-1, "HT600", puType);
+//std::string puFileName_HT600 = "/afs/cern.ch/user/p/pandolf/public/pileup_HT600.root";
+//TFile* filePU_HT600 = TFile::Open(puFileName_HT600.c_str());
+//TH1F* h1_nPU_data_HT600 = (TH1F*)filePU_HT600->Get("pileup");
+//fPUWeight_HT600->SetDataHistogram(h1_nPU_data_HT600);
 
 
 
@@ -460,25 +458,25 @@ void TreeFinalizerC_MultiJet::finalize() {
     tree_passedEvents->Branch( "nNeutralJet3", &nNeutralJet3, "nNeutralJet3/I" );
   }
 
-  tree_passedEvents->Branch( "ptD_QCJet0", &ptD_QCJet0, "ptD_QCJet0/I" );
-  tree_passedEvents->Branch( "ptD_QCJet1", &ptD_QCJet1, "ptD_QCJet1/I" );
+  tree_passedEvents->Branch( "ptD_QCJet0", &ptD_QCJet0, "ptD_QCJet0/F" );
+  tree_passedEvents->Branch( "ptD_QCJet1", &ptD_QCJet1, "ptD_QCJet1/F" );
   if( analyzerType_=="MultiJet" ) {
-    tree_passedEvents->Branch( "ptD_QCJet2", &ptD_QCJet2, "ptD_QCJet2/I" );
-    tree_passedEvents->Branch( "ptD_QCJet3", &ptD_QCJet3, "ptD_QCJet3/I" );
+    tree_passedEvents->Branch( "ptD_QCJet2", &ptD_QCJet2, "ptD_QCJet2/F" );
+    tree_passedEvents->Branch( "ptD_QCJet3", &ptD_QCJet3, "ptD_QCJet3/F" );
   }
 
-  tree_passedEvents->Branch( "axis1_QCJet0", &axis1_QCJet0, "axis1_QCJet0/I" );
-  tree_passedEvents->Branch( "axis1_QCJet1", &axis1_QCJet1, "axis1_QCJet1/I" );
+  tree_passedEvents->Branch( "axis1_QCJet0", &axis1_QCJet0, "axis1_QCJet0/F" );
+  tree_passedEvents->Branch( "axis1_QCJet1", &axis1_QCJet1, "axis1_QCJet1/F" );
   if( analyzerType_=="MultiJet" ) {
-    tree_passedEvents->Branch( "axis1_QCJet2", &axis1_QCJet2, "axis1_QCJet2/I" );
-    tree_passedEvents->Branch( "axis1_QCJet3", &axis1_QCJet3, "axis1_QCJet3/I" );
+    tree_passedEvents->Branch( "axis1_QCJet2", &axis1_QCJet2, "axis1_QCJet2/F" );
+    tree_passedEvents->Branch( "axis1_QCJet3", &axis1_QCJet3, "axis1_QCJet3/F" );
   }
 
-  tree_passedEvents->Branch( "axis2_QCJet0", &axis2_QCJet0, "axis2_QCJet0/I" );
-  tree_passedEvents->Branch( "axis2_QCJet1", &axis2_QCJet1, "axis2_QCJet1/I" );
+  tree_passedEvents->Branch( "axis2_QCJet0", &axis2_QCJet0, "axis2_QCJet0/F" );
+  tree_passedEvents->Branch( "axis2_QCJet1", &axis2_QCJet1, "axis2_QCJet1/F" );
   if( analyzerType_=="MultiJet" ) {
-    tree_passedEvents->Branch( "axis2_QCJet2", &axis2_QCJet2, "axis2_QCJet2/I" );
-    tree_passedEvents->Branch( "axis2_QCJet3", &axis2_QCJet3, "axis2_QCJet3/I" );
+    tree_passedEvents->Branch( "axis2_QCJet2", &axis2_QCJet2, "axis2_QCJet2/F" );
+    tree_passedEvents->Branch( "axis2_QCJet3", &axis2_QCJet3, "axis2_QCJet3/F" );
   }
 
   tree_passedEvents->Branch( "nChg_QCJet0", &nChg_QCJet0, "nChg_QCJet0/I" );
@@ -508,7 +506,8 @@ void TreeFinalizerC_MultiJet::finalize() {
 
 
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/cmsrm/pc25/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
-  QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
+  //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
+  QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/work/p/pandolf/CMSSW_5_3_6/src/QG/QGLikelihood/test/Histos_2012.root");
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
 
 
@@ -522,6 +521,8 @@ void TreeFinalizerC_MultiJet::finalize() {
   int iEventMin = iBlock_*blockSize;
   int iEventMax = (iBlock_+1)*blockSize;
   if( iEventMax>nEntries ) iEventMax = nEntries;
+
+
 
   std::cout << "-> Running on events: " << iEventMin << " - " << iEventMax << std::endl;
 
@@ -648,8 +649,8 @@ void TreeFinalizerC_MultiJet::finalize() {
 
 
 
-    if( rhoPF > 40. || rhoPF < 0. ) continue;
-    if( ht_akt5 > 3500. ) continue;
+    //if( rhoPF > 40. || rhoPF < 0. ) continue;
+    //if( ht_akt5 > 5000. ) continue;
 
 
     if( dijet_selection_ ) {
@@ -691,12 +692,12 @@ void TreeFinalizerC_MultiJet::finalize() {
     if( isMC ) {
       // PU reweighting:
      eventWeight_noPU = eventWeight;
-     PUWeight_HT150 = fPUWeight_HT150->GetWeight(nPU);
-     PUWeight_HT250 = fPUWeight_HT250->GetWeight(nPU);
-     PUWeight_HT350 = fPUWeight_HT350->GetWeight(nPU);
-     PUWeight_HT400 = fPUWeight_HT400->GetWeight(nPU);
-     PUWeight_HT500 = fPUWeight_HT500->GetWeight(nPU);
-     PUWeight_HT600 = fPUWeight_HT600->GetWeight(nPU);
+     //PUWeight_HT150 = fPUWeight_HT150->GetWeight(nPU);
+     //PUWeight_HT250 = fPUWeight_HT250->GetWeight(nPU);
+     //PUWeight_HT350 = fPUWeight_HT350->GetWeight(nPU);
+     //PUWeight_HT400 = fPUWeight_HT400->GetWeight(nPU);
+     //PUWeight_HT500 = fPUWeight_HT500->GetWeight(nPU);
+     //PUWeight_HT600 = fPUWeight_HT600->GetWeight(nPU);
     }
 
     h1_nvertexPU->Fill( nvertex, eventWeight);
@@ -746,7 +747,7 @@ void TreeFinalizerC_MultiJet::finalize() {
       thisJet->axis2_QC = axis2_QCJet[iJet];
       thisJet->nChg_QC = nChg_QCJet[iJet];
       thisJet->nNeutral_ptCut = nNeutral_ptCutJet[iJet];
-      thisJet->nPFCand_QC_ptCut = nPFCand_QC_ptCutJet[iJet];
+      thisJet->nPFCand_QC_ptCut = nChg_QCJet[iJet] + nNeutral_ptCutJet[iJet];
 
       if( jets.size()<2 ) { //jetID only on two leading jets
         if( !(thisJet->passedJetID("minimal")) ) continue;
@@ -758,11 +759,11 @@ void TreeFinalizerC_MultiJet::finalize() {
    			 //if( thisJet->Pt() > 50. && thisJet->Pt()<100. && (passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL) && ptPhotReco>53. ) continue;
       }
 
-      if( fabs(thisJet->Eta())<2.4 ) {
-          thisJet->QGLikelihood =  qglikeli->computeQGLikelihoodPU( thisJet->Pt(), rhoPF, thisJet->nChargedHadrons, thisJet->nNeutralHadrons + thisJet->nPhotons, thisJet->ptD );
-      } else if( fabs(thisJet->Eta())>3. && fabs(thisJet->Eta())<4.7 ) {
-        thisJet->QGLikelihood = -1;// qglikeli->computeQGLikelihoodFwd( thisJet->Pt(), rhoPF, thisJet->ptD, -log( thisJet->rmsCand ) );
-      }
+ //   if( fabs(thisJet->Eta())<2.4 ) {
+ //       thisJet->QGLikelihood =  qglikeli->computeQGLikelihoodPU( thisJet->Pt(), rhoPF, thisJet->nChargedHadrons, thisJet->nNeutralHadrons + thisJet->nPhotons, thisJet->ptD );
+ //   } else if( fabs(thisJet->Eta())>3. && fabs(thisJet->Eta())<4.7 ) {
+ //     thisJet->QGLikelihood = -1;// qglikeli->computeQGLikelihoodFwd( thisJet->Pt(), rhoPF, thisJet->ptD, -log( thisJet->rmsCand ) );
+ //   }
 
       thisJet->QGLikelihood2012 =  qglikeli->computeQGLikelihood2012( thisJet->Pt(), thisJet->Eta(), rhoPF, thisJet->nPFCand_QC_ptCut, thisJet->ptD_QC, thisJet->axis2_QC );
 
