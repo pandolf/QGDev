@@ -52,6 +52,8 @@ void Ntp1Analyzer_MultiJet::CreateOutputFile() {
   reducedTree_->Branch( "rmsCandJet",  rmsCandJet_,  "rmsCandJet_[nJet_]/F");
   reducedTree_->Branch("trackCountingHighEffBJetTagsJet",  trackCountingHighEffBJetTagsJet_,  "trackCountingHighEffBJetTagsJet_[nJet_]/F");
   reducedTree_->Branch("simpleSecondaryVertexHighEffBJetTagsJet",  simpleSecondaryVertexHighEffBJetTagsJet_,  "simpleSecondaryVertexHighEffBJetTagsJet_[nJet_]/F");
+  reducedTree_->Branch("jetProbabilityBJetTagsJet",  jetProbabilityBJetTagsJet_,  "jetProbabilityBJetTagsJet_[nJet_]/F");
+  reducedTree_->Branch("combinedSecondaryVertexBJetTagsJet",  combinedSecondaryVertexBJetTagsJet_,  "combinedSecondaryVertexBJetTagsJet_[nJet_]/F");
   //reducedTree_->Branch(  "eJetGen",   eJetGen_,   "eJetGen_[nJet_]/F");
   //reducedTree_->Branch(  "ptJetGen",   ptJetGen_,   "ptJetGen_[nJet_]/F");
   //reducedTree_->Branch( "etaJetGen",  etaJetGen_,  "etaJetGen_[nJet_]/F");
@@ -245,6 +247,8 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
        thisJet.trackCountingHighEffBJetTag = trackCountingHighEffBJetTagsAK5PFPUcorrJet[iRecoJet];
        thisJet.simpleSecondaryVertexHighEffBJetTag = simpleSecondaryVertexHighEffBJetTagsAK5PFPUcorrJet[iRecoJet];
+       thisJet.jetProbabilityBJetTag = jetProbabilityBJetTagsAK5PFPUcorrJet[iRecoJet];
+       thisJet.combinedSecondaryVertexBJetTag = combinedSecondaryVertexBJetTagsAK5PFPUcorrJet[iRecoJet];
 
        thisJet.nChargedHadrons = chargedHadronMultiplicityAK5PFPUcorrJet[iRecoJet];
        thisJet.nPhotons = photonMultiplicityAK5PFPUcorrJet[iRecoJet];
@@ -347,6 +351,8 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
        trackCountingHighEffBJetTagsJet_[iJet]= jets[iJet]->trackCountingHighEffBJetTag;
        simpleSecondaryVertexHighEffBJetTagsJet_[iJet]= jets[iJet]->simpleSecondaryVertexHighEffBJetTag;
+       jetProbabilityBJetTagsJet_[iJet]= jets[iJet]->jetProbabilityBJetTag;
+       combinedSecondaryVertexBJetTagsJet_[iJet]= jets[iJet]->combinedSecondaryVertexBJetTag;
 
        nChargedHadronsJet_[iJet] = jets[iJet]->nChargedHadrons;
        nPhotonsJet_[iJet] = jets[iJet]->nPhotons;

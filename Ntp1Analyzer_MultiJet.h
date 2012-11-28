@@ -50,6 +50,8 @@ class Ntp1Analyzer_MultiJet : public Ntp1Analyzer {
 
    Float_t trackCountingHighEffBJetTagsJet_[10];
    Float_t simpleSecondaryVertexHighEffBJetTagsJet_[10];
+   Float_t jetProbabilityBJetTagsJet_[10];
+   Float_t combinedSecondaryVertexBJetTagsJet_[10];
 
    Float_t QGLikelihoodJet_[10];
 
