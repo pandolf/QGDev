@@ -222,6 +222,9 @@ void TreeFinalizerC_MultiJet::finalize() {
   Int_t nNeutral_ptCutJet[20];
   tree_->SetBranchAddress("nNeutral_ptCutJet", nNeutral_ptCutJet);
 
+  Float_t combinedSecondaryVertexBJetTagsJet[20];
+  tree_->SetBranchAddress("combinedSecondaryVertexBJetTagsJet", combinedSecondaryVertexBJetTagsJet);
+
   Float_t ePartJet[20];
   tree_->SetBranchAddress("ePartJet", ePartJet);
   Float_t ptPartJet[20];
@@ -358,6 +361,7 @@ void TreeFinalizerC_MultiJet::finalize() {
   float axis2_QCJet0, axis2_QCJet1, axis2_QCJet2, axis2_QCJet3;
   int nChg_QCJet0, nChg_QCJet1, nChg_QCJet2, nChg_QCJet3;
   int nNeutral_ptCutJet0, nNeutral_ptCutJet1, nNeutral_ptCutJet2, nNeutral_ptCutJet3;
+  float combinedSecondaryVertexBJetTagsJet0, combinedSecondaryVertexBJetTagsJet1, combinedSecondaryVertexBJetTagsJet2, combinedSecondaryVertexBJetTagsJet3;
   int nPFCand_QC_ptCutJet0, nPFCand_QC_ptCutJet1, nPFCand_QC_ptCutJet2, nPFCand_QC_ptCutJet3;
   float eventWeight_noPU(1.);
   float PUWeight(1.), PUWeight_HT150(1.), PUWeight_HT250(1.), PUWeight_HT350(1.), PUWeight_HT400(1.), PUWeight_HT500(1.), PUWeight_HT600(1.);
@@ -501,6 +505,14 @@ void TreeFinalizerC_MultiJet::finalize() {
   }
 
 
+  tree_passedEvents->Branch( "combinedSecondaryVertexBJetTagsJet0", &combinedSecondaryVertexBJetTagsJet0, "combinedSecondaryVertexBJetTagsJet0/F" );
+  tree_passedEvents->Branch( "combinedSecondaryVertexBJetTagsJet1", &combinedSecondaryVertexBJetTagsJet1, "combinedSecondaryVertexBJetTagsJet1/F" );
+  if( analyzerType_=="MultiJet" ) {
+    tree_passedEvents->Branch( "combinedSecondaryVertexBJetTagsJet2", &combinedSecondaryVertexBJetTagsJet2, "combinedSecondaryVertexBJetTagsJet2/F" );
+    tree_passedEvents->Branch( "combinedSecondaryVertexBJetTagsJet3", &combinedSecondaryVertexBJetTagsJet3, "combinedSecondaryVertexBJetTagsJet3/F" );
+  }
+
+
 
   gROOT->cd();
 
@@ -591,6 +603,7 @@ void TreeFinalizerC_MultiJet::finalize() {
     etaJet0 = 10.;
     pdgIdPartJet0 = -100;
     QGLikelihoodJet0 = -1.;
+    QGLikelihood2012Jet0 = -1.;
     ptDJet0 = -1.;
     rmsCandJet0 = -1.;
     nChargedJet0 = -1.;
@@ -606,6 +619,7 @@ void TreeFinalizerC_MultiJet::finalize() {
     etaJet1 = 10.;
     pdgIdPartJet1 = -100;
     QGLikelihoodJet1 = -1.;
+    QGLikelihood2012Jet1 = -1.;
     ptDJet1 = -1.;
     rmsCandJet1 = -1.;
     nChargedJet1 = -1.;
@@ -621,6 +635,7 @@ void TreeFinalizerC_MultiJet::finalize() {
     etaJet2 = 10.;
     pdgIdPartJet2 = -100;
     QGLikelihoodJet2 = -1.;
+    QGLikelihood2012Jet2 = -1.;
     ptDJet2 = -1.;
     rmsCandJet2 = -1.;
     nChargedJet2 = -1.;
@@ -636,6 +651,7 @@ void TreeFinalizerC_MultiJet::finalize() {
     etaJet3 = 10.;
     pdgIdPartJet3 = -100;
     QGLikelihoodJet3 = -1.;
+    QGLikelihood2012Jet3 = -1.;
     ptDJet3 = -1.;
     rmsCandJet3 = -1.;
     nChargedJet3 = -1.;
@@ -716,6 +732,7 @@ void TreeFinalizerC_MultiJet::finalize() {
       if( ptJet[iJet]<20. ) continue;
 
 
+
    // if( jets.size()<2 ) {
    //   // only two leading jets are required to be in tracker covered region
    //   // (will cut on third jet, but with no eta restrictions)
@@ -749,6 +766,12 @@ void TreeFinalizerC_MultiJet::finalize() {
       thisJet->nNeutral_ptCut = nNeutral_ptCutJet[iJet];
       thisJet->nPFCand_QC_ptCut = nChg_QCJet[iJet] + nNeutral_ptCutJet[iJet];
 
+      thisJet->combinedSecondaryVertexBJetTag = combinedSecondaryVertexBJetTagsJet[iJet];
+
+      // antibtag:
+      if( thisJet->combinedSecondaryVertexBJetTag > 0.244 ) continue;
+
+
       if( jets.size()<2 ) { //jetID only on two leading jets
         if( !(thisJet->passedJetID("minimal")) ) continue;
    			 //if( fabs(thisJet->Eta())<2.4 && thisJet->nChargedHadrons==0 ) continue;
@@ -759,13 +782,20 @@ void TreeFinalizerC_MultiJet::finalize() {
    			 //if( thisJet->Pt() > 50. && thisJet->Pt()<100. && (passed_Photon50_CaloIdVL || passed_Photon50_CaloIdVL) && ptPhotReco>53. ) continue;
       }
 
- //   if( fabs(thisJet->Eta())<2.4 ) {
- //       thisJet->QGLikelihood =  qglikeli->computeQGLikelihoodPU( thisJet->Pt(), rhoPF, thisJet->nChargedHadrons, thisJet->nNeutralHadrons + thisJet->nPhotons, thisJet->ptD );
- //   } else if( fabs(thisJet->Eta())>3. && fabs(thisJet->Eta())<4.7 ) {
- //     thisJet->QGLikelihood = -1;// qglikeli->computeQGLikelihoodFwd( thisJet->Pt(), rhoPF, thisJet->ptD, -log( thisJet->rmsCand ) );
- //   }
+      if( fabs(thisJet->Eta())<2.4 ) {
+        thisJet->QGLikelihood =  qglikeli->computeQGLikelihoodPU( thisJet->Pt(), rhoPF, thisJet->nChargedHadrons, thisJet->nNeutralHadrons + thisJet->nPhotons, thisJet->ptD );
+        //if( thisJet->QGLikelihood > 1. ) {
+        //std::cout <<  thisJet->Pt() << " " <<  rhoPF << " " <<  thisJet->nChargedHadrons << " " <<  thisJet->nNeutralHadrons + thisJet->nPhotons << " " <<  thisJet->ptD << std::endl;
+        //std::cout <<  thisJet->QGLikelihood << std::endl;
+        //}
+      } else {
+        thisJet->QGLikelihood = -1.;// qglikeli->computeQGLikelihoodFwd( thisJet->Pt(), rhoPF, thisJet->ptD, -log( thisJet->rmsCand ) );
+      }
 
+      std::cout << std::endl << std::endl;
+      std::cout <<  thisJet->Pt() << " " <<  thisJet->Eta() << " " <<  rhoPF << " " <<  thisJet->nPFCand_QC_ptCut << " " <<  thisJet->ptD_QC << " " <<  thisJet->axis2_QC << std::endl;
       thisJet->QGLikelihood2012 =  qglikeli->computeQGLikelihood2012( thisJet->Pt(), thisJet->Eta(), rhoPF, thisJet->nPFCand_QC_ptCut, thisJet->ptD_QC, thisJet->axis2_QC );
+      std::cout << thisJet->QGLikelihood2012 << std::endl;
 
 
       if( isMC ) {
@@ -844,6 +874,8 @@ void TreeFinalizerC_MultiJet::finalize() {
       nChargedJet0 = jets[0]->nChargedHadrons;
       nNeutralJet0 = jets[0]->nNeutralHadrons+ jets[0]->nPhotons;
 
+      combinedSecondaryVertexBJetTagsJet0 = jets[0]->combinedSecondaryVertexBJetTag;
+
       ptD_QCJet0 = jets[0]->ptD_QC;
       axis1_QCJet0 = jets[0]->axis1_QC;
       axis2_QCJet0 = jets[0]->axis2_QC;
@@ -879,6 +911,8 @@ void TreeFinalizerC_MultiJet::finalize() {
       rmsCandJet1 = jets[1]->rmsCand;
       nChargedJet1 = jets[1]->nChargedHadrons;
       nNeutralJet1 = jets[1]->nNeutralHadrons+ jets[1]->nPhotons;
+
+      combinedSecondaryVertexBJetTagsJet1 = jets[1]->combinedSecondaryVertexBJetTag;
 
       ptD_QCJet1 = jets[1]->ptD_QC;
       axis1_QCJet1 = jets[1]->axis1_QC;
@@ -918,6 +952,8 @@ void TreeFinalizerC_MultiJet::finalize() {
       nChargedJet2 = jets[2]->nChargedHadrons;
       nNeutralJet2 = jets[2]->nNeutralHadrons+ jets[2]->nPhotons;
 
+      combinedSecondaryVertexBJetTagsJet2 = jets[2]->combinedSecondaryVertexBJetTag;
+
       ptD_QCJet2 = jets[2]->ptD_QC;
       axis1_QCJet2 = jets[2]->axis1_QC;
       axis2_QCJet2 = jets[2]->axis2_QC;
@@ -952,6 +988,8 @@ void TreeFinalizerC_MultiJet::finalize() {
       rmsCandJet3 = jets[3]->rmsCand;
       nChargedJet3 = jets[3]->nChargedHadrons;
       nNeutralJet3 = jets[3]->nNeutralHadrons+jets[3]->nPhotons;
+
+      combinedSecondaryVertexBJetTagsJet3 = jets[3]->combinedSecondaryVertexBJetTag;
 
       ptD_QCJet3 = jets[3]->ptD_QC;
       axis1_QCJet3 = jets[3]->axis1_QC;
