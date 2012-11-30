@@ -140,9 +140,12 @@ void Ntp1Analyzer_ZJet::CreateOutputFile() {
   reducedTree_->Branch( "ptUncertJet",  ptUncertJet_,  "ptUncertJet_[nJets_]/F");
 
   reducedTree_->Branch("ptDJet", ptDJet_, "ptDJet_[nJets_]/F");
+  reducedTree_->Branch("ptD_QCJet", ptD_QCJet_, "ptD_QCJet_[nJets_]/F");
+  reducedTree_->Branch("axis2_QCJet", axis2_QCJet_, "axis2_QCJet_[nJets_]/F");
   reducedTree_->Branch("rmsCandJet", rmsCandJet_, "rmsCandJet_[nJets_]/F");
   reducedTree_->Branch("nChargedJet", nChargedJet_, "nChargedJet_[nJets_]/F");
   reducedTree_->Branch("nNeutralJet", nNeutralJet_, "nNeutralJet_[nJets_]/F");
+  reducedTree_->Branch("nPFCand_QC_ptCutJet", nPFCand_QC_ptCutJet_, "nPFCand_QC_ptCutJet_[nJets_]/I");
 
   reducedTree_->Branch("eChargedHadronsJet", eChargedHadronsJet_, "eChargedHadronsJet_[nJets_]/F");
   reducedTree_->Branch("ePhotonsJet", ePhotonsJet_, "ePhotonsJet_[nJets_]/F");
@@ -233,6 +236,7 @@ void Ntp1Analyzer_ZJet::Loop()
    if( DEBUG_ ) nentries = 100000;
    else nentries = fChain->GetEntries();
 
+nentries = 100;
 
    Long64_t nbytes = 0, nb = 0;
 
@@ -1101,6 +1105,9 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        thisJet.nNeutral = neutralHadronMultiplicityAK5PFPUcorrJet[iJet]+photonMultiplicityAK5PFPUcorrJet[iJet];
        thisJet.rmsCand =  rmsCandAK5PFPUcorrJet[iJet];
        thisJet.ptD =  ptDAK5PFPUcorrJet[iJet];
+       thisJet.ptD_QC =  ptD_QCAK5PFPUcorrJet[iJet];
+       thisJet.axis2_QC =  axis2_QCAK5PFPUcorrJet[iJet];
+       thisJet.nPFCand_QC_ptCut =  nNeutral_ptCutAK5PFPUcorrJet[iJet] + nChg_QCAK5PFPUcorrJet[iJet];
 
        thisJet.trackCountingHighEffBJetTag = trackCountingHighEffBJetTagsAK5PFPUcorrJet[iJet];
        thisJet.trackCountingHighPurBJetTag = trackCountingHighPurBJetTagsAK5PFPUcorrJet[iJet];
@@ -1218,9 +1225,12 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        nMuonsJet_[nJets_]          = leadJets[iJet].nMuons;
 
        ptDJet_[nJets_] = leadJets[iJet].ptD;
+       ptD_QCJet_[nJets_] = leadJets[iJet].ptD_QC;
+       axis2_QCJet_[nJets_] = leadJets[iJet].axis2_QC;
        rmsCandJet_[nJets_] = leadJets[iJet].rmsCand;
        nChargedJet_[nJets_] = leadJets[iJet].nCharged;
        nNeutralJet_[nJets_] = leadJets[iJet].nNeutral;
+       nPFCand_QC_ptCutJet_[nJets_] = leadJets[iJet].nPFCand_QC_ptCut;
 
        trackCountingHighEffBJetTagJet_[nJets_] = leadJets[iJet].trackCountingHighEffBJetTag;
        trackCountingHighPurBJetTagJet_[nJets_] = leadJets[iJet].trackCountingHighPurBJetTag;
