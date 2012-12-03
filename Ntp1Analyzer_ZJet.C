@@ -934,6 +934,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
  
      if( leptons.size()<2 ) continue;
+     if( leptType>1 ) continue; //only ee and mm
 
   
 
@@ -1105,6 +1106,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        thisJet.rmsCand =  rmsCandAK5PFPUcorrJet[iJet];
        thisJet.ptD =  ptDAK5PFPUcorrJet[iJet];
        thisJet.ptD_QC =  ptD_QCAK5PFPUcorrJet[iJet];
+       thisJet.axis1_QC =  axis1_QCAK5PFPUcorrJet[iJet];
        thisJet.axis2_QC =  axis2_QCAK5PFPUcorrJet[iJet];
        thisJet.nPFCand_QC_ptCut =  nNeutral_ptCutAK5PFPUcorrJet[iJet] + nChg_QCAK5PFPUcorrJet[iJet];
 
@@ -1225,6 +1227,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
        ptDJet_[nJets_] = leadJets[iJet].ptD;
        ptD_QCJet_[nJets_] = leadJets[iJet].ptD_QC;
+       axis1_QCJet_[nJets_] = leadJets[iJet].axis1_QC;
        axis2_QCJet_[nJets_] = leadJets[iJet].axis2_QC;
        rmsCandJet_[nJets_] = leadJets[iJet].rmsCand;
        nChargedJet_[nJets_] = leadJets[iJet].nCharged;
