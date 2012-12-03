@@ -37,11 +37,18 @@ TreeFinalizerC_MultiJet.o: TreeFinalizerC_MultiJet.C TreeFinalizer.o
 TreeFinalizerC_QGStudies.o: TreeFinalizerC_QGStudies.C TreeFinalizer.o
 	$(CC) $(CFLAGS) $(INCLUDES) TreeFinalizer.o TreeFinalizerC_QGStudies.C $(ROOTFLAG)
 
+TreeFinalizerC_ZJet.o: TreeFinalizerC_ZJet.C TreeFinalizer.o
+	$(CC) $(CFLAGS) $(INCLUDES) TreeFinalizer.o TreeFinalizerC_ZJet.C $(ROOTFLAG)
+
+
 finalize_MultiJet: finalize_MultiJet.cpp TreeFinalizer.o TreeFinalizerC_MultiJet.o QGLikelihoodCalculator.o Bins.o
 	$(CC)  $(INCLUDES) -Wall -o finalize_MultiJet TreeFinalizer.o TreeFinalizerC_MultiJet.o finalize_MultiJet.cpp QGLikelihoodCalculator.o Bins.o `${ROOTSYS}/bin/root-config --cflags --libs`
 
 finalize_QGStudies: finalize_QGStudies.cpp TreeFinalizer.o TreeFinalizerC_QGStudies.o PUWeight.o QGLikelihoodCalculator.o
 	$(CC)  $(INCLUDES) -Wall -o finalize_QGStudies TreeFinalizer.o TreeFinalizerC_QGStudies.o PUWeight.o QGLikelihoodCalculator.o finalize_QGStudies.cpp `${ROOTSYS}/bin/root-config --cflags --libs`
+
+finalize_ZJet: finalize_ZJet.cpp TreeFinalizer.o TreeFinalizerC_ZJet.o PUWeight.o QGLikelihoodCalculator.o Bins.o
+	$(CC)  $(INCLUDES) -Wall -o finalize_ZJet TreeFinalizer.o TreeFinalizerC_ZJet.o PUWeight.o QGLikelihoodCalculator.o Bins.o finalize_ZJet.cpp `${ROOTSYS}/bin/root-config --cflags --libs`
 
 
 
