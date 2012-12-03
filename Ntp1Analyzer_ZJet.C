@@ -934,7 +934,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
  
      if( leptons.size()<2 ) continue;
-     if( leptType>1 ) continue; //only ee and mm
+     if( leptType_>1 ) continue; //only ee and mm
 
   
 
