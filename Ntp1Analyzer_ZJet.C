@@ -141,10 +141,11 @@ void Ntp1Analyzer_ZJet::CreateOutputFile() {
 
   reducedTree_->Branch("ptDJet", ptDJet_, "ptDJet_[nJets_]/F");
   reducedTree_->Branch("ptD_QCJet", ptD_QCJet_, "ptD_QCJet_[nJets_]/F");
+  reducedTree_->Branch("axis1_QCJet", axis1_QCJet_, "axis1_QCJet_[nJets_]/F");
   reducedTree_->Branch("axis2_QCJet", axis2_QCJet_, "axis2_QCJet_[nJets_]/F");
   reducedTree_->Branch("rmsCandJet", rmsCandJet_, "rmsCandJet_[nJets_]/F");
-  reducedTree_->Branch("nChargedJet", nChargedJet_, "nChargedJet_[nJets_]/F");
-  reducedTree_->Branch("nNeutralJet", nNeutralJet_, "nNeutralJet_[nJets_]/F");
+  reducedTree_->Branch("nChargedJet", nChargedJet_, "nChargedJet_[nJets_]/I");
+  reducedTree_->Branch("nNeutralJet", nNeutralJet_, "nNeutralJet_[nJets_]/I");
   reducedTree_->Branch("nPFCand_QC_ptCutJet", nPFCand_QC_ptCutJet_, "nPFCand_QC_ptCutJet_[nJets_]/I");
 
   reducedTree_->Branch("eChargedHadronsJet", eChargedHadronsJet_, "eChargedHadronsJet_[nJets_]/F");

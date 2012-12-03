@@ -108,6 +108,7 @@ class Ntp1Analyzer_ZJet : public Ntp1Analyzer {
 
    Float_t ptDJet_[50];
    Float_t ptD_QCJet_[50];
+   Float_t axis1_QCJet_[50];
    Float_t axis2_QCJet_[50];
    Float_t rmsCandJet_[50];
    Int_t nChargedJet_[50];
