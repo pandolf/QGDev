@@ -188,7 +188,6 @@ void Ntp1Analyzer_ZJet::CreateOutputFile() {
   reducedTree_->Branch( "ptPart",  ptPart_,  "ptPart_[nPart_]/F");
   reducedTree_->Branch("etaPart", etaPart_, "etaPart_[nPart_]/F");
   reducedTree_->Branch("phiPart", phiPart_, "phiPart_[nPart_]/F");
-  reducedTree_->Branch("pdgIdPart", pdgIdPart_, "pdgIdPart_[nPart_]/I");
   reducedTree_->Branch("motherPart", motherPart_, "motherPart_[nPart_]/I");
 
 
@@ -236,7 +235,6 @@ void Ntp1Analyzer_ZJet::Loop()
    if( DEBUG_ ) nentries = 100000;
    else nentries = fChain->GetEntries();
 
-nentries = 100;
 
    Long64_t nbytes = 0, nb = 0;
 
