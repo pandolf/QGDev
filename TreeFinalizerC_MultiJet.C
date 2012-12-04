@@ -519,7 +519,7 @@ void TreeFinalizerC_MultiJet::finalize() {
 
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/cmsrm/pc25/pandolf/CMSSW_4_2_8_patch7/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGLikelihood/QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
-  QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/work/p/pandolf/CMSSW_5_3_6/src/QG/QGLikelihood/test/Histos_2012.root");
+  QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("/afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src/UserCode/pandolf/QGDev/Fit/Output/Histos_2012.root");
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
 
 
@@ -791,12 +791,12 @@ void TreeFinalizerC_MultiJet::finalize() {
       } else {
         thisJet->QGLikelihood = -1.;// qglikeli->computeQGLikelihoodFwd( thisJet->Pt(), rhoPF, thisJet->ptD, -log( thisJet->rmsCand ) );
       }
-
+	if(DEBUG_){
       std::cout << std::endl << std::endl;
       std::cout <<  thisJet->Pt() << " " <<  thisJet->Eta() << " " <<  rhoPF << " " <<  thisJet->nPFCand_QC_ptCut << " " <<  thisJet->ptD_QC << " " <<  thisJet->axis2_QC << std::endl;
       thisJet->QGLikelihood2012 =  qglikeli->computeQGLikelihood2012( thisJet->Pt(), thisJet->Eta(), rhoPF, thisJet->nPFCand_QC_ptCut, thisJet->ptD_QC, thisJet->axis2_QC );
       std::cout << thisJet->QGLikelihood2012 << std::endl;
-
+	}
 
       if( isMC ) {
 
