@@ -279,8 +279,20 @@ void TreeFinalizerC_ZJet::finalize() {
   tree_->SetBranchAddress("trackCountingHighEffBJetTagsJet", trackCountingHighEffBJetTagsJet);
   Float_t combinedSecondaryVertexBJetTagJet[50];
   tree_->SetBranchAddress("combinedSecondaryVertexBJetTagJet", combinedSecondaryVertexBJetTagJet);
-  Float_t pdgIdPartJet[50];
+  Int_t pdgIdPartJet[50];
   tree_->SetBranchAddress("pdgIdPartJet", pdgIdPartJet);
+  Float_t ptPartJet[50];
+  tree_->SetBranchAddress("ptPartJet", ptPartJet);
+  Float_t etaPartJet[50];
+  tree_->SetBranchAddress("etaPartJet", etaPartJet);
+  Float_t phiPartJet[50];
+  tree_->SetBranchAddress("phiPartJet", phiPartJet);
+  Float_t ptGenJet[50];
+  tree_->SetBranchAddress("ptGenJet", ptGenJet);
+  Float_t etaGenJet[50];
+  tree_->SetBranchAddress("etaGenJet", etaGenJet);
+  Float_t phiGenJet[50];
+  tree_->SetBranchAddress("phiGenJet", phiGenJet);
 
 	
        Float_t axis1Jet[50];		tree_->SetBranchAddress("axis1Jet",axis1Jet);
@@ -326,6 +338,7 @@ void TreeFinalizerC_ZJet::finalize() {
   Float_t axis1_QCJet0_t;
   Float_t axis2_QCJet0_t;
   Int_t nPFCand_QC_ptCutJet0_t;
+  Int_t pdgIdPartJet_t;
 
   Float_t ptJet1_t;
   Float_t etaJet1_t;
@@ -356,7 +369,7 @@ void TreeFinalizerC_ZJet::finalize() {
   //tree_passedEvents->Branch( "betaStarJet0", &betaStarJet0_t, "betaStarJet[0]/F");
   tree_passedEvents->Branch( "QGLikelihoodJet0", &QGlikelihood, "QGlikelihood/F");
   tree_passedEvents->Branch( "QGLikelihood2012Jet0", &QGlikelihood2012, "QGlikelihood2012/F");
-  tree_passedEvents->Branch( "pdgIdPartJet0", &pdgIdPartJet[0], "pdgIdPart/I");
+  tree_passedEvents->Branch( "pdgIdPartJet0", &pdgIdPartJet_t, "pdgIdPart_t/I");
   tree_passedEvents->Branch( "deltaPhi_jet", &deltaPhi_jet, "deltaPhi_jet/F");
 
   //tree_passedEvents->Branch( "axis1Jet0"		, &axis1Jet[0]			, "axis1Jet[0]/F");
@@ -506,7 +519,6 @@ void TreeFinalizerC_ZJet::finalize() {
     // jet id:
     TLorentzVector jet;
     jet.SetPtEtaPhiE( ptJet[0], etaJet[0], phiJet[0], eJet[0] );
-    std::cout <<  ptJet[0] << " " <<   etaJet[0] << " " <<   phiJet[0] << " " <<   eJet[0] <<std::endl;
 
     if( fabs(jet.Eta())<2.4 && nChargedJet[0]==0 ) continue;
     if( (nNeutralJet[0]+nChargedJet[0])==1 ) continue;
@@ -514,6 +526,36 @@ void TreeFinalizerC_ZJet::finalize() {
     if( (eNeutralHadronsJet[0])/jet.E()>0.99 ) continue;
 
 
+    pdgIdPartJet_t = 0;
+
+    if( isMC ) {
+
+      // check if matched to parton/genjet
+      TLorentzVector part;
+      part.SetPtEtaPhiE( ptPartJet[0], etaPartJet[0], phiPartJet[0], ptPartJet[0] );
+
+      TLorentzVector genJet;
+      genJet.SetPtEtaPhiE( ptGenJet[0], etaGenJet[0], phiGenJet[0], ptGenJet[0] );
+
+      float deltaR_jet_part = jet.DeltaR(part);
+
+      if( deltaR_jet_part<0.3 ) {
+
+        pdgIdPartJet_t = pdgIdPartJet[0];
+
+      } else {
+
+        float deltaR_jet_genjet = jet.DeltaR(genJet);
+
+        if( deltaR_jet_genjet < 0.3 ) { //undefined
+          pdgIdPartJet_t = -999;
+        } else {
+          pdgIdPartJet_t = 0;  //PU
+        }
+
+      } // else (if not matched to parton)
+
+    } // if is MC
 
 
 //  if( !isMC ) {
