@@ -28,14 +28,7 @@
 #include "CommonTools/PUWeight.h"
 #include "QGLikelihood/interface/QGLikelihoodCalculator.h"
 
-
-
-
-
 float delta_phi(float phi1, float phi2);
-
-
-
 
 void TreeFinalizerC_ZJet::finalize() {
 
@@ -558,26 +551,6 @@ void TreeFinalizerC_ZJet::finalize() {
     } // if is MC
 
 
-//  if( !isMC ) {
-
-//    if( ptPhotReco>30. && ptPhotReco<50. && !passed_Photon30 ) continue;
-//    if( ptPhotReco>50. && ptPhotReco<70. && !passed_Photon50 ) continue;
-//      if( ptPhotReco>70. && ptPhotReco<120. && !passed_Photon30 ) continue;
-
-//    if( ptPhotReco < 33. ) {
-//      if( !passed_Photon20 ) continue;
-//    } else if( ptPhotReco < 55. ) {
-//      if( !passed_Photon30 ) continue;
-//    } else if( ptPhotReco < 85. ) {
-//      if( !passed_Photon50 ) continue;
-//    }
-//  } //trigger requirement
-
-
-    //if( ptPhotReco<85. || ptPhotReco>115. ) continue;
-
-
-
 
     //leading jet and Z back2back in transverse plane
     bool back2back = true;
@@ -587,16 +560,10 @@ void TreeFinalizerC_ZJet::finalize() {
     if( fabs(deltaPhi_jet) < (pi - deltaPhiThreshold) ) back2back = false; //loose back to back for now
 
 
-    //Float_t deltaPhi_2ndJet = fabs(delta_phi(phiPhotReco, phi2ndJetReco));
-
-
-
     // cut away b-jets:
     //if( trackCountingHighEffBJetTagsJetReco>1.7 ) continue;
     btagged = combinedSecondaryVertexBJetTagJet[0]>0.244;
     if( btagged ) continue;
-
-
 
     if( nJets>1 )
       secondJetOK = ( ptJet[1] < secondJetThreshold_*Z.Pt() || ptJet[1] < 10. );
@@ -627,10 +594,6 @@ void TreeFinalizerC_ZJet::finalize() {
    tree_passedEvents->Fill();
 
   }
-
-
-
-
 
 
   outFile->cd();

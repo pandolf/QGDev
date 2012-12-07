@@ -239,6 +239,17 @@ void TreeFinalizerC_MultiJet::finalize() {
   //tree_->SetBranchAddress("pdgIdMomStatus3Jet", pdgIdMomJet);
   //tree_->SetBranchAddress("pdgIdMomJet", pdgIdMomJet);
 
+  Int_t nGenJet;
+  tree_->SetBranchAddress("nGenJet", &nGenJet);
+  Float_t eGenJet[20];
+  tree_->SetBranchAddress("eGenJet", eGenJet);
+  Float_t ptGenJet[20];
+  tree_->SetBranchAddress("ptGenJet", ptGenJet);
+  Float_t etaGenJet[20];
+  tree_->SetBranchAddress("etaGenJet", etaGenJet);
+  Float_t phiGenJet[20];
+  tree_->SetBranchAddress("phiGenJet", phiGenJet);
+
 
   Bool_t passed_HT150;
   tree_->SetBranchAddress("passed_HT150", &passed_HT150);
@@ -523,7 +534,7 @@ void TreeFinalizerC_MultiJet::finalize() {
   //QGLikelihoodCalculator *qglikeli = new QGLikelihoodCalculator("QG_QCD_Pt-15to3000_TuneZ2_Flat_7TeV_pythia6_Summer11-PU_S3_START42_V11-v2.root");
 
 
-  bool debug=true;
+  bool debug=false;
 
   std::map< int, std::map<int, std::vector<int> > > run_lumi_ev_map;
 
@@ -726,7 +737,7 @@ void TreeFinalizerC_MultiJet::finalize() {
     std::vector<AnalysisJet*> jets;
 
     //for( unsigned iJet=0; iJet<1 && jets.size()<4; ++iJet ) {
-    for( unsigned iJet=0; iJet<nJet && jets.size()<4; ++iJet ) {
+    for( unsigned iJet=0; iJet<unsigned(nJet) && jets.size()<4; ++iJet ) {
 
 
       if( ptJet[iJet]<20. ) continue;
@@ -798,7 +809,7 @@ void TreeFinalizerC_MultiJet::finalize() {
       std::cout << thisJet->QGLikelihood2012 << std::endl;
 	}
 
-      if( isMC ) {
+      if( isMC ) { //matching
 
         thisJet->pdgIdPart = pdgIdPartJet[iJet];
         thisJet->ptPart = ptPartJet[iJet];
@@ -809,9 +820,22 @@ void TreeFinalizerC_MultiJet::finalize() {
 
         TLorentzVector* parton = new TLorentzVector();
         parton->SetPtEtaPhiE( thisJet->ptPart, thisJet->etaPart, thisJet->phiPart, thisJet->ePart );
+	
+	//GEN MATCHING
+	float DR_gen_reco=999;
+	for(int iGenJet=0;iGenJet<nGenJet;iGenJet++)
+		{
+		TLorentzVector thisGenJet;
+		thisGenJet.SetPtEtaPhiE(ptGenJet[iGenJet],etaGenJet[iGenJet],phiGenJet[iGenJet],eGenJet[iGenJet]);
+		if( thisJet->DeltaR(thisGenJet) < DR_gen_reco )
+			DR_gen_reco= thisJet->DeltaR( thisGenJet );
+		}
+		
 
         float deltaR_part_jet = thisJet->DeltaR( *parton );
-        if( deltaR_part_jet>0.5 ) thisJet->pdgIdPart = -100;
+        if( deltaR_part_jet<0.3 ) thisJet->pdgIdPart = pdgIdPartJet[iJet];
+	else if( DR_gen_reco<0.3) thisJet->pdgIdPart=-999;
+	else thisJet->pdgIdPart=0;
 
         if( iJet==0 )
           h1_deltaR_part_jet0->Fill( deltaR_part_jet, eventWeight );
