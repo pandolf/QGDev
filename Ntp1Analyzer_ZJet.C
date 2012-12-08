@@ -1079,7 +1079,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        std::cout << "Now adding in jets." << std::endl;
 
      float jetPt_thresh = 18.; //so that we can vary the JER uncert up one sigma (max value is ~10%)
-     float jetEta_thresh = 2.5;
+     float jetEta_thresh = 5.;
 
      // first save leading jets in event:
      std::vector<AnalysisJet> leadJets;
