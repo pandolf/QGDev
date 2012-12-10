@@ -35,23 +35,27 @@ if flags=="500":
 
 # to write on the cmst3 cluster disks
 ################################################
-castordir = "/castor/cern.ch/user/p/pandolf/NTUPLES/" + dataset
-pnfsdir = "/pnfs/roma1.infn.it/data/cms/store/user/pandolf/NTUPLES/" + dataset
-afsdir = "/afs/cern.ch/user/p/pandolf/scratch0/NTUPLES/"+dataset
 #outputmain = castordir+output
 # to write on local disks
 ################################################
 #diskoutputdir = "/cmsrm/pc21_2/pandolf/MC/"+dataset
-diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Data/"+dataset
+#diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Data/"+dataset
+diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/DATA/"+dataset
 
 match_Summer11 = re.search( r'Summer11', dataset, re.M|re.I)
-if match_Summer11:
-    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer11/"+dataset
+match_Summer12 = re.search( r'Summer12', dataset, re.M|re.I)
 match_Fall11 = re.search( r'Fall11', dataset, re.M|re.I)
-if match_Fall11:
-    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Fall11/"+dataset
 
-diskoutputmain2 = afsdir
+if match_Summer11:
+#    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer11/"+dataset
+	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Summer11/"+dataset
+if match_Fall11:
+#    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Fall11/"+dataset
+	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Fall11/"+dataset
+if match_Summer12:
+#    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer12/"+dataset
+	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Summer12/"+dataset
+
 diskoutputmain = diskoutputdir
 # prepare job to write on the cmst3 cluster disks
 ################################################
@@ -103,7 +107,8 @@ while (len(inputfiles) > 0):
       outputfile.write(pwd+'/'+application+" "+dataset+" "+inputfilename+" "+str(ijob)+"\n")
     else :
       outputfile.write(pwd+'/'+application+" "+dataset+" "+inputfilename+" "+flags+"_"+str(ijob)+"\n")
-    outputfile.write('ls '+analyzerType+'*.root | xargs -i cp {} '+diskoutputmain+'/{}\n') 
+    #outputfile.write('ls '+analyzerType+'*.root | xargs -i cp {} '+diskoutputmain+'/{}\n') 
+    outputfile.write('ls '+analyzerType+'*.root | xargs -i /afs/cern.ch/project/eos/installation/0.2.5/bin/eos.select cp {} '+diskoutputmain+'/{}\n') 
     outputfile.close
     os.system("echo bsub -q "+queue+" -o "+dir+"/log/"+dataset+"_"+str(ijob)+".log source "+pwd+"/"+outputname)
     os.system("bsub -q "+queue+" -o "+dir+"/log/"+dataset+"_"+str(ijob)+".log source "+pwd+"/"+outputname+" -copyInput="+dataset+"_"+str(ijob))
