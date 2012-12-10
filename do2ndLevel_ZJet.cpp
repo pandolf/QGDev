@@ -54,10 +54,10 @@ int main( int argc, char* argv[]) {
 
     }
 
-    if( isData2011 )
-      na->ReadJSONFile("Cert_160404-180252_7TeV_PromptReco_Collisions11_CMSSWConfig.txt");
-    if( isData2012 )
-      na->ReadJSONFile("Cert_190456-200245_8TeV_PromptReco_Collisions12_CMSSWConfig.txt");
+    //if( isData2011 )
+    //  na->ReadJSONFile("Cert_160404-180252_7TeV_PromptReco_Collisions11_CMSSWConfig.txt");
+    //if( isData2012 )
+    //  na->ReadJSONFile("Cert_190456-200245_8TeV_PromptReco_Collisions12_CMSSWConfig.txt");
 
   }  //if is data
 
