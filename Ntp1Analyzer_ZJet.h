@@ -141,6 +141,8 @@ class Ntp1Analyzer_ZJet : public Ntp1Analyzer {
    Float_t jetProbabilityBJetTagJet_[50];
    Float_t combinedSecondaryVertexBJetTagJet_[50];
 
+   Float_t betaStarJet_[50];
+
    Float_t SFTCHEJet_[50];
    Float_t SFerrTCHEJet_[50];
 

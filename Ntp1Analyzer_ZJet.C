@@ -172,6 +172,8 @@ void Ntp1Analyzer_ZJet::CreateOutputFile() {
   reducedTree_->Branch("jetProbabilityBJetTagJet", jetProbabilityBJetTagJet_, "jetProbabilityBJetTagJet_[nJets_]/F");
   reducedTree_->Branch("combinedSecondaryVertexBJetTagJet", combinedSecondaryVertexBJetTagJet_, "combinedSecondaryVertexBJetTagJet_[nJets_]/F");
 
+  reducedTree_->Branch("betaStarJet", betaStarJet_, "betaStarJet_[nJets_]/F");
+
   reducedTree_->Branch("eGenJet",  eGenJet_,  "eGenJet_[nJets_]/F");
   reducedTree_->Branch( "ptGenJet",  ptGenJet_,  "ptGenJet_[nJets_]/F");
   reducedTree_->Branch("etaGenJet", etaGenJet_, "etaGenJet_[nJets_]/F");
@@ -1118,6 +1120,8 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        thisJet.jetProbabilityBJetTag = jetProbabilityBJetTagsAK5PFPUcorrJet[iJet];
        thisJet.combinedSecondaryVertexBJetTag = combinedSecondaryVertexBJetTagsAK5PFPUcorrJet[iJet];
 
+       thisJet.betaStar =  betastarAK5PFPUcorrJet[iJet];
+
 
 
        //// save at least 3 lead jets (if event has them) and all jets with pt>thresh:
@@ -1241,6 +1245,8 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        jetBProbabilityBJetTagJet_[nJets_] = leadJets[iJet].jetBProbabilityBJetTag;
        jetProbabilityBJetTagJet_[nJets_] = leadJets[iJet].jetProbabilityBJetTag;
        combinedSecondaryVertexBJetTagJet_[nJets_] = leadJets[iJet].combinedSecondaryVertexBJetTag;
+
+       betaStarJet_[nJets_] = leadJets[iJet].betaStar;
 
 
        eGenJet_[nJets_] = leadJets[iJet].eGen;
