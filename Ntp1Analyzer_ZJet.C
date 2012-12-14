@@ -57,6 +57,7 @@ void Ntp1Analyzer_ZJet::CreateOutputFile() {
   reducedTree_->Branch("nPU_ave",&nPU_ave_,"nPU_ave_/I");
   reducedTree_->Branch("nvertex",&nvertex_,"nvertex_/I");
   reducedTree_->Branch("rhoPF",&rhoPF_,"rhoPF_/F");
+  reducedTree_->Branch("rhoJetPF",&rhoJetPF_,"rhoJetPF_/F");
   reducedTree_->Branch("genWeight",&genWeight_,"genWeight_/F");
   reducedTree_->Branch("eventWeight",&eventWeight_,"eventWeight_/F");
   reducedTree_->Branch("eventWeightPU",&eventWeightPU_,"eventWeightPU_/F");
@@ -325,6 +326,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
      nvertex_ = nPV;
      rhoPF_ = rhoFastjet;
+     rhoJetPF_ = rhoJetsFastjet;
 
 
      // save trigger info:
