@@ -73,7 +73,7 @@ void inline getMVA(TString region, double pt,double rho, double &mvaval, double 
 
 int AddBDTBranch(const char*fileName)
 {
-TFile *f=TFile::Open(fileName);
+TFile *f=TFile::Open(fileName,"UPDATE");
 TTree *t=(TTree*)f->Get("tree_passedEvents");
 
 float QGLBDT;
