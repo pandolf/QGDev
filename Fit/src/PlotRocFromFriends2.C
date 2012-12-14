@@ -29,12 +29,12 @@ TChain *d=new TChain("tree_passedEvents");
 TChain *e=new TChain("tree_passedEvents");
 TChain *t=new TChain("tree_passedEvents");
 
-cout << "1st chain "<<a->Add("~/work/2ndLevel/QG/QG/QGSplit/QG_QCD_Split*.root") 		;cout<<" Entries="<<a->GetEntries() <<endl;
-cout << "2nd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit4Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<b->GetEntries()<<endl;
-cout << "3rd chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit/QGFit2Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<c->GetEntries()<<endl;
-cout << "4th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<d->GetEntries()<<endl;
-cout << "5th chain "<<e->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_QCD_Split*.root");cout<<" Entries="<<e->GetEntries()<<endl;
-cout << "6th chain "<<t->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_Old_QG_QCD_Split*.root") ;cout<<" Entries="<<t->GetEntries()<<endl;
+cout << "1st chain "<<a->Add("~/work/2ndLevel/QG/QG/QGSplit_7TeV/QG_QCD_Split*.root") 		;cout<<" Entries="<<a->GetEntries() <<endl;
+cout << "2nd chain "<<b->Add("~/work/2ndLevel/QG/QG/QGSplit_7TeV/QGFit4Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<b->GetEntries()<<endl;
+cout << "3rd chain "<<c->Add("~/work/2ndLevel/QG/QG/QGSplit_7TeV/QGFit2Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<c->GetEntries()<<endl;
+cout << "4th chain "<<d->Add("~/work/2ndLevel/QG/QG/QGSplit_7TeV/QGL1Friend_QG_QCD_Split*.root") 	;cout<<" Entries="<<d->GetEntries()<<endl;
+//cout << "5th chain "<<e->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_4var_QG_QCD_Split*.root");cout<<" Entries="<<e->GetEntries()<<endl;
+//cout << "6th chain "<<t->Add("~/work/2ndLevel/QG/QG/QGSplit/QGL1Friend_Old_QG_QCD_Split*.root") ;cout<<" Entries="<<t->GetEntries()<<endl;
 
 
 
@@ -59,8 +59,8 @@ TH1F* o2=new TH1F("o2","o2",500,0.0,1.00001);
 a->AddFriend(c);
 a->AddFriend(b);
 a->AddFriend(d);
-a->AddFriend(e,"4var");
-a->AddFriend(t,"old");
+//a->AddFriend(e,"4var");
+//a->AddFriend(t,"old");
 
 
 //Kinematics cuts
@@ -70,11 +70,11 @@ Float_t etaJet0; a->SetBranchAddress("etaJet0",&etaJet0);
 Int_t pdgIdPartJet0; a->SetBranchAddress("pdgIdPartJet0",&pdgIdPartJet0);
 
 //Variables
-cout<<"QGL old"<<endl;
-Float_t oldQGL; t->SetBranchAddress("QGL",&oldQGL);
+//cout<<"QGL old"<<endl;
+//Float_t oldQGL; t->SetBranchAddress("QGL",&oldQGL);
 
-cout<<"QGL 4var"<<endl;
-Float_t varQGL; e->SetBranchAddress("QGL",&varQGL);
+//cout<<"QGL 4var"<<endl;
+//Float_t varQGL; e->SetBranchAddress("QGL",&varQGL);
 
 cout<<"QGL"<<endl;
 Float_t QGL; d->SetBranchAddress("QGL",&QGL);
@@ -97,8 +97,8 @@ for(int iEntry=0;iEntry<a->GetEntries();++iEntry)
 	b->GetEntry(iEntry);
 	c->GetEntry(iEntry);
 	d->GetEntry(iEntry);
-	e->GetEntry(iEntry);
-	t->GetEntry(iEntry);
+//	e->GetEntry(iEntry);
+//	t->GetEntry(iEntry);
 	//Kinematics cuts
 		if( !( ptJet0 > PtMin ) )continue;
 		if( !( ptJet0 < PtMax ) )continue;
@@ -111,15 +111,15 @@ for(int iEntry=0;iEntry<a->GetEntries();++iEntry)
 			l1->Fill( QGFit2  )	;
 			f1->Fill( QGFit4 )	;
 			h1->Fill( QGL ) 	;
-			v1->Fill( varQGL )	;
-			o1->Fill( oldQGL )	;
+//			v1->Fill( varQGL )	;
+//			o1->Fill( oldQGL )	;
 			} else if (pdgIdPartJet0==21){
 			g2->Fill( qglPaoloJet0 );
 			l2->Fill( QGFit2) ;
 			f2->Fill( QGFit4) ;
 			h2->Fill( QGL) 	  ;
-			v2->Fill( varQGL) ;
-			o2->Fill( oldQGL) ;
+//			v2->Fill( varQGL) ;
+//			o2->Fill( oldQGL) ;
 			}
 	}
 cout<<"DONE"<<endl;
@@ -245,8 +245,8 @@ TCanvas*c4=new TCanvas("c4","c4",800,800);
 	f->Draw("P SAME");
 	l->Draw("P SAME");
 	h->Draw("P SAME");
-	v->Draw("P SAME");
-	o->Draw("P SAME");
+//	v->Draw("P SAME");
+//	o->Draw("P SAME");
 	TGraph *k=new TGraph(); k->SetName("line"); k->SetPoint(0,0,1);k->SetPoint(1,1,0);k->SetLineColor(kBlack);k->SetLineWidth(1);
 	k->Draw("L SAME");
 	L=new TLegend(0.15,0.15,.5,.45,Form("%.0f<P_{T}[GeV]<%.0f %.0f<#rho<%.0f",PtMin,PtMax,RhoMin,RhoMax)); L->SetFillStyle(0);L->SetBorderSize(0);
@@ -254,8 +254,8 @@ TCanvas*c4=new TCanvas("c4","c4",800,800);
 	L->AddEntry(f,"QGL 4","P");
 	L->AddEntry(l,"QGL 2","P");
 	L->AddEntry(h,"QGL 1","P");
-	L->AddEntry(v,"QGL 1 (4var)","P");
-	L->AddEntry(o,"QGL 1 (old)","P");
+//	L->AddEntry(v,"QGL 1 (4var)","P");
+//	L->AddEntry(o,"QGL 1 (old)","P");
 	L->Draw();
 TCanvas*c5=new TCanvas("c5","c5",800,600);
 	h1->Draw("HIST");

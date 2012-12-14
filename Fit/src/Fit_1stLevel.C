@@ -43,7 +43,7 @@ const double MaxChiSquareNDF=10.;
 
 TString VarNames[1023]; // ={"nCharged","nNeutral","ptD"};//,"rRMS"};
 Read A;
-const char *vars=A.ReadParameterFromFile("data/config.ini","VARS"); 		fprintf(stderr,"%s\n",vars);
+const char *vars=A.ReadParameterFromFile("data/config.ini","FITVARS"); 		fprintf(stderr,"%s\n",vars);
 const char *fitfunc=A.ReadParameterFromFile("data/config.ini","FITFUNC");	fprintf(stderr,"%s\n",fitfunc);
 map<TString,TString> FitFunctions;
 int NVars=0;
