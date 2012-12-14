@@ -212,6 +212,8 @@ void TreeFinalizerC_ZJet::finalize() {
   tree_->SetBranchAddress("PUReWeight", &PUReWeight);
   Float_t rhoPF;
   tree_->SetBranchAddress("rhoPF", &rhoPF);
+  Float_t rhoJetPF;
+  tree_->SetBranchAddress("rhoJetPF", &rhoJetPF);
 
   Float_t eLeptZ1;
   tree_->SetBranchAddress("eLeptZ1", &eLeptZ1);
@@ -332,9 +334,11 @@ void TreeFinalizerC_ZJet::finalize() {
   Float_t axis2_QCJet0_t;
   Int_t nPFCand_QC_ptCutJet0_t;
   Int_t pdgIdPartJet_t;
+  Float_t betaStarJet0_t;
 
   Float_t ptJet1_t;
   Float_t etaJet1_t;
+  
 
 
   tree_passedEvents->Branch( "run", &run, "run/I" );
@@ -346,6 +350,7 @@ void TreeFinalizerC_ZJet::finalize() {
   tree_passedEvents->Branch( "eventWeight_noPU", &eventWeight_noPU, "eventWeight_noPU/F");
   tree_passedEvents->Branch( "nvertex", &nvertex, "nvertex/I");
   tree_passedEvents->Branch( "rhoPF", &rhoPF, "rhoPF/F");
+  tree_passedEvents->Branch( "rhoJetPF", &rhoJetPF, "rhoJetPF/F");
   tree_passedEvents->Branch( "secondJetOK", &secondJetOK, "secondJetOK/O");
   tree_passedEvents->Branch( "btagged", &btagged, "btagged/O");
   tree_passedEvents->Branch( "mZ", &mZ, "mZ/F");
@@ -388,6 +393,7 @@ void TreeFinalizerC_ZJet::finalize() {
   //tree_passedEvents->Branch( "RJet0"			, &RJet[0]			, "RJet[0]/F");
   //tree_passedEvents->Branch( "Rchg_QCJet0"		, &Rchg_QCJet[0]		, "Rchg_QCJet[0]/F");
 
+  tree_passedEvents->Branch( "betaStarJet0"		, &betaStarJet0_t		, "betaStarJet0_t/F");
 
 
 
@@ -579,6 +585,7 @@ void TreeFinalizerC_ZJet::finalize() {
     ptD_QCJet0_t = ptD_QCJet[0];
     axis1_QCJet0_t = axis1_QCJet[0];
     axis2_QCJet0_t = axis2_QCJet[0];
+    betaStarJet0_t= betaStarJet[0];
     nPFCand_QC_ptCutJet0_t = nPFCand_QC_ptCutJet[0];
 
     ptJet1_t  = (nJets>0) ? ptJet[1] : 0.;
