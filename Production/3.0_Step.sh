@@ -13,6 +13,8 @@ for i in files_*.txt ;
 
 	[ "$1" == "" ] || { echo $DATASET | grep "$1" || continue ; }	
 
+	echo "DATASET is $DATASET"
+
 		#choose the Analyzer
 		if [ "$2" == "" ]; then
 			 #PHOTONJET
@@ -22,6 +24,10 @@ for i in files_*.txt ;
 			 #MULTIJET
 			{ echo ${DATASET} | grep 'HT_'  >/dev/null 	&& echo "HT Match" && export ANALYZER="MultiJet" ; } ||
 			{ echo ${DATASET} | grep 'QCD_' >/dev/null 	&& echo "QCD Match" && export ANALYZER="MultiJet" ; } ||
+			#ZJET
+			{ echo ${DATASET} | grep 'DY' >/dev/null 	&& echo "DY Match" && export ANALYZER="ZJet" ; } ||
+			{ echo ${DATASET} | grep 'DoubleMu' >/dev/null 	&& echo "DMu Match" && export ANALYZER="ZJet" ; } ||
+			{ echo ${DATASET} | grep 'DoubleE' >/dev/null 	&& echo "DE Match" && export ANALYZER="ZJet" ; } ||
 			export ANALYZER="QG" 
 		else
 			export ANALYZER="$2"
@@ -29,6 +35,7 @@ for i in files_*.txt ;
 
 		#Choose Directory
 		{ echo ${DATASET} | grep "Summer11" > /dev/null && export DIRECTORY="Summer11"; } ||
+		{ echo ${DATASET} | grep "Summer12" > /dev/null && export DIRECTORY="Summer12"; } ||
 		{ echo ${DATASET} | grep "Fall11" > /dev/null && export DIRECTORY="Fall11"; } ||
 		export DIRECTORY="Data"
 		echo ${DATASET} ${DIRECTORY} ${ANALYZER}	

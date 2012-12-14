@@ -25,6 +25,7 @@ if [ "$2" == "" ]; then
 	{ echo ${DATASET} | grep 'EMEnriched' >/dev/null && echo "EMEnriched match" && export ANALYZER="PhotonJet" ; } ||
 	 #MULTIJET
 	{ echo ${DATASET} | grep 'HT_'  >/dev/null 	&& echo "HT Match" && export ANALYZER="MultiJet" ; } ||
+	{ echo ${DATASET} | grep 'JetHT'  >/dev/null 	&& echo "HT Match" && export ANALYZER="MultiJet" ; } ||
 	{ echo ${DATASET} | grep 'QCD_' >/dev/null 	&& echo "QCD Match" && export ANALYZER="MultiJet" ; } ||
 	export ANALYZER="QG" 
 else

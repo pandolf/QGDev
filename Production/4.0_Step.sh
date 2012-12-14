@@ -10,6 +10,7 @@ for i in files_PhotonJet_2ndLevel_*.txt ; do
 	#if $1 is defined -> if DATASET matches $1 go ahead otherwise continue
 	[ "$1" == "" ] || { echo $DATASET | grep "$1" || continue ; }	
 
+		{ echo ${DATASET} | grep "Summer12" > /dev/null && export DIRECTORY="Summer12"; } ||
 		{ echo ${DATASET} | grep "Summer11" > /dev/null && export DIRECTORY="Summer11"; } ||
 		{ echo ${DATASET} | grep "Fall11" > /dev/null && export DIRECTORY="Fall11"; } ||
 		export DIRECTORY="Data"
