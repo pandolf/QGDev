@@ -171,7 +171,7 @@ int getBin(int nBins,double  Bins[],double value,double *x0,double *x1)
 int R=0;
 //int nBins=sizeof(Bins)/sizeof(double);//?
 if(value <Bins[0])return -1;
-if(value >Bins[nBins])return -1;
+if(value >Bins[nBins])return -1;//{printf("Values=%f %d\n",Bins[nBins],nBins);return -1;}
 for(R=0;R<nBins;R++)
 	{
 	if(Bins[R]>value)break;	

@@ -28,6 +28,7 @@ double RhoBins[1023];
 Bins::SetParameters("data/config.ini");
 getBins_int(Bins::nPtBins+1,PtBins,Bins::Pt0,Bins::Pt1,true);    
 PtBins[Bins::nPtBins+1]=Bins::PtLastExtend;  
+Bins::nPtBins++;
 getBins_int(Bins::nRhoBins+1,RhoBins,Bins::Rho0,Bins::Rho1,false);   
 
 map< string, TH1F *> plots;
@@ -117,7 +118,9 @@ while(sscanf(VariablesPointer,"%s%n",VarName,&n)==1)
 	{
 		t->GetEntry(entry);
 		double ptBin0,ptBin1,rhoBin0,rhoBin1;
+		//if(ptJetReco >2000) printf("Yeah %d\n",Bins::nPtBins);
 		if(getBin(Bins::nPtBins,PtBins,ptJetReco,&ptBin0,&ptBin1)<0)continue;
+		//if(ptJetReco >2000) printf("Passed\n");
 		if(getBin(Bins::nRhoBins,RhoBins,rhoPF,&rhoBin0,&rhoBin1)<0)continue;
 		
 		//selection

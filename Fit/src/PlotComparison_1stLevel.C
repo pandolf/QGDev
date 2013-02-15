@@ -30,7 +30,7 @@ int PlotComparison_1stLevel(const char *varName,float pt , float rho)
 //20 26 1 2 4 0 100 54.187 2.037
 
 //FILE *fr =fopen(Form("%s/%s.txt",A.ReadParameterFromFile("../data/config.ini","FITOUTPUT"),varName),"r");
-FILE *fr=fopen(Form("../Output/Fit_1stLevel_2012/%s.txt",varName),"r");
+FILE *fr=fopen(Form("../Output/Fit_1stLevel_2012_F/%s.txt",varName),"r");
 
 char func[1023];
 double parq[10];
@@ -70,8 +70,8 @@ fg->SetParameters(parg);
 //Take Histo
 fprintf(stderr,"Get Histo\n");
 //TFile *f=TFile::Open(A.ReadParameterFromFile("../data/config.ini","HISTO"));
-if(false){
-TFile *f=TFile::Open("../Output/Histos_2012.root");
+
+TFile *f=TFile::Open("../Output/Histos_2012_F.root");
 TH1F*h_q=(TH1F*)f->Get( Form("rhoBins_pt%.0f_%.0f/%s_quark_pt%.0f_%.0f_rho%.0f",pt0,pt1,
 		varName, ceil(pt0),ceil(pt1), floor(rho0) 
 		) );
@@ -100,17 +100,17 @@ h_g->SetFillStyle(3005);
 
 h_q->Draw("HIST");
 h_g->Draw("HIST SAME");
-}
-fq->SetLineColor(kBlack);fq->SetLineWidth(1);fq->Draw("");
+
+fq->SetLineColor(kBlack);fq->SetLineWidth(1);fq->Draw("SAME");
 fg->SetLineColor(kRed)  ;fg->SetLineWidth(1);fg->Draw("SAME");
 
-return 0;
+//return 0;
 
 TLegend *L=new TLegend(0.65,.58,.95,.90,Form("%.0f<P_{T} [GeV]<%.0f %.0f<#rho[GeV]<%.0f",pt0,pt1,rho0,rho1));
 L->SetBorderSize(0);L->SetFillStyle(0);
 L->AddEntry(h_q,"quark","F");
 L->AddEntry(h_g,"gluon","F");
-L->AddEntry("fg","Q","L");
+L->AddEntry("fq","Q","L");
 L->AddEntry("fg","G","L");
 L->Draw();
 

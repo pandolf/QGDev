@@ -83,7 +83,7 @@ int nPFCand_QC_ptCutJet0;
 float axis1_QCJet0,axis2_QCJet0,ptD_QCJet0;
 float rhoPF,rhoJetPF,etaJet0,ptJet0;
 //SetBranchAddress
-t->SetBranchAddress("nPFCand_QC_ptCutJet",&nPFCand_QC_ptCutJet0); 
+t->SetBranchAddress("nPFCand_QC_ptCutJet0",&nPFCand_QC_ptCutJet0); 
 t->SetBranchAddress("axis1_QCJet0",&axis1_QCJet0);
 t->SetBranchAddress("axis2_QCJet0",&axis2_QCJet0);
 t->SetBranchAddress("ptD_QCJet0",&ptD_QCJet0);

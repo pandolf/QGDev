@@ -9,8 +9,10 @@ PT1=0;
 PT2=0;
 RHO1=0;
 RHO2=0;
+
+TMPFILE=/tmp/amarini/$RANDOM.txt
 #emulate tac: perl -e 'print reverse <>'
-cat $1 |tac |while read line; do
+tac $1 |while read line; do
 		(( COUNT++ ))
 		(( m=COUNT % 4 ))
 		[ $m == 1 ] && echo -n -e "/" >&2
@@ -39,7 +41,8 @@ cat $1 |tac |while read line; do
 	#echo e >&2
 	PTLAST=${PT1}
 	RHOLAST=${RHO1}
-done | tac
+done > $TMPFILE 
+tac $TMPFILE 
 
 exit 0;
 
