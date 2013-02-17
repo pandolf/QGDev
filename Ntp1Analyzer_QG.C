@@ -58,6 +58,7 @@ class AnalysisJet : public TLorentzVector {
   float betastar;
   
   float qgl;
+  float qgMLP;
 
 };
 
@@ -100,11 +101,12 @@ void Ntp1Analyzer_QG::CreateOutputFile() {
   reducedTree_->Branch( "ptJet",  ptJet_,  "ptJet_[nJet_]/F");
   reducedTree_->Branch("etaJet", etaJet_, "etaJet_[nJet_]/F");
   reducedTree_->Branch("phiJet", phiJet_, "phiJet_[nJet_]/F");
+  reducedTree_->Branch("pdgIdJet", pdgIdJet_, "pdgIdJet_[nJet_]/I");
 
-  reducedTree_->Branch("eJetGen",  eJetGen_,  "eJet_[nJetGen_]/F");
-  reducedTree_->Branch( "ptJetGen",  ptJetGen_,  "ptJetGen_[nJetGen_]/F");
-  reducedTree_->Branch("etaJetGen", etaJetGen_, "etaJetGen_[nJetGen_]/F");
-  reducedTree_->Branch("phiJetGen", phiJetGen_, "phiJetGen_[nJetGen_]/F");
+  reducedTree_->Branch("eJetGen",  eJetGen_,  "eJetGen_[nJet_]/F");
+  reducedTree_->Branch( "ptJetGen",  ptJetGen_,  "ptJetGen_[nJet_]/F");
+  reducedTree_->Branch("etaJetGen", etaJetGen_, "etaJetGen_[nJet_]/F");
+  reducedTree_->Branch("phiJetGen", phiJetGen_, "phiJetGen_[nJet_]/F");
 
   reducedTree_->Branch("nChargedJet", nCharged_, "nCharged_[nJet_]/I");
   reducedTree_->Branch("nNeutralJet", nNeutral_, "nNeutral_[nJet_]/I");
@@ -141,6 +143,7 @@ void Ntp1Analyzer_QG::CreateOutputFile() {
   reducedTree_->Branch("betastarJet", betastar_, "betastar_[nJet_]/F");
 
   reducedTree_->Branch("qglJet", qgl_, "qgl_[nJet_]/F");
+  reducedTree_->Branch("qgMLPJet", qgMLP_, "qgMLP_[nJet_]/F");
 
 
   reducedTree_->Branch("nPart", &nPart_, "nPart_/I");
@@ -611,6 +614,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
          thisJet.betastar = betastarAK5PFNoPUJet[iJet];
 
          thisJet.qgl = qglAK5PFNoPUJet[iJet];
+         thisJet.qgMLP = qgMLPAK5PFNoPUJet[iJet];
 
 
          leadJets.push_back(thisJet);
@@ -674,6 +678,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
          thisJet.betastar = betastarAK5PFPUcorrJet[iJet];
 
          thisJet.qgl = qglAK5PFPUcorrJet[iJet];
+         thisJet.qgMLP = qgMLPAK5PFPUcorrJet[iJet];
 
          leadJets.push_back(thisJet);
          leadJetsIndex.push_back(iJet);
@@ -739,6 +744,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
          betastar_[nJet_] = thisJet.betastar;
 
          qgl_[nJet_] = thisJet.qgl;
+         qgMLP_[nJet_] = thisJet.qgMLP;
 
          // match to gen jet:
          float deltaR_genJet_best = 999.;
@@ -773,6 +779,40 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
          } 
 
+
+         //match to parton:
+         int i_foundPart=-1;
+         float bestDeltaRPart=999.;
+         for( unsigned iMC=0; iMC<nMc; ++iMC ) {
+        
+           if( statusMc[iMC]!=3 ) continue;
+           if( !(fabs(idMc[iMC])<7 || idMc[iMC]==21) ) continue;
+        
+           TLorentzVector thisPart;
+           thisPart.SetPtEtaPhiE( pMc[iMC]*sin(thetaMc[iMC]), etaMc[iMC], phiMc[iMC], energyMc[iMC] );
+           if( thisPart.Pt()<0.1 ) continue;
+               
+        
+           float thisDeltaR = thisPart.DeltaR(thisJet);
+      
+           if( thisDeltaR<bestDeltaRPart ) {
+             bestDeltaRPart = thisDeltaR;
+             i_foundPart = iMC;
+           }
+        
+         } //for partons
+        
+         if( deltaR_genJet_best>0.5 ) {
+           pdgIdJet_[nJet_] = 0; // PU
+         } else {
+           if( bestDeltaRPart<0.3 ) { 
+             pdgIdJet_[nJet_] = idMc[i_foundPart];
+           } else {
+             pdgIdJet_[nJet_] = -9999; // undefined
+           }
+         }
+
+
          nJet_++;
           
        } //if less than 20
@@ -791,6 +831,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
            TLorentzVector* thisParticle = new TLorentzVector();
            thisParticle->SetPtEtaPhiE( pMc[iMc]*sin(thetaMc[iMc]), etaMc[iMc], phiMc[iMc], energyMc[iMc] );
+           if( thisParticle->Pt()<0.1 ) continue;
 
            if( nPart_<20 ) {
 
