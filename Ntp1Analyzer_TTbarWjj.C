@@ -1242,6 +1242,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
        std::cout << "Found a total of " << nJets_ << " jets." << std::endl;
 
 
+     if( nJets_ < 3 ) continue;
 
 
      if( isMC_ ) {
