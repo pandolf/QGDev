@@ -50,11 +50,14 @@ finalize_QGStudies: finalize_QGStudies.cpp TreeFinalizer.o TreeFinalizerC_QGStud
 finalize_ZJet: finalize_ZJet.cpp TreeFinalizer.o TreeFinalizerC_ZJet.o PUWeight.o QGLikelihoodCalculator.o Bins.o
 	$(CC)  $(INCLUDES) -Wall -o finalize_ZJet TreeFinalizer.o TreeFinalizerC_ZJet.o PUWeight.o QGLikelihoodCalculator.o Bins.o finalize_ZJet.cpp `${ROOTSYS}/bin/root-config --cflags --libs`
 
+finalize_TTbarWjj: finalize_TTbarWjj.cpp Ntp1Finalizer.o Ntp1Finalizer_TTbarWjj.o AnalysisJet.o BTagSFUtil.o SFlightFuncs.o MistagFuncs.o
+	$(CC)  $(INCLUDES) -Wall -o finalize_TTbarWjj Ntp1Finalizer.o Ntp1Finalizer_TTbarWjj.o AnalysisJet.o BTagSFUtil.o SFlightFuncs.o MistagFuncs.o finalize_TTbarWjj.cpp `${ROOTSYS}/bin/root-config --cflags --libs`
 
 
 
-do2ndLevel_QG: Ntp1Analyzer.o Ntp1Analyzer_QG.o do2ndLevel_QG.cpp QGLikelihoodCalculator.o
-	$(CC) -Wall $(INCLUDES) -o do2ndLevel_QG do2ndLevel_QG.cpp Ntp1Analyzer.o Ntp1Analyzer_QG.o QGLikelihoodCalculator.o $(ROOTFLAG)
+
+do2ndLevel_QG: Ntp1Analyzer.o Ntp1Analyzer_QG.o do2ndLevel_QG.cpp QGLikelihoodCalculator.o Bins.o
+	$(CC) -Wall $(INCLUDES) -o do2ndLevel_QG do2ndLevel_QG.cpp Ntp1Analyzer.o Ntp1Analyzer_QG.o QGLikelihoodCalculator.o Bins.o $(ROOTFLAG)
 
 do2ndLevel_PhotonJet: Ntp1Analyzer.o Ntp1Analyzer_PhotonJet.o do2ndLevel_PhotonJet.cpp AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o
 	$(CC) -Wall $(INCLUDES) -o do2ndLevel_PhotonJet do2ndLevel_PhotonJet.cpp Ntp1Analyzer.o Ntp1Analyzer_PhotonJet.o AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o $(ROOTFLAG) $(EXTRALIBS)
@@ -64,6 +67,9 @@ do2ndLevel_MultiJet: Ntp1Analyzer.o Ntp1Analyzer_MultiJet.o do2ndLevel_MultiJet.
 
 do2ndLevel_ZJet: Ntp1Analyzer.o Ntp1Analyzer_ZJet.o do2ndLevel_ZJet.cpp AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o Bins.o AnalysisElectron.o AnalysisMuon.o 
 	$(CC) -Wall $(INCLUDES) -o do2ndLevel_ZJet do2ndLevel_ZJet.cpp Ntp1Analyzer.o Ntp1Analyzer_ZJet.o AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o Bins.o fitTools.o AnalysisElectron.o AnalysisMuon.o $(ROOTFLAG) $(EXTRALIBS)
+
+do2ndLevel_TTbarWjj: Ntp1Analyzer.o Ntp1Analyzer_TTbarWjj.o do2ndLevel_TTbarWjj.cpp AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o fitTools.o Bins.o AnalysisElectron.o AnalysisMuon.o 
+	$(CC) -Wall $(INCLUDES) -o do2ndLevel_TTbarWjj do2ndLevel_TTbarWjj.cpp Ntp1Analyzer.o Ntp1Analyzer_TTbarWjj.o AnalysisJet.o AnalysisPhoton.o QGLikelihoodCalculator.o Bins.o fitTools.o AnalysisElectron.o AnalysisMuon.o $(ROOTFLAG) $(EXTRALIBS)
 
 
 make_omogeneizzato: make_omogeneizzato.cpp
@@ -95,6 +101,9 @@ Ntp1Analyzer_MultiJet.o: Ntp1Analyzer_MultiJet.C
 Ntp1Analyzer_ZJet.o: Ntp1Analyzer_ZJet.C
 	$(CC) $(CFLAGS) $(INCLUDES) -I$(CMSSW_BASE)/src/UserCode/emanuele/CommonTools Ntp1Analyzer_ZJet.C $(ROOTFLAG)
 
+Ntp1Analyzer_TTbarWjj.o: Ntp1Analyzer_TTbarWjj.C QGLikelihoodCalculator.o
+	$(CC) $(CFLAGS) $(INCLUDES) -I$(CMSSW_BASE)/src/UserCode/emanuele/CommonTools Ntp1Analyzer_TTbarWjj.C $(ROOTFLAG)
+
 
 
 Ntp1Finalizer.o: $(CMSSW_BASE)/src/UserCode/pandolf/CommonTools/Ntp1Finalizer.C
@@ -102,6 +111,9 @@ Ntp1Finalizer.o: $(CMSSW_BASE)/src/UserCode/pandolf/CommonTools/Ntp1Finalizer.C
 
 Ntp1Finalizer_QG.o: Ntp1Finalizer_QG.C
 	$(CC) $(CFLAGS) $(INCLUDES)  Ntp1Finalizer_QG.C $(ROOTFLAG)
+
+Ntp1Finalizer_TTbarWjj.o: Ntp1Finalizer_TTbarWjj.C
+	$(CC) $(CFLAGS) $(INCLUDES)  Ntp1Finalizer_TTbarWjj.C $(ROOTFLAG)
 
 
 DrawBase.o: $(CMSSW_BASE)/src/UserCode/pandolf/CommonTools/DrawBase.C fitTools.o
