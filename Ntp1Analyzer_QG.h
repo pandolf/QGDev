@@ -49,6 +49,7 @@ class Ntp1Analyzer_QG : public Ntp1Analyzer {
    Float_t   eJet_[20];
    Float_t phiJet_[20];
    Float_t etaJet_[20];
+   Int_t   pdgIdJet_[20];
 
    Float_t  ptJetGen_[20];
    Float_t   eJetGen_[20];
@@ -97,6 +98,7 @@ class Ntp1Analyzer_QG : public Ntp1Analyzer {
    Float_t betastar_[20];
 
    Float_t qgl_[20];
+   Float_t qgMLP_[20];
   
   
     bool DEBUG_VERBOSE_;

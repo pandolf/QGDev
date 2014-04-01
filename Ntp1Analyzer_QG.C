@@ -744,7 +744,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
          betastar_[nJet_] = thisJet.betastar;
 
          qgl_[nJet_] = thisJet.qgl;
-         qgMLP_[nJet_] = thisJet.qgMLP;
+         //qgMLP_[nJet_] = thisJet.qgMLP;
 
          // match to gen jet:
          float deltaR_genJet_best = 999.;
