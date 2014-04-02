@@ -11,7 +11,7 @@ if (len(sys.argv) != 3) and (len(sys.argv) != 4) and (len(sys.argv) != 5):
     print "usage sendOnBatch.py dataset filesPerJob analyzerType=\"QG\" flags=\"\""
     sys.exit(1)
 dataset = sys.argv[1]
-inputlist = "files_2ndLevel_"+dataset+".txt"
+inputlist = "files_"+dataset+".txt"
 #settingfile = "config/RSZZsettings.txt"
 # choose among cmt3 8nm 1nh 8nh 1nd 1nw 
 #queue = "cmst3"
