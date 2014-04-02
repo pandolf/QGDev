@@ -108,6 +108,12 @@ void Ntp1Analyzer_QG::CreateOutputFile() {
   reducedTree_->Branch("etaJetGen", etaJetGen_, "etaJetGen_[nJet_]/F");
   reducedTree_->Branch("phiJetGen", phiJetGen_, "phiJetGen_[nJet_]/F");
 
+  reducedTree_->Branch("ptD_QCJetGen", ptD_QCJetGen_, "ptD_QCJetGen_[nJet_]/F");
+  reducedTree_->Branch("axis1_QCJetGen", axis1_QCJetGen_, "axis1_QCJetGen_[nJet_]/F");
+  reducedTree_->Branch("axis2_QCJetGen", axis2_QCJetGen_, "axis2_QCJetGen_[nJet_]/F");
+  reducedTree_->Branch("nChg_QCJetGen", nChg_QCJetGen_, "nChg_QCJetGen_[nJet_]/I");
+  reducedTree_->Branch("nNeutral_ptCutJetGen", nNeutral_ptCutJetGen_, "nNeutral_ptCutJetGen_[nJet_]/I");
+
   reducedTree_->Branch("nChargedJet", nCharged_, "nCharged_[nJet_]/I");
   reducedTree_->Branch("nNeutralJet", nNeutral_, "nNeutral_[nJet_]/I");
   reducedTree_->Branch("ptDJet", ptD_, "ptD_[nJet_]/F");
@@ -748,7 +754,7 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
          // match to gen jet:
          float deltaR_genJet_best = 999.;
-         TLorentzVector foundGenJet;
+         AnalysisJet foundGenJet;
          for( unsigned iGenJet=0; iGenJet<nAK5GenJet; ++iGenJet ) {
 
            TLorentzVector* thisGenJet = new TLorentzVector( pxAK5GenJet[iGenJet], pyAK5GenJet[iGenJet], pzAK5GenJet[iGenJet], energyAK5GenJet[iGenJet] );
@@ -758,7 +764,12 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
 
            if( deltaR<deltaR_genJet_best ) {
              deltaR_genJet_best = deltaR;
-             foundGenJet = *thisGenJet;
+             foundGenJet.SetPtEtaPhiE( thisGenJet->Pt(), thisGenJet->Eta(), thisGenJet->Phi(), thisGenJet->Energy() );
+             foundGenJet.ptD_QC = ptD_QCAK5GenJet[iGenJet];
+             foundGenJet.axis1_QC = axis1_QCAK5GenJet[iGenJet];
+             foundGenJet.axis2_QC = axis2_QCAK5GenJet[iGenJet];
+             foundGenJet.nChg_QC = nChg_QCAK5GenJet[iGenJet];
+             foundGenJet.nNeutral_ptCut = nNeutral_ptCutAK5GenJet[iGenJet];
            }
            
          } //for genjets
@@ -770,12 +781,24 @@ if( DEBUG_VERBOSE_ ) std::cout << "entry n." << jentry << std::endl;
            etaJetGen_[nJet_] = foundGenJet.Eta();
            phiJetGen_[nJet_] = foundGenJet.Phi();
 
+           ptD_QCJetGen_[nJet_] = foundGenJet.ptD_QC;
+           axis1_QCJetGen_[nJet_] = foundGenJet.axis1_QC;
+           axis2_QCJetGen_[nJet_] = foundGenJet.axis2_QC;
+           nChg_QCJetGen_[nJet_] = foundGenJet.nChg_QC;
+           nNeutral_ptCutJetGen_[nJet_] = foundGenJet.nNeutral_ptCut;
+
          } else {
 
            eJetGen_[nJet_]   = 0.;
            ptJetGen_[nJet_]  = 0.;
            etaJetGen_[nJet_] = 0.;
            phiJetGen_[nJet_] = 0.;
+
+           ptD_QCJetGen_[nJet_] = -999.;
+           axis1_QCJetGen_[nJet_] = -999.;
+           axis2_QCJetGen_[nJet_] = -999.;
+           nChg_QCJetGen_[nJet_] = -999.;
+           nNeutral_ptCutJetGen_[nJet_] = -999.;
 
          } 
 
