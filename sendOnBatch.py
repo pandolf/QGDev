@@ -11,7 +11,7 @@ if (len(sys.argv) != 3) and (len(sys.argv) != 4) and (len(sys.argv) != 5):
     print "usage sendOnBatch.py dataset filesPerJob analyzerType=\"QG\" flags=\"\""
     sys.exit(1)
 dataset = sys.argv[1]
-inputlist = "files_"+dataset+".txt"
+inputlist = "files_2ndLevel_"+dataset+".txt"
 #settingfile = "config/RSZZsettings.txt"
 # choose among cmt3 8nm 1nh 8nh 1nd 1nw 
 #queue = "cmst3"
@@ -40,21 +40,21 @@ if flags=="500":
 ################################################
 #diskoutputdir = "/cmsrm/pc21_2/pandolf/MC/"+dataset
 #diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Data/"+dataset
-diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/DATA/"+dataset
+diskoutputdir = "root://eoscms//eos/cms/store/user/pandolf/vecbos/2ndLevel/Summer12" + dataset
 
 match_Summer11 = re.search( r'Summer11', dataset, re.M|re.I)
 match_Summer12 = re.search( r'Summer12', dataset, re.M|re.I)
 match_Fall11 = re.search( r'Fall11', dataset, re.M|re.I)
 
-if match_Summer11:
-#    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer11/"+dataset
-	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Summer11/"+dataset
-if match_Fall11:
-#    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Fall11/"+dataset
-	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Fall11/"+dataset
-if match_Summer12:
-#    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer12/"+dataset
-	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Summer12/"+dataset
+#if match_Summer11:
+##    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer11/"+dataset
+#	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Summer11/"+dataset
+#if match_Fall11:
+##    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Fall11/"+dataset
+#	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Fall11/"+dataset
+#if match_Summer12:
+##    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer12/"+dataset
+#	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Summer12/"+dataset
 
 diskoutputmain = diskoutputdir
 # prepare job to write on the cmst3 cluster disks
@@ -64,7 +64,7 @@ os.system("mkdir -p "+dir)
 os.system("mkdir -p "+dir+"/log/")
 os.system("mkdir -p "+dir+"/input/")
 os.system("mkdir -p "+dir+"/src/")
-os.system("mkdir -p "+diskoutputdir)
+os.system("eos mkdir -p "+diskoutputdir)
 #outputroot = outputmain+"/root/"
 #if castordir != "none": 
 #    os.system("rfmkdir -p "+outputmain)
