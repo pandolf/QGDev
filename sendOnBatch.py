@@ -99,8 +99,8 @@ while (len(inputfiles) > 0):
     outputname = dir+"/src/submit_"+str(ijob)+".src"
     outputfile = open(outputname,'w')
     outputfile.write('#!/bin/bash\n')
-    outputfile.write('export SCRAM_ARCH=slc5_amd64_gcc434\n')
-    outputfile.write('cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src ; eval `scramv1 runtime -sh` ; cd -\n')
+    outputfile.write('export SCRAM_ARCH=slc5_amd64_gcc472\n')
+    outputfile.write('cd /afs/cern.ch/work/p/pandolf/CMSSW_6_1_1_QGUnfold/src/ ; eval `scramv1 runtime -sh` ; cd -\n')
     outputfile.write('cd $WORKDIR\n')
 
     if flags=="":
