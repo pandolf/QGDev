@@ -56,6 +56,12 @@ class Ntp1Analyzer_QG : public Ntp1Analyzer {
    Float_t phiJetGen_[20];
    Float_t etaJetGen_[20];
 
+   Float_t ptD_QCJetGen_[20];
+   Float_t axis1_QCJetGen_[20];
+   Float_t axis2_QCJetGen_[20];
+   Int_t   nChg_QCJetGen_[20];
+   Int_t   nNeutral_ptCutJetGen_[20];
+
    Int_t  nCharged_[20];
    Int_t  nNeutral_[20];
    Float_t  ptD_[20];
