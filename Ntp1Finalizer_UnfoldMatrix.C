@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <cmath>
 
 #include "TLorentzVector.h"
 #include "TH2D.h"
@@ -277,16 +278,16 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
         vh2_nCharged_centr[thisPtBin]->Fill( nChg_QCJet[iJet], nChg_QCJetGen[iJet], eventWeight );
         vh2_nNeutral_centr[thisPtBin]->Fill( nNeutral_ptCutJet[iJet], nNeutral_ptCutJetGen[iJet], eventWeight );
         vh2_ptD_centr[thisPtBin]->Fill( ptD_QCJet[iJet], ptD_QCJetGen[iJet], eventWeight );
-        vh2_axis1_centr[thisPtBin]->Fill( axis1_QCJet[iJet], axis1_QCJetGen[iJet], eventWeight );
-        vh2_axis2_centr[thisPtBin]->Fill( axis2_QCJet[iJet], axis2_QCJetGen[iJet], eventWeight );
+        vh2_axis1_centr[thisPtBin]->Fill( -log(axis1_QCJet[iJet]), -log(axis1_QCJetGen[iJet]), eventWeight );
+        vh2_axis2_centr[thisPtBin]->Fill( -log(axis2_QCJet[iJet]), -log(axis2_QCJetGen[iJet]), eventWeight );
  
       } else if(  fabs(etaJet[iJet]) > 2.5 ) {
 
         vh2_nCharged_fwd[thisPtBin]->Fill( nChg_QCJet[iJet], nChg_QCJetGen[iJet], eventWeight );
         vh2_nNeutral_fwd[thisPtBin]->Fill( nNeutral_ptCutJet[iJet], nNeutral_ptCutJetGen[iJet], eventWeight );
         vh2_ptD_fwd[thisPtBin]->Fill( ptD_QCJet[iJet], ptD_QCJetGen[iJet], eventWeight );
-        vh2_axis1_fwd[thisPtBin]->Fill( axis1_QCJet[iJet], axis1_QCJetGen[iJet], eventWeight );
-        vh2_axis2_fwd[thisPtBin]->Fill( axis2_QCJet[iJet], axis2_QCJetGen[iJet], eventWeight );
+        vh2_axis1_fwd[thisPtBin]->Fill( -log(axis1_QCJet[iJet]), -log(axis1_QCJetGen[iJet]), eventWeight );
+        vh2_axis2_fwd[thisPtBin]->Fill( -log(axis2_QCJet[iJet]), -log(axis2_QCJetGen[iJet]), eventWeight );
 
       }
  
