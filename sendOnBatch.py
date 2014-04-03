@@ -11,7 +11,7 @@ if (len(sys.argv) != 3) and (len(sys.argv) != 4) and (len(sys.argv) != 5):
     print "usage sendOnBatch.py dataset filesPerJob analyzerType=\"QG\" flags=\"\""
     sys.exit(1)
 dataset = sys.argv[1]
-inputlist = "files_2ndLevel_"+dataset+".txt"
+inputlist = "files_"+dataset+".txt"
 #settingfile = "config/RSZZsettings.txt"
 # choose among cmt3 8nm 1nh 8nh 1nd 1nw 
 #queue = "cmst3"
@@ -40,7 +40,7 @@ if flags=="500":
 ################################################
 #diskoutputdir = "/cmsrm/pc21_2/pandolf/MC/"+dataset
 #diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Data/"+dataset
-diskoutputdir = "root://eoscms//eos/cms/store/user/pandolf/vecbos/2ndLevel/Summer12" + dataset
+diskoutputdir = "/eos/cms/store/user/pandolf/vecbos/2ndLevel/Summer12/" + dataset
 
 match_Summer11 = re.search( r'Summer11', dataset, re.M|re.I)
 match_Summer12 = re.search( r'Summer12', dataset, re.M|re.I)
@@ -56,7 +56,6 @@ match_Fall11 = re.search( r'Fall11', dataset, re.M|re.I)
 ##    diskoutputdir = "/afs/cern.ch/work/a/amarini/2ndLevel/Summer12/"+dataset
 #	diskoutputdir = "root://eoscms///eos/cms/store/user/amarini/2ndLevel/Summer12/"+dataset
 
-diskoutputmain = diskoutputdir
 # prepare job to write on the cmst3 cluster disks
 ################################################
 dir = analyzerType + "_" + dataset
@@ -99,16 +98,16 @@ while (len(inputfiles) > 0):
     outputname = dir+"/src/submit_"+str(ijob)+".src"
     outputfile = open(outputname,'w')
     outputfile.write('#!/bin/bash\n')
-    outputfile.write('export SCRAM_ARCH=slc5_amd64_gcc434\n')
-    outputfile.write('cd /afs/cern.ch/user/a/amarini/scratch0/CMSSW_4_2_5/src ; eval `scramv1 runtime -sh` ; cd -\n')
+    outputfile.write('export SCRAM_ARCH=slc5_amd64_gcc472\n')
+    outputfile.write('cd /afs/cern.ch/work/p/pandolf/CMSSW_6_1_1_QGUnfold/src/ ; eval `scramv1 runtime -sh` ; cd -\n')
     outputfile.write('cd $WORKDIR\n')
 
     if flags=="":
       outputfile.write(pwd+'/'+application+" "+dataset+" "+inputfilename+" "+str(ijob)+"\n")
     else :
       outputfile.write(pwd+'/'+application+" "+dataset+" "+inputfilename+" "+flags+"_"+str(ijob)+"\n")
-    #outputfile.write('ls '+analyzerType+'*.root | xargs -i cp {} '+diskoutputmain+'/{}\n') 
-    outputfile.write('ls '+analyzerType+'*.root | xargs -i /afs/cern.ch/project/eos/installation/0.2.5/bin/eos.select cp {} '+diskoutputmain+'/{}\n') 
+    #outputfile.write('ls '+analyzerType+'*.root | xargs -i cp {} '+diskoutputdir+'/{}\n') 
+    outputfile.write('ls '+analyzerType+'*.root | xargs -i /afs/cern.ch/project/eos/installation/0.3.15/bin/eos.select cp {} '+diskoutputdir+'/{}\n') 
     outputfile.close
     os.system("echo bsub -q "+queue+" -o "+dir+"/log/"+dataset+"_"+str(ijob)+".log source "+pwd+"/"+outputname)
     os.system("bsub -q "+queue+" -o "+dir+"/log/"+dataset+"_"+str(ijob)+".log source "+pwd+"/"+outputname+" -copyInput="+dataset+"_"+str(ijob))
