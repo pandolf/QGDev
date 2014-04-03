@@ -25,6 +25,9 @@ merge_and_setWeights_HWWlvjj: merge_and_setWeights_HWWlvjj.cpp
 finalize_QG: Ntp1Finalizer.o Ntp1Finalizer_QG.o finalize_QG.cpp fitTools.o AnalysisJet.o BTagSFUtil.o SFlightFuncs.o MistagFuncs.o
 	$(CC) -Wall $(INCLUDES) -o finalize_QG finalize_QG.cpp Ntp1Finalizer.o Ntp1Finalizer_QG.o fitTools.o AnalysisJet.o BTagSFUtil.o SFlightFuncs.o MistagFuncs.o $(ROOTFLAG) $(EXTRALIBS)
 
+finalize_UnfoldMatrix: Ntp1Finalizer.o Ntp1Finalizer_UnfoldMatrix.o finalize_UnfoldMatrix.cpp fitTools.o AnalysisJet.o 
+	$(CC) -Wall $(INCLUDES) -o finalize_UnfoldMatrix finalize_UnfoldMatrix.cpp Ntp1Finalizer.o Ntp1Finalizer_UnfoldMatrix.o fitTools.o AnalysisJet.o $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 
@@ -106,6 +109,8 @@ Ntp1Analyzer_TTbarWjj.o: Ntp1Analyzer_TTbarWjj.C QGLikelihoodCalculator.o
 
 
 
+
+
 Ntp1Finalizer.o: $(CMSSW_BASE)/src/pandolf/CommonTools/Ntp1Finalizer.C
 	$(CC) $(CFLAGS) $(INCLUDES) $(CMSSW_BASE)/src/pandolf/CommonTools/Ntp1Finalizer.C $(ROOTFLAG)
 
@@ -114,6 +119,9 @@ Ntp1Finalizer_QG.o: Ntp1Finalizer_QG.C
 
 Ntp1Finalizer_TTbarWjj.o: Ntp1Finalizer_TTbarWjj.C
 	$(CC) $(CFLAGS) $(INCLUDES)  Ntp1Finalizer_TTbarWjj.C $(ROOTFLAG)
+
+Ntp1Finalizer_UnfoldMatrix.o: Ntp1Finalizer_UnfoldMatrix.C
+	$(CC) $(CFLAGS) $(INCLUDES)  Ntp1Finalizer_UnfoldMatrix.C $(ROOTFLAG)
 
 
 DrawBase.o: $(CMSSW_BASE)/src/pandolf/CommonTools/DrawBase.C fitTools.o
