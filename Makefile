@@ -13,6 +13,14 @@ ROOTFLAG = `${ROOTSYS}/bin/root-config --cflags --libs`
 EXTRALIBS  :=  -L$(ROOTSYS)/lib -L$(ROOFIT_LIBDIR)/ -lHtml -lMathCore -lGenVector -lMinuit -lEG -lRooFitCore -lRooFit `root-config --libs` -lTMVA
 
 
+SLC=$(shell lsb_release -r | tr '\t' ' '| tr -s ' ' | cut -d ' ' -f2)
+SLC6=$(shell echo "$(SLC) > 5.9" | bc -lq )
+
+ifeq ($(strip $(SLC6)),"1")
+LD_LIBRARY_PATH=/lib64:/usr/lib64/perl5/CORE:$(LD_LIBRARY_PATH) 
+$(shell source /afs/cern.ch/sw/lcg/contrib/gcc/4.7.2p1/x86_64-slc6/setup.sh )  
+endif
+
 merge_and_setWeights: $(CMSSW_BASE)/src/pandolf/CommonTools/merge_and_setWeights.cpp
 	$(CC) -Wall $(INCLUDES) -o merge_and_setWeights $(CMSSW_BASE)/src/pandolf/CommonTools/merge_and_setWeights.cpp $(ROOTFLAG) $(EXTRALIBS)
 
@@ -26,6 +34,8 @@ finalize_QG: Ntp1Finalizer.o Ntp1Finalizer_QG.o finalize_QG.cpp fitTools.o Analy
 	$(CC) -Wall $(INCLUDES) -o finalize_QG finalize_QG.cpp Ntp1Finalizer.o Ntp1Finalizer_QG.o fitTools.o AnalysisJet.o BTagSFUtil.o SFlightFuncs.o MistagFuncs.o $(ROOTFLAG) $(EXTRALIBS)
 
 finalize_UnfoldMatrix: Ntp1Finalizer.o Ntp1Finalizer_UnfoldMatrix.o finalize_UnfoldMatrix.cpp fitTools.o AnalysisJet.o 
+	@echo -n "$(SLC)"
+	@echo ":is slc6? $(SLC6)"
 	$(CC) -Wall $(INCLUDES) -o finalize_UnfoldMatrix finalize_UnfoldMatrix.cpp Ntp1Finalizer.o Ntp1Finalizer_UnfoldMatrix.o fitTools.o AnalysisJet.o $(ROOTFLAG) $(EXTRALIBS)
 
 
@@ -128,7 +138,7 @@ DrawBase.o: $(CMSSW_BASE)/src/pandolf/CommonTools/DrawBase.C fitTools.o
 	$(CC) $(CFLAGS) $(INCLUDES) fitTools.o $(CMSSW_BASE)/src/pandolf/CommonTools/DrawBase.C $(ROOTFLAG) $(EXTRALIBS) 
 
 fitTools.o: $(CMSSW_BASE)/src/pandolf/CommonTools/fitTools.C
-	$(CC) $(CFLAGS) $(INCLUDES) $(CMSSW_BASE)/src/pandolf/CommonTools/fitTools.C $(ROOTFLAG) $(EXTRALIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(CMSSW_BASE)/src/pandolf/CommonTools/fitTools.C $(ROOTFLAG) $(EXTRALIBS) -fPIC
 
 QGLikelihoodCalculator.o: $(CMSSW_BASE)/src/pandolf/QGLikelihood/src/QGLikelihoodCalculator.cc
 	$(CC) $(CFLAGS) -I$(CMSSW_BASE)/src/pandolf/QGLikelihood/ $(CMSSW_BASE)/src/pandolf/QGLikelihood/src/QGLikelihoodCalculator.cc $(ROOTFLAG)
@@ -182,8 +192,17 @@ DrawComposition: DrawComposition.C
 
 DrawComposition.o: DrawComposition.C
 	g++ `root-config --libs --cflags` -c  DrawComposition.C
+
+fitTools.so: fitTools.o ../CommonTools/fitTools.C ../CommonTools/fitTools.h fitToolsLinkDef.h
+	rootcint -v4 -f ./fitToolsDict.cc -c ../CommonTools/fitTools.h fitToolsLinkDef.h 
+	g++ -fPIC -o ./fitToolsDict.o -c ./fitToolsDict.cc  $(ROOTFLAG)
+	g++ -shared -fPIC -o fitTools.so fitTools.o fitToolsDict.o $(ROOTFLAG)  $(EXTRALIBS)
+
+	
 .PHONY:QGDev
 QGDev:create_pileupNvertex_files merge_and_setWeights finalize_QG finalize_QGStudies finalize_MultiJet do2ndLevel_PhotonJet do2ndLevel_QG do2ndLevel_MultiJet DrawComparison drawDiMultiJetQG DrawComposition make_omogeneizzato
+
+
 
 .PHONY:clean
 clean:
