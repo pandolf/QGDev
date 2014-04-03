@@ -33,28 +33,39 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
 
 
 
-  const int nPtBins = 18;
+  const int nPtBins = 10;
   Double_t ptBins[nPtBins+1];
   fitTools::getBins_int( nPtBins, ptBins, 20., 1000. );
   ptBins[nPtBins] = 3500.;
   //fitTools::getBins_int( nPtBins+1, ptBins, 15., 1000. );
 
+  const int nPtBins_fine = 25;
+  Double_t ptBins_fine[nPtBins_fine+1];
+  fitTools::getBins_int( nPtBins_fine, ptBins_fine, 20., 1000. );
+  ptBins_fine[nPtBins_fine] = 3500.;
 
 
-  const int nRhoBins = 40;
-  Double_t rhoBins[nRhoBins+1];
-  fitTools::getBins( nRhoBins+1, rhoBins, 0., (float)nRhoBins, false );
+  //const int nRhoBins = 40;
+  //Double_t rhoBins[nRhoBins+1];
+  //fitTools::getBins( nRhoBins+1, rhoBins, 0., (float)nRhoBins, false );
 
 
 
-  TH2D* h2_ptUnfolding  = new TH2D("ptUnfolding", "", 15, 0.5, 15.5, 50, 0., (float)nRhoBins);
+  TH2D* h2_ptUnfolding  = new TH2D("ptUnfolding", "", nPtBins_fine, ptBins_fine, nPtBins_fine, ptBins_fine);
+  h2_ptUnfolding->Sumw2();
 
 
-  std::vector<TH2D*> vh2_nCharged;
-  std::vector<TH2D*> vh2_nNeutral;
-  std::vector<TH2D*> vh2_ptD;
-  std::vector<TH2D*> vh2_axis1;
-  std::vector<TH2D*> vh2_axis2;
+  std::vector<TH2D*> vh2_nCharged_centr;
+  std::vector<TH2D*> vh2_nNeutral_centr;
+  std::vector<TH2D*> vh2_ptD_centr;
+  std::vector<TH2D*> vh2_axis1_centr;
+  std::vector<TH2D*> vh2_axis2_centr;
+
+  std::vector<TH2D*> vh2_nCharged_fwd;
+  std::vector<TH2D*> vh2_nNeutral_fwd;
+  std::vector<TH2D*> vh2_ptD_fwd;
+  std::vector<TH2D*> vh2_axis1_fwd;
+  std::vector<TH2D*> vh2_axis2_fwd;
 
 
   //std::vector< std::vector<TH1D*> >  vvh1_nCharged_gluon = allocateHistogramMatrix(nPtBins, ptBins, nRhoBins, "nCharged_gluon", 101, -0.5, 100.5);
@@ -78,30 +89,57 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
     char histoname[300];
     
 
-    sprintf( histoname, "nCharged_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_nCharged_new = new TH2D(histoname, "", 101, -0.5, 100.5, 101, -0.5, 100.5);
-    h2_nCharged_new->Sumw2();
-    vh2_nCharged.push_back(h2_nCharged_new);
+    sprintf( histoname, "nCharged_centr_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_nCharged_centr_new = new TH2D(histoname, "", 101, -0.5, 100.5, 101, -0.5, 100.5);
+    h2_nCharged_centr_new->Sumw2();
+    vh2_nCharged_centr.push_back(h2_nCharged_centr_new);
 
-    sprintf( histoname, "nNeutral_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_nNeutral_new = new TH2D(histoname, "", 101, -0.5, 100.5, 101, -0.5, 100.5);
-    h2_nNeutral_new->Sumw2();
-    vh2_nNeutral.push_back(h2_nNeutral_new);
+    sprintf( histoname, "nNeutral_centr_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_nNeutral_centr_new = new TH2D(histoname, "", 101, -0.5, 100.5, 101, -0.5, 100.5);
+    h2_nNeutral_centr_new->Sumw2();
+    vh2_nNeutral_centr.push_back(h2_nNeutral_centr_new);
 
-    sprintf( histoname, "axis1_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_axis1_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
-    h2_axis1_new->Sumw2();
-    vh2_axis1.push_back(h2_axis1_new);
+    sprintf( histoname, "axis1_centr_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_axis1_centr_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    h2_axis1_centr_new->Sumw2();
+    vh2_axis1_centr.push_back(h2_axis1_centr_new);
 
-    sprintf( histoname, "axis2_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_axis2_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
-    h2_axis2_new->Sumw2();
-    vh2_axis2.push_back(h2_axis2_new);
+    sprintf( histoname, "axis2_centr_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_axis2_centr_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    h2_axis2_centr_new->Sumw2();
+    vh2_axis2_centr.push_back(h2_axis2_centr_new);
 
-    sprintf( histoname, "ptD_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_ptD_new = new TH2D(histoname, "", 50, 0., 1.0001, 50, 0., 1.0001);
-    h2_ptD_new->Sumw2();
-    vh2_ptD.push_back(h2_ptD_new);
+    sprintf( histoname, "ptD_centr_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_ptD_centr_new = new TH2D(histoname, "", 50, 0., 1.0001, 50, 0., 1.0001);
+    h2_ptD_centr_new->Sumw2();
+    vh2_ptD_centr.push_back(h2_ptD_centr_new);
+
+
+
+    sprintf( histoname, "nCharged_fwd_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_nCharged_fwd_new = new TH2D(histoname, "", 101, -0.5, 100.5, 101, -0.5, 100.5);
+    h2_nCharged_fwd_new->Sumw2();
+    vh2_nCharged_fwd.push_back(h2_nCharged_fwd_new);
+
+    sprintf( histoname, "nNeutral_fwd_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_nNeutral_fwd_new = new TH2D(histoname, "", 101, -0.5, 100.5, 101, -0.5, 100.5);
+    h2_nNeutral_fwd_new->Sumw2();
+    vh2_nNeutral_fwd.push_back(h2_nNeutral_fwd_new);
+
+    sprintf( histoname, "axis1_fwd_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_axis1_fwd_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    h2_axis1_fwd_new->Sumw2();
+    vh2_axis1_fwd.push_back(h2_axis1_fwd_new);
+
+    sprintf( histoname, "axis2_fwd_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_axis2_fwd_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    h2_axis2_fwd_new->Sumw2();
+    vh2_axis2_fwd.push_back(h2_axis2_fwd_new);
+
+    sprintf( histoname, "ptD_fwd_pt%.0f_%.0f", ptMin, ptMax);
+    TH2D* h2_ptD_fwd_new = new TH2D(histoname, "", 50, 0., 1.0001, 50, 0., 1.0001);
+    h2_ptD_fwd_new->Sumw2();
+    vh2_ptD_fwd.push_back(h2_ptD_fwd_new);
 
   } //for bins
 
@@ -173,14 +211,12 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
 
   for(int iEntry=0; iEntry<nEntries; ++iEntry) {
 
-    if( (iEntry % 50000)==0 ) std::cout << "Entry: " << iEntry << " /" << nEntries << std::endl;
+    if( (iEntry % 100000)==0 ) std::cout << "Entry: " << iEntry << " /" << nEntries << std::endl;
 
     tree_->GetEntry(iEntry);
 
     if( eventWeight <= 0. ) eventWeight = 1.;
 
-    h1_rhoPF->Fill( rhoPF, eventWeight );
-    h2_rhoPF_vs_nvertex->Fill( nvertex, rhoPF, eventWeight );
 
 
     //for( unsigned iJet=0; iJet<nJet; ++iJet ) {
@@ -236,12 +272,24 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
      // }
 
 
-      vh2_nCharged[thisPtBin]->Fill( nChg_QCJet[iJet], nChg_QCJetGen[iJet], eventWeight );
-      vh2_nNeutral[thisPtBin]->Fill( nNeutral_ptCutJet[iJet], nNeutral_ptCutJetGen[iJet], eventWeight );
-      vh2_ptD[thisPtBin]->Fill( ptD_QCJet[iJet], ptD_QCJetGen[iJet], eventWeight );
-      vh2_axis1[thisPtBin]->Fill( axis1_QCJet[iJet], axis1_QCJetGen[iJet], eventWeight );
-      vh2_axis2[thisPtBin]->Fill( axis2_QCJet[iJet], axis2_QCJetGen[iJet], eventWeight );
+      if( fabs(etaJet[iJet]) < 2. ) {
 
+        vh2_nCharged_centr[thisPtBin]->Fill( nChg_QCJet[iJet], nChg_QCJetGen[iJet], eventWeight );
+        vh2_nNeutral_centr[thisPtBin]->Fill( nNeutral_ptCutJet[iJet], nNeutral_ptCutJetGen[iJet], eventWeight );
+        vh2_ptD_centr[thisPtBin]->Fill( ptD_QCJet[iJet], ptD_QCJetGen[iJet], eventWeight );
+        vh2_axis1_centr[thisPtBin]->Fill( axis1_QCJet[iJet], axis1_QCJetGen[iJet], eventWeight );
+        vh2_axis2_centr[thisPtBin]->Fill( axis2_QCJet[iJet], axis2_QCJetGen[iJet], eventWeight );
+ 
+      } else if(  fabs(etaJet[iJet]) > 2.5 ) {
+
+        vh2_nCharged_fwd[thisPtBin]->Fill( nChg_QCJet[iJet], nChg_QCJetGen[iJet], eventWeight );
+        vh2_nNeutral_fwd[thisPtBin]->Fill( nNeutral_ptCutJet[iJet], nNeutral_ptCutJetGen[iJet], eventWeight );
+        vh2_ptD_fwd[thisPtBin]->Fill( ptD_QCJet[iJet], ptD_QCJetGen[iJet], eventWeight );
+        vh2_axis1_fwd[thisPtBin]->Fill( axis1_QCJet[iJet], axis1_QCJetGen[iJet], eventWeight );
+        vh2_axis2_fwd[thisPtBin]->Fill( axis2_QCJet[iJet], axis2_QCJetGen[iJet], eventWeight );
+
+      }
+ 
 
     } // for jets
 
@@ -254,17 +302,22 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
 
   outFile_->cd();
 
-
+  h2_ptUnfolding->Write();
 
   for( unsigned iBin=0; iBin<nPtBins; ++iBin ) {
 
 
-    vh2_nCharged[iBin]->Write();
-    vh2_nNeutral[iBin]->Write();
-    vh2_ptD[iBin]->Write();
-    vh2_axis1[iBin]->Write();
-    vh2_axis2[iBin]->Write();
+    vh2_nCharged_centr[iBin]->Write();
+    vh2_nNeutral_centr[iBin]->Write();
+    vh2_ptD_centr[iBin]->Write();
+    vh2_axis1_centr[iBin]->Write();
+    vh2_axis2_centr[iBin]->Write();
 
+    vh2_nCharged_fwd[iBin]->Write();
+    vh2_nNeutral_fwd[iBin]->Write();
+    vh2_ptD_fwd[iBin]->Write();
+    vh2_axis1_fwd[iBin]->Write();
+    vh2_axis2_fwd[iBin]->Write();
 
   }
 
