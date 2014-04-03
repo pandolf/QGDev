@@ -101,12 +101,12 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
     vh2_nNeutral_centr.push_back(h2_nNeutral_centr_new);
 
     sprintf( histoname, "axis1_centr_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_axis1_centr_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    TH2D* h2_axis1_centr_new = new TH2D(histoname, "", 50, 0., 10., 50, 0., 10.);
     h2_axis1_centr_new->Sumw2();
     vh2_axis1_centr.push_back(h2_axis1_centr_new);
 
     sprintf( histoname, "axis2_centr_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_axis2_centr_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    TH2D* h2_axis2_centr_new = new TH2D(histoname, "", 50, 0., 10., 50, 0., 10.);
     h2_axis2_centr_new->Sumw2();
     vh2_axis2_centr.push_back(h2_axis2_centr_new);
 
@@ -128,12 +128,12 @@ void Ntp1Finalizer_UnfoldMatrix::finalize() {
     vh2_nNeutral_fwd.push_back(h2_nNeutral_fwd_new);
 
     sprintf( histoname, "axis1_fwd_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_axis1_fwd_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    TH2D* h2_axis1_fwd_new = new TH2D(histoname, "", 50, 0., 10., 50, 0., 10.);
     h2_axis1_fwd_new->Sumw2();
     vh2_axis1_fwd.push_back(h2_axis1_fwd_new);
 
     sprintf( histoname, "axis2_fwd_pt%.0f_%.0f", ptMin, ptMax);
-    TH2D* h2_axis2_fwd_new = new TH2D(histoname, "", 50, 0., 0.1, 50, 0., 0.1);
+    TH2D* h2_axis2_fwd_new = new TH2D(histoname, "", 50, 0., 10., 50, 0., 10.);
     h2_axis2_fwd_new->Sumw2();
     vh2_axis2_fwd.push_back(h2_axis2_fwd_new);
 
