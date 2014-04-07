@@ -22,6 +22,7 @@ int main( int argc, char* argv[] ) {
 
   Ntp1Finalizer_UnfoldMatrix* nf = new Ntp1Finalizer_UnfoldMatrix( dataset );
 
+  nf->set_inputAnalyzerType("QG");
   nf->addFile( dataset );
  
 
