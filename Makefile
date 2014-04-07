@@ -28,6 +28,9 @@ finalize_QG: Ntp1Finalizer.o Ntp1Finalizer_QG.o finalize_QG.cpp fitTools.o Analy
 finalize_UnfoldMatrix: Ntp1Finalizer.o Ntp1Finalizer_UnfoldMatrix.o finalize_UnfoldMatrix.cpp fitTools.o AnalysisJet.o 
 	$(CC) -Wall $(INCLUDES) -o finalize_UnfoldMatrix finalize_UnfoldMatrix.cpp Ntp1Finalizer.o Ntp1Finalizer_UnfoldMatrix.o fitTools.o AnalysisJet.o $(ROOTFLAG) $(EXTRALIBS)
 
+makeRivetDat: makeRivetDat.cpp
+	$(CC) -Wall $(INCLUDES) -o makeRivetDat makeRivetDat.cpp $(ROOTFLAG) $(EXTRALIBS)
+
 
 
 
